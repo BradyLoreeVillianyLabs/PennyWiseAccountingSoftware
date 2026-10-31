@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "product": "PennyWise Accounting",
+  "environment": "controlled-beta",
+  "database": {
+    "expectedHost": "127.0.0.1",
+    "expectedPort": 55432,
+    "expectedDatabase": "clearledger"
+  },
+  "shares": [
+    {
+      "key": "jesse",
+      "displayName": "Jesse",
+      "email": "albertatreeplanting@gmail.com",
+      "organizationId": "72423993-2d83-4f9e-9466-736129ebaf22",
+      "subdomain": "pennywisejesse",
+      "username": "jesse",
+      "webPort": 3100,
+      "apiPort": 3101
+    },
+    {
+      "key": "kristina",
+      "displayName": "Kristina",
+      "email": "kristina@clearledger.test",
+      "organizationId": "db5f68e9-f451-48fd-88da-cdbc1cab6a28",
+      "subdomain": "pennywisekristina",
+      "tunnelMode": "temporary",
+      "username": "kristina",
+      "webPort": 3200,
+      "apiPort": 3201
+    },
+    {
+      "key": "andrew",
+      "displayName": "Andrew",
+      "email": "andrew@clearledger.test",
+      "organizationId": "4e287aa6-724b-4c83-a036-1334f20bce38",
+      "subdomain": "pennywiseandrew",
+      "tunnelMode": "temporary",
+      "username": "andrew",
+      "webPort": 3700,
+      "apiPort": 3701
+    },
+    {
+      "key": "cindi",
+      "displayName": "Cindi",
+      "email": "cindi@clearledger.test",
+      "organizationId": "bb0e5215-8484-408f-9e56-39fb1f8ba518",
+      "subdomain": "pennywisecindi",
+      "username": "cindi",
+      "webPort": 3300,
+      "apiPort": 3301
+    },
+    {
+      "key": "brady",
+      "displayName": "Brady",
+      "email": "brady@clearledger.test",
+      "organizationId": "b9fa1992-4cb5-4dca-a7f8-f7eec9438f3d",
+      "subdomain": "pennywisebrady",
+      "username": "brady",
+      "webPort": 3400,
+      "apiPort": 3401
+    }
+  ]
+}

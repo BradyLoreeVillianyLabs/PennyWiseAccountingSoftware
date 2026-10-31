@@ -1,0 +1,11 @@
+DROP POLICY IF EXISTS "CommercialEvent_tenant_policy" ON "CommercialEvent";
+DROP POLICY IF EXISTS "CommercialSubscription_tenant_policy" ON "CommercialSubscription";
+DROP POLICY IF EXISTS "MigrationRunEntry_tenant_policy" ON "MigrationRunEntry";
+DROP POLICY IF EXISTS "MigrationRun_tenant_policy" ON "MigrationRun";
+DROP TABLE IF EXISTS "CommercialEvent";
+DROP TABLE IF EXISTS "CommercialSubscription";
+DROP TABLE IF EXISTS "MigrationRunEntry";
+DROP TABLE IF EXISTS "MigrationRun";
+DROP TYPE IF EXISTS "CommercialEventStatus";
+DROP TYPE IF EXISTS "CommercialStatus";
+DROP TYPE IF EXISTS "MigrationRunStatus";

@@ -1,0 +1,11 @@
+DROP POLICY IF EXISTS "ConnectorLog_tenant_policy" ON "ConnectorLog";
+DROP POLICY IF EXISTS "ConnectorConflict_tenant_policy" ON "ConnectorConflict";
+DROP POLICY IF EXISTS "ConnectorCheckpoint_tenant_policy" ON "ConnectorCheckpoint";
+DROP POLICY IF EXISTS "ConnectorInstallation_tenant_policy" ON "ConnectorInstallation";
+DROP TABLE IF EXISTS "ConnectorLog";
+DROP TABLE IF EXISTS "ConnectorConflict";
+DROP TABLE IF EXISTS "ConnectorCheckpoint";
+DROP TABLE IF EXISTS "ConnectorInstallation";
+DROP TYPE IF EXISTS "ConnectorConflictStatus";
+DROP TYPE IF EXISTS "ConnectorHealthStatus";
+DROP TYPE IF EXISTS "ConnectorInstallationStatus";

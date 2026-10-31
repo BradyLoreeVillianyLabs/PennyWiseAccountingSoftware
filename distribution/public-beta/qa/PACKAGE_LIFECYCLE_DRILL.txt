@@ -1,0 +1,20 @@
+ClearLedger final package lifecycle drill
+Result: FAIL
+Package: ClearLedger-Public-Beta-0.14.0-rc.1.zip
+Package SHA-256: 501b9ead2a4c800d9138892c3977b071aa50aa5d5768649ecd8da14bfbe28cf7
+Candidate image: clearledger/public-beta:0.14.0-rc.1 (sha256:90d7d541ffa6f3ddff2f5ac21a34c5f7f8b0de5c3fa951f24668b772ec67cc2d)
+Preceding image: clearledger/public-beta:0.14.0-rc.1-previous-fixture (sha256:e3b233285dcfab019790ebfeb4a0d637c3c8e0452eb237a2091151927d779189)
+Isolated Compose project: clearledger-beta-qa-4b82ce504ba0
+Generated: 2026-08-09 04:47:42Z
+
+2026-08-09 04:41:10Z Artifact SHA-256 verified: 501b9ead2a4c800d9138892c3977b071aa50aa5d5768649ecd8da14bfbe28cf7
+2026-08-09 04:41:11Z Package extracted safely; manifest version 0.14.0-rc.1.
+2026-08-09 04:41:28Z Preserved preceding image started with web/API health on loopback: clearledger/public-beta:0.14.0-rc.1-previous-fixture (sha256:e3b233285dcfab019790ebfeb4a0d637c3c8e0452eb237a2091151927d779189).
+2026-08-09 04:41:32Z Seeded one fictional company for backup/restore identity: 5a82bed2-d832-5cd4-9d02-e531614d38a7
+2026-08-09 04:41:53Z Backup produced with sibling checksum: ClearLedger-Backup-20260808-224132-e883d9d4f4.zip
+2026-08-09 04:42:50Z Restore recovered the pre-backup company, removed the post-backup mutation, and returned healthy service state.
+2026-08-09 04:43:45Z Preceding-to-current update reached the candidate image and preserved a verified pre-update backup.
+2026-08-09 04:43:58Z Current-image API/web restart recovered within the bounded wait.
+2026-08-09 04:44:52Z Verified rollback restored pre-update state, removed post-update state, and started only the preceding image after database replacement.
+2026-08-09 04:45:43Z Candidate re-update after verified rollback completed with preserved pre-update state.
+2026-08-09 04:47:30Z FAIL: The authenticated HTTPS share did not become reachable.

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "noEmit": true
+  },
+  "include": ["apps/**/*.ts", "packages/**/*.ts", "scripts/**/*.ts"],
+  "exclude": [
+    "**/dist/**",
+    "node_modules/**",
+    ".tmp/**",
+    "packages/db/generated-client/**",
+    "packages/db/generated-client-d5/**",
+    "packages/db/generated-client-rebuilt/**"
+  ]
+}

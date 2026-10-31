@@ -1,0 +1,1 @@
+-- The prior trigger function is retained by the migration history; no destructive rollback is performed.

@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PennyWise Accounting — Visual Atlas</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --canvas: #f7f3ed;
+        --surface: #fffdf9;
+        --ink: #142a3b;
+        --muted: #65707a;
+        --teal: #356e75;
+        --copper: #b8673d;
+        --line: #ddd7ce;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--canvas);
+        color: var(--ink);
+        font-family:
+          Inter,
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+      }
+      header {
+        padding: 40px max(24px, calc((100vw - 1440px) / 2));
+        background: #142a3b;
+        color: #fffdf9;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: clamp(28px, 4vw, 42px);
+        line-height: 1.1;
+      }
+      header p {
+        max-width: 780px;
+        margin: 0;
+        color: #e7e0d7;
+        line-height: 1.5;
+      }
+      main {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 32px 24px 56px;
+      }
+      .note {
+        margin: 0 0 24px;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+        gap: 20px;
+      }
+      article {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface);
+        box-shadow: 0 3px 16px rgb(20 42 59 / 8%);
+      }
+      img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        border-bottom: 1px solid var(--line);
+      }
+      .copy {
+        padding: 14px 16px 16px;
+      }
+      h2 {
+        margin: 0 0 5px;
+        font-size: 17px;
+        line-height: 1.25;
+      }
+      .num {
+        color: var(--copper);
+        font-weight: 700;
+      }
+      .copy p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 14px;
+        line-height: 1.45;
+      }
+      footer {
+        max-width: 1500px;
+        margin: 0 auto;
+        padding: 0 24px 40px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      @media (max-width: 480px) {
+        header {
+          padding: 28px 20px;
+        }
+        main {
+          padding: 20px 14px 32px;
+        }
+        .grid {
+          grid-template-columns: 1fr;
+          gap: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>PennyWise Accounting — Visual Atlas</h1>
+      <p>
+        Original, high-density workflow references for the entire accounting product surface. These
+        are design blueprints only; implementation must create semantic, accessible components and
+        preserve real application behavior.
+      </p>
+    </header>
+    <main>
+      <p class="note">
+        Each screen has deliberate menus, contextual actions, tables, inspectors, validation, and
+        safe states. Use <code>PENNYWISE_VISUAL_ATLAS.md</code> alongside this gallery for the
+        screen-by-screen implementation rules and the route-level visual-verification gate.
+      </p>
+      <section class="grid">
+        <article>
+          <img src="pennywise-ui-atlas/01-command-center.png" alt="PennyWise command center" />
+          <div class="copy">
+            <h2><span class="num">01</span> Command center</h2>
+            <p>Compact overview, action center, global shell, and priority work window.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/02-cash-workbench.png" alt="PennyWise cash workbench" />
+          <div class="copy">
+            <h2><span class="num">02</span> Cash workbench</h2>
+            <p>Review queue, transaction table, inspector, and bulk actions.</p>
+          </div>
+        </article>
+        <article>
+          <img
+            src="pennywise-ui-atlas/03-reconciliation-cockpit.png"
+            alt="PennyWise reconciliation cockpit"
+          />
+          <div class="copy">
+            <h2><span class="num">03</span> Reconciliation cockpit</h2>
+            <p>Paired statement/book lines, live difference, exceptions, and finish guardrail.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/04-sales-list.png" alt="PennyWise sales list" />
+          <div class="copy">
+            <h2><span class="num">04</span> Sales / invoice list</h2>
+            <p>Receivables table, customer inspector, status filters, and row/bulk actions.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/05-bills-workbench.png" alt="PennyWise bills workbench" />
+          <div class="copy">
+            <h2><span class="num">05</span> Bills &amp; expenses</h2>
+            <p>Approval queue, document preview, coding context, and payment controls.</p>
+          </div>
+        </article>
+        <article>
+          <img
+            src="pennywise-ui-atlas/06-contact-workspace.png"
+            alt="PennyWise contact workspace"
+          />
+          <div class="copy">
+            <h2><span class="num">06</span> Contact workspace</h2>
+            <p>Open items, activity, attachments, people, and related financial actions.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/07-ledger-workbench.png" alt="PennyWise ledger workbench" />
+          <div class="copy">
+            <h2><span class="num">07</span> Ledger workbench</h2>
+            <p>Chart/account register, transaction detail, and audit/reconciliation context.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/08-report-studio.png" alt="PennyWise report studio" />
+          <div class="copy">
+            <h2><span class="num">08</span> Report studio</h2>
+            <p>
+              Financial report, filter bar, drill-down inspector, export, and schedule controls.
+            </p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/09-tax-center.png" alt="PennyWise tax center" />
+          <div class="copy">
+            <h2><span class="num">09</span> Tax center</h2>
+            <p>Period checklist, exceptions, deadlines, evidence, and filing actions.</p>
+          </div>
+        </article>
+        <article>
+          <img
+            src="pennywise-ui-atlas/10-operations-workspace.png"
+            alt="PennyWise operations workspace"
+          />
+          <div class="copy">
+            <h2><span class="num">10</span> Operations workspace</h2>
+            <p>Products, inventory, projects, or job context with financial visibility.</p>
+          </div>
+        </article>
+        <article>
+          <img
+            src="pennywise-ui-atlas/11-settings-admin.png"
+            alt="PennyWise settings administration"
+          />
+          <div class="copy">
+            <h2><span class="num">11</span> Settings &amp; administration</h2>
+            <p>Company, team, roles, integrations, audit, and scoped save state.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/12-invoice-editor.png" alt="PennyWise invoice editor" />
+          <div class="copy">
+            <h2><span class="num">12</span> Invoice editor</h2>
+            <p>Compact metadata grid, line items, customer context, totals, and send actions.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/13-journal-entry.png" alt="PennyWise journal entry" />
+          <div class="copy">
+            <h2><span class="num">13</span> Journal entry</h2>
+            <p>Balanced debit/credit grid, evidence, audit context, and safe posting.</p>
+          </div>
+        </article>
+        <article>
+          <img src="pennywise-ui-atlas/14-month-close.png" alt="PennyWise month close" />
+          <div class="copy">
+            <h2><span class="num">14</span> Month-end close</h2>
+            <p>Checklist, blockers, variances, owner detail, evidence, and lock controls.</p>
+          </div>
+        </article>
+        <article>
+          <img
+            src="pennywise-ui-atlas/15-payroll-workbench.png"
+            alt="PennyWise payroll workbench"
+          />
+          <div class="copy">
+            <h2><span class="num">15</span> Payroll workbench</h2>
+            <p>Pay run, exception queue, employee inspector, preflight, and submit guardrail.</p>
+          </div>
+        </article>
+        <article>
+          <img
+            src="pennywise-ui-atlas/16-onboarding-import.png"
+            alt="PennyWise onboarding import"
+          />
+          <div class="copy">
+            <h2><span class="num">16</span> Onboarding &amp; import</h2>
+            <p>Setup progress, mapping, validation, error recovery, and import action bar.</p>
+          </div>
+        </article>
+      </section>
+    </main>
+    <footer>
+      Visual inspiration is original to PennyWise. Competitor product sources are workflow research
+      only and are not bundled in this deliverable.
+    </footer>
+  </body>
+</html>

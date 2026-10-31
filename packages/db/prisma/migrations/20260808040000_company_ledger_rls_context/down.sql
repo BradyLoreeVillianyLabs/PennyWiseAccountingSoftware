@@ -1,0 +1,2 @@
+-- Keep the company-aware RLS boundary in place during rollback; disabling it
+-- would expose records across legal entities.

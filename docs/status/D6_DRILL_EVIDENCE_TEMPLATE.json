@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "sourceDataCopied": false,
+  "sensitiveDataRedacted": true,
+  "drills": [
+    { "id": "store-preparation", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "catalog-import-review", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "tax-configuration", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "opening-balance-reconciliation", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "end-to-end-order-trace", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "backup-restore", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "restart", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "upgrade-over-install", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "uninstall-preserves-data", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "refund", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "short-pick", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "cancelled-order-after-posting", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "non-developer-uat", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "accessibility-acceptance", "status": "UNVERIFIED", "evidence": [], "notes": "" },
+    { "id": "disposable-machine-runbook", "status": "UNVERIFIED", "evidence": [], "notes": "" }
+  ]
+}

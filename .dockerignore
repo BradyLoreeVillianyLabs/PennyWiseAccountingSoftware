@@ -1,0 +1,15 @@
+.git
+.github
+.data
+node_modules
+**/node_modules
+**/dist
+**/.tsbuildinfo
+test-results
+tmp
+distribution/public-beta/output
+*.log
+.env
+.env.*
+!.env.example
+docs/research/*.pdf

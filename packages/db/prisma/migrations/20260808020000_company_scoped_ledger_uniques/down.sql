@@ -1,0 +1,2 @@
+-- Keep the forward index shape during rollback; dropping company-scoped
+-- uniqueness could merge identities between legal companies.

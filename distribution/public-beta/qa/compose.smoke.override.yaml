@@ -1,0 +1,6 @@
+name: clearledger-beta-smoke
+
+services:
+  web:
+    ports: !override
+      - "127.0.0.1:3199:3000"

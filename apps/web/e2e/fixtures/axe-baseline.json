@@ -1,0 +1,40 @@
+[
+  {
+    "state": "dialog-open",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "targets": [
+      "#workspace-mode-switch > button[data-workspace-mode=\"accountant\"][type=\"button\"]"
+    ]
+  },
+  {
+    "state": "error",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "targets": [
+      "#workspace-mode-switch > button[data-workspace-mode=\"accountant\"][type=\"button\"]"
+    ]
+  },
+  {
+    "state": "filled",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "targets": [
+      "#workspace-mode-switch > button[data-workspace-mode=\"accountant\"][type=\"button\"]"
+    ]
+  },
+  {
+    "state": "side-panel-open",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "targets": [
+      "#workspace-mode-switch > button[data-workspace-mode=\"accountant\"][type=\"button\"]"
+    ]
+  },
+  {
+    "state": "signed-out",
+    "rule": "color-contrast",
+    "impact": "serious",
+    "targets": [".auth-brand > .brand-wordmark > span:nth-child(1)"]
+  }
+]

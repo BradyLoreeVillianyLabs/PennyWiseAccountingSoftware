@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" RequiredVersion="6.0.0">
+  <Package
+    Name="ClearLedger Public Beta"
+    Manufacturer="ClearLedger"
+    Version="$(var.MsiVersion)"
+    ProductCode="$(var.ProductCode)"
+    UpgradeCode="$(var.UpgradeCode)"
+    Scope="perUser"
+    InstallerVersion="500"
+    Compressed="yes">
+
+    <MajorUpgrade
+      Disallow="yes"
+      DisallowUpgradeErrorMessage="A different ClearLedger Public Beta MSI is already installed. Use the verified ZIP update workflow; this MSI does not perform application upgrades."
+      DowngradeErrorMessage="A newer ClearLedger Public Beta installer is already installed." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Property Id="ARPCOMMENTS" Value="ClearLedger Public Beta $(var.DisplayVersion). Docker is required at runtime and is not installed by this MSI." />
+    <Property Id="ARPNOMODIFY" Value="1" />
+
+    <Feature Id="Complete" Title="ClearLedger Public Beta" Level="1">
+      <ComponentGroupRef Id="PayloadComponents" />
+      <ComponentRef Id="ApplicationShortcuts" />
+    </Feature>
+
+    <StandardDirectory Id="PerUserProgramFilesFolder">
+      <Directory Id="INSTALLFOLDER" Name="ClearLedger Public Beta" />
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="ApplicationProgramsFolder" Name="ClearLedger Public Beta">
+        <Component Id="ApplicationShortcuts" Guid="{22168FB3-60FD-41AE-A35E-A6B6752B29FB}">
+          <Shortcut
+            Id="StartClearLedgerShortcut"
+            Name="Start ClearLedger"
+            Description="Start ClearLedger; Docker must already be installed and running."
+            Target="[System64Folder]WindowsPowerShell\v1.0\powershell.exe"
+            Arguments="-NoLogo -NoProfile -NoExit -File &quot;[INSTALLFOLDER]Start-ClearLedger.ps1&quot;"
+            WorkingDirectory="INSTALLFOLDER" />
+          <Shortcut
+            Id="DiagnoseClearLedgerShortcut"
+            Name="Diagnose ClearLedger"
+            Description="Show ClearLedger service status and recent logs."
+            Target="[System64Folder]WindowsPowerShell\v1.0\powershell.exe"
+            Arguments="-NoLogo -NoProfile -NoExit -File &quot;[INSTALLFOLDER]Diagnose-ClearLedger.ps1&quot;"
+            WorkingDirectory="INSTALLFOLDER" />
+          <Shortcut
+            Id="CheckClearLedgerPrerequisitesShortcut"
+            Name="Check ClearLedger Prerequisites"
+            Description="Check Docker, Compose, package integrity, and disk prerequisites without printing credentials."
+            Target="[System64Folder]WindowsPowerShell\v1.0\powershell.exe"
+            Arguments="-NoLogo -NoProfile -NoExit -File &quot;[INSTALLFOLDER]Test-ClearLedgerPrerequisites.ps1&quot;"
+            WorkingDirectory="INSTALLFOLDER" />
+          <Shortcut
+            Id="BackupClearLedgerShortcut"
+            Name="Backup ClearLedger"
+            Description="Create a protected ClearLedger backup."
+            Target="[System64Folder]WindowsPowerShell\v1.0\powershell.exe"
+            Arguments="-NoLogo -NoProfile -NoExit -File &quot;[INSTALLFOLDER]Backup-ClearLedger.ps1&quot;"
+            WorkingDirectory="INSTALLFOLDER" />
+          <Shortcut
+            Id="UninstallClearLedgerShortcut"
+            Name="Uninstall ClearLedger (keep Docker data)"
+            Description="Remove MSI-managed files and shortcuts without calling Docker or deleting Docker data."
+            Target="[System64Folder]msiexec.exe"
+            Arguments="/x [ProductCode]"
+            WorkingDirectory="INSTALLFOLDER" />
+          <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+          <RegistryValue
+            Root="HKCU"
+            Key="Software\ClearLedger\PublicBeta\Installer"
+            Name="Shortcuts"
+            Type="integer"
+            Value="1"
+            KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+  </Package>
+</Wix>

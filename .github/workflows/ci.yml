@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: clearledger
+          POSTGRES_PASSWORD: clearledger_ci_only
+          POSTGRES_DB: clearledger_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U clearledger -d clearledger_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_ci?schema=public
+      TEST_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_test?schema=public
+      PGHOST: localhost
+      PGUSER: clearledger
+      PGPASSWORD: clearledger_ci_only
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - uses: pnpm/action-setup@7088e561eb65bb68695d245aa206f005ef30921d # v4.1.0
+        with:
+          version: 10.13.1
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install PostgreSQL client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Dependency vulnerability scan
+        run: pnpm audit --audit-level high
+
+      - name: Create disposable databases
+        run: |
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_test;'
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_performance_ci;'
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_clean_migrate_ci;'
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_reset_ci;'
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_rollback_verify_ci;'
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_backup_source_ci;'
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_restore_verify_ci;'
+
+      - name: Formatting
+        run: pnpm format:check
+
+      - name: Linting
+        run: pnpm lint
+
+      - name: UI v2 clutter regression check
+        run: node scripts/ui-v2/measure-ui.mjs --check
+
+      - name: TypeScript type checking
+        run: pnpm typecheck
+
+      - name: Prisma validation
+        run: pnpm db:validate
+
+      - name: Prisma client generation
+        run: pnpm db:generate
+
+      - name: Clean migration deployment
+        env:
+          DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_clean_migrate_ci?schema=public
+        run: pnpm db:migrate
+
+      - name: Migration reset verification
+        env:
+          DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_reset_ci?schema=public
+        run: pnpm db:reset
+
+      - name: Backup restore drill
+        env:
+          DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_backup_source_ci?schema=public
+          BACKUP_RESTORE_SOURCE_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_backup_source_ci?schema=public
+          BACKUP_RESTORE_TARGET_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_restore_verify_ci?schema=public
+        run: |
+          pnpm db:migrate:deploy
+          node scripts/verify-backup-restore.mjs
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Integration tests
+        env:
+          DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_ci?schema=public
+          TEST_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_test?schema=public
+        run: pnpm test:integration
+
+      - name: Controlled-beta capacity profile
+        env:
+          DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_ci?schema=public
+          TEST_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_performance_ci?schema=public
+        run: pnpm test:performance
+
+      - name: Accessibility and security contracts
+        run: |
+          pnpm test:accessibility
+          pnpm test:security
+          pnpm test:release
+
+      - name: Install browser test engines
+        run: pnpm exec playwright install --with-deps chromium firefox webkit
+
+      - name: Browser end-to-end tests
+        env:
+          DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_ci?schema=public
+          TEST_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_test?schema=public
+        run: pnpm test:e2e
+
+      - name: Build
+        run: pnpm build
+
+      - name: Migration rollback verification
+        env:
+          DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_rollback_verify_ci?schema=public
+        run: pnpm db:rollback:verify

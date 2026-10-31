@@ -1,0 +1,28 @@
+{
+  "id": "/",
+  "name": "PennyWise Accounting",
+  "short_name": "PennyWise Accounting",
+  "description": "Canada-first small-business accounting and invoicing.",
+  "lang": "en-CA",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f7f3ed",
+  "theme_color": "#142a3b",
+  "categories": ["business", "finance"],
+  "icons": [
+    {
+      "src": "/icons/clearledger.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/clearledger-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "prefer_related_applications": false
+}

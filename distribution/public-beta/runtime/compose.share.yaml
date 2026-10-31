@@ -1,0 +1,62 @@
+services:
+  share_api:
+    image: ${CLEARLEDGER_IMAGE:?Run Start-ClearLedger.ps1 first}
+    restart: "no"
+    depends_on:
+      runtime_role:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: development
+      LOG_LEVEL: info
+      HOST: 0.0.0.0
+      PORT: 3001
+      CLEARLEDGER_BETA_RUNTIME: "true"
+      DATABASE_URL: postgresql://clearledger_beta_runtime:${CLEARLEDGER_RUNTIME_DB_PASSWORD}@postgres:5432/clearledger?schema=public
+      APP_BASE_URL: https://${CLEARLEDGER_SHARE_SUBDOMAIN:?Run Share-ClearLedger.ps1}.loclx.io
+      API_BASE_URL: http://share_api:3001
+      PAYMENT_PUBLIC_BASE_URL: https://${CLEARLEDGER_SHARE_SUBDOMAIN:?Run Share-ClearLedger.ps1}.loclx.io
+      WEBHOOK_SECRET_ENCRYPTION_SECRET: ${WEBHOOK_SECRET_ENCRYPTION_SECRET:?Run Start-ClearLedger.ps1 first}
+      CONNECTOR_CREDENTIAL_ENCRYPTION_SECRET: ${CONNECTOR_CREDENTIAL_ENCRYPTION_SECRET:?Run Start-ClearLedger.ps1 first}
+      PAYMENT_WEBHOOK_SECRET: ${PAYMENT_WEBHOOK_SECRET:?Run Start-ClearLedger.ps1 first}
+      PAYMENT_ACCOUNT_ENCRYPTION_SECRET: ${PAYMENT_ACCOUNT_ENCRYPTION_SECRET:?Run Start-ClearLedger.ps1 first}
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:3001/health"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      - clearledger_files:/app/.data
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - internal
+      - provider_egress
+
+  share_web:
+    image: ${CLEARLEDGER_IMAGE:?Run Start-ClearLedger.ps1 first}
+    restart: "no"
+    depends_on:
+      share_api:
+        condition: service_healthy
+    command: ["node", "apps/web/serve.mjs"]
+    environment:
+      WEB_HOST: 0.0.0.0
+      WEB_PORT: 3000
+      API_BASE_URL: http://share_api:3001
+      APP_ORIGIN: https://${CLEARLEDGER_SHARE_SUBDOMAIN:?Run Share-ClearLedger.ps1}.loclx.io
+      SHARE_IDENTITY_EMAIL: ${CLEARLEDGER_SHARE_EMAIL:?Run Share-ClearLedger.ps1}
+      SHARE_IDENTITY_NAME: ${CLEARLEDGER_SHARE_NAME:?Run Share-ClearLedger.ps1}
+      SHARE_ORGANIZATION_ID: ${CLEARLEDGER_SHARE_ORGANIZATION_ID:?Run Share-ClearLedger.ps1}
+    ports:
+      - "127.0.0.1:${CLEARLEDGER_SHARE_PORT:-3100}:3000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - internal
+      - public_ingress

@@ -1,0 +1,113 @@
+# QuickBooks Desktop feature and settings gap review
+
+Date: 2026-08-13
+
+This review compares PennyWise Accounting with the operational expectations established by
+QuickBooks Desktop. It is a product-planning baseline, not an Intuit endorsement or a claim
+that every QuickBooks edition has the same features. Pro/Premier, Enterprise, Accountant,
+Canadian payroll subscriptions, and single-user versus multi-user mode differ.
+
+## Executive decision
+
+PennyWise already has a stronger modern foundation than a file-based desktop ledger in several
+areas: tenant-scoped multi-user access, immutable postings, explicit review queues, browser and
+desktop delivery, connected-commerce evidence, and auditable source provenance. It is not yet at
+full QuickBooks Desktop functional breadth.
+
+The Canadian beta must not claim complete QuickBooks replacement until the production-provider
+and regulated-workflow gates below are closed. The highest-value parity work is not adding more
+navigation entries. It is finishing a coherent settings model, production email/bank/payment
+providers, Canadian tax/payroll controls, recoverable backup/restore, and cross-module dimensions
+for jobs/classes.
+
+## Current strength and material gaps
+
+| Area                            | PennyWise status from repository inspection                                                                                                                                                                    | QuickBooks Desktop benchmark                                                                                                                                                                                                                                                                                                                                                                                                                                   | Decision                                                                                                                                                                                   |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Ledger and period control       | Double-entry services, immutable journals, reversals, fiscal periods, close/reopen, trace and audit surfaces are implemented.                                                                                  | QuickBooks protects work before a closing date and can require a closing-date password. [Intuit closing-date guide](https://quickbooks.intuit.com/learn-support/en-ca/help-article/close-books/set-change-closing-date-closing-date-password/L2uKHmMhZ_CA_en_CA)                                                                                                                                                                                               | Keep PennyWise's role/reauth model; add one company-level closing-policy page and exception report.                                                                                        |
+| Users and permissions           | Fixed business roles and granular server permissions exist.                                                                                                                                                    | Enterprise supports predefined and custom roles plus a permission-access report; Pro/Premier provide selected-area restrictions. [Enterprise roles](https://quickbooks.intuit.com/learn-support/en-ca/help-article/manage-users/create-manage-users-roles-quickbooks-desktop/L9z3XdBcQ_CA_en_CA), [Desktop restrictions](https://quickbooks.intuit.com/learn-support/en-ca/help-article/manage-users/quickbooks-desktop-users-restrictions/L7bbEXsl2_CA_en_CA) | Add custom role composition, clone role, effective-permission preview, sensitive-balance control, and permission report.                                                                   |
+| Sales and receivables           | Customers, estimates, invoices, credits, receipts, refunds, deposits and progress-plan foundations exist; some advanced deposit/progress paths remain non-posting.                                             | Desktop includes estimates, invoices, sales receipts, statements, credits, payments and job links. [Intuit Desktop setup](https://quickbooks.intuit.com/learn-support/en-ca/help-article/product-setup/getting-started-quickbooks-desktop/L9o53ewxM_CA_en_CA)                                                                                                                                                                                                  | Finish one posting-safe progress/deposit workflow and statements before broad parity claims.                                                                                               |
+| Purchases and payables          | Vendors, purchase orders, bills, expenses, credits, attachments, duplicate controls and payments exist.                                                                                                        | Comparable AP centre, bill payment and reporting.                                                                                                                                                                                                                                                                                                                                                                                                              | Beta-ready after focused workflow and print/email validation.                                                                                                                              |
+| Forms and email                 | Invoice templates include fonts, spacing, colours, images and PDF output; email connections and delivery infrastructure exist but production configuration remains environment-dependent.                      | Desktop supports multiple form and email templates, dynamic fields, batch send and defaults. [Email templates](https://quickbooks.intuit.com/learn-support/en-ca/help-article/customise-forms/create-custom-email-templates-quickbooks-desktop/L1oR8AyaT_CA_en_CA), [form templates](https://quickbooks.intuit.com/learn-support/en-us/help-article/customize-forms/use-customize-form-templates/L31kJSVTb_US_en_US)                                           | Extend the template designer to estimates, statements, credits, purchase orders, receipts and payment stubs; add batch-send review and delivery history.                                   |
+| Banking                         | CSV/OFX/QFX imports, matching, rules, transfers and reconciliation exist. Hosted-consent bank-feed architecture and a local simulator exist; live production still needs an approved provider and credentials. | Desktop supports Direct Connect or Web Connect, then review, add and match. [Bank-feed setup](https://quickbooks.intuit.com/learn-support/en-ca/help-article/bank-connectivity/set-bank-accounts-bank-feeds-quickbooks-desktop/L5gZcG2Ql_CA_en_CA), [matching](https://quickbooks.intuit.com/learn-support/en-ca/help-article/bank-connectivity/add-match-bank-feed-transactions-quickbooks/L3FoaeL3b_CA_en_CA)                                                | File import is beta-capable. Do not advertise live feeds until production consent, token, webhook, removal/change and institution acceptance tests pass.                                   |
+| Canadian sales tax              | Tax registrations, codes, reporting and explicit commerce remitter mapping exist. Automated filing/payment remains unavailable.                                                                                | Desktop configures Canadian tax agencies/items/groups, customer/supplier/item codes, liability reporting and adjustments. [Canadian sales-tax setup](https://quickbooks.intuit.com/learn-support/en-ca/help-article/remit-sales-taxes/set-sales-tax-quickbooks-desktop/L4eiCAozs_CA_en_CA), [tax adjustments](https://quickbooks.intuit.com/learn-support/en-ca/help-article/sales-taxes/process-sales-tax-adjustment/L46isBM3Z_CA_en_CA)                      | Add a unified tax-agency/remittance calendar, reviewed adjustments, return workpaper and filing export. Keep filing/payment provider-gated.                                                |
+| Payroll                         | Canadian/Alberta calculation and draft-automation foundations exist; filing, direct deposit and complete province/form coverage are gated.                                                                     | Desktop Canadian payroll maintains tax tables, schedules, TD1 data, remittances and year-end forms. [Payroll setup](https://quickbooks.intuit.com/learn-support/en-ca/help-article/payroll-setup/set-payroll-service/L8iUmVRm1_CA_en_CA), [tax-table updates](https://quickbooks.intuit.com/learn-support/en-ca/help-article/retirement-benefits/download-latest-payroll-tax-table/L6uFWKUKO_CA_en_CA)                                                         | Payroll is not a public-beta parity claim until all supported provinces, corrections, ROE/T4/RL-1, remittance, direct-deposit export/provider and legal acceptance pass.                   |
+| Inventory and commerce          | Weighted-average inventory, locations, receipts, adjustments, returns, transfers, valuation, low stock, Woo/Etsy mapping, images and reviewed quantity authority exist.                                        | Desktop includes item tracking, reorder points and, by edition, advanced inventory.                                                                                                                                                                                                                                                                                                                                                                            | Add assemblies/bundles, reservations/available-to-sell, serial/lot/bin controls where required, purchase suggestions and multi-channel allocation before advanced-inventory parity.        |
+| Jobs, classes and time          | CRM, projects, work items, estimates, calendar and time entry exist. Posting dimensions are not consistently available on every sales, purchase, payroll and journal line.                                     | Desktop job costing assigns revenue, expenses, estimates and time to Customer:Job; classes support segment reporting. [Job costing](https://quickbooks.intuit.com/learn-support/en-ca/help-article/job-costing/track-job-costs-quickbooks-desktop/L2X01vi47_CA_en_CA), [class tracking](https://quickbooks.intuit.com/learn-support/en-us/help-article/class-list/set-use-class-tracking-quickbooks-desktop/L51C0Hl0v_US_en_US)                                | Create first-class project/job and class/department dimensions across posting lines, budgets and reports. This is the largest everyday parity gap for contractors.                         |
+| Budgets and forecasts           | Budget plans, lines, status workflow, cash assumptions and forecasts are implemented.                                                                                                                          | Desktop supports P&L and balance-sheet budgets, prior-year seeding and optional job/class criteria. [Budgets and forecasts](https://quickbooks.intuit.com/learn-support/en-us/help-article/financial-reports/create-budget-forecast-quickbooks-desktop/L4bHm1wBM_US_en_US)                                                                                                                                                                                     | Add prior-year copy, spreadsheet fill, job/class dimensions and richer budget-versus-actual reports; do not rebuild the module.                                                            |
+| Recurring work and reminders    | Recurring invoice schedules exist; the calendar/reminder foundation is broader than the released automatic-posting boundary.                                                                                   | Desktop memorizes several transaction types and supports reminder/automatic-entry groups. [Memorized transactions](https://quickbooks.intuit.com/learn-support/en-ca/help-article/memorise-transactions/create-edit-delete-memorized-transactions/L9kERjiUf_CA_en_CA)                                                                                                                                                                                          | Generalize to reviewable recurring bills, cheques, journals and reminders. Automatic posting must remain separately permissioned and idempotent.                                           |
+| Reports                         | Formal financial and operational reports, comparison, printing and CSV export exist.                                                                                                                           | Desktop adds memorized report groups, scheduled reports and deep custom filtering. [Memorized reports](https://quickbooks.intuit.com/learn-support/en-ca/help-article/memorise-reports/create-access-modify-memorized-reports/L8TUb2B8j_CA_en_CA)                                                                                                                                                                                                              | Add named saved reports/views, schedules, distribution controls, consolidated multi-company reports and a permission-aware report catalogue.                                               |
+| Fixed assets                    | Register, asset classes and deterministic non-posting depreciation previews exist.                                                                                                                             | Fixed Asset Manager supports depreciation configuration and account assignment in eligible editions. [Fixed Asset Manager](https://quickbooks.intuit.com/learn-support/en-us/help-article/import-export-data-files/use-fixed-asset-manager-quickbooks-desktop/L9eXyJhph_US_en_US)                                                                                                                                                                              | Add approved depreciation posting, disposal/trade-in, impairment, attachments and Canadian CCA workpapers before claiming full asset accounting.                                           |
+| Backup, restore and portability | Complete organization export and engineering recovery controls exist; the export explicitly is not an in-product full restore.                                                                                 | Desktop provides manual/scheduled verified backups and restore points. [Backup guide](https://quickbooks.intuit.com/learn-support/en-ca/help-article/back-data/back-quickbooks-desktop-company-file/L9qYBI54v_CA_en_CA)                                                                                                                                                                                                                                        | Add a visible backup schedule/status, encrypted package format, restore wizard, validation-only restore, retention policy and proven clean-machine recovery. This is a beta trust blocker. |
+| Accountant collaboration        | Accountant workbench, manual-journal drafts, review queues, shared multi-user access and exports exist.                                                                                                        | Accountant's Copy supports a dividing date and a file exchange for accountant changes. [Accountant's Copy](https://quickbooks.intuit.com/learn-support/en-ca/help-article/set-files/use-accountant-copy-working-file-quickbooks/L151sQlqf_CA_en_CA)                                                                                                                                                                                                            | Prefer live scoped accountant access over QBX/QBA/QBY emulation; add an engagement package, requested-change queue, sign-off and client acceptance workflow.                               |
+| Custom fields and attachments   | Evidence and attachments exist in selected modules; a universal custom-field system is not evident.                                                                                                            | Desktop can expose custom name/item fields in forms and reports. [Custom fields](https://quickbooks.intuit.com/learn-support/en-ca/help-article/customise-forms/create-use-custom-fields-quickbooks-desktop/L7l6yvJ5u_CA_en_CA)                                                                                                                                                                                                                                | Add typed custom fields with permissions, validation, form/report visibility and API/export support; expand attachments to every relevant transaction and master record.                   |
+| Multicurrency                   | Controlled CAD/USD accounting, positions and revaluation exist.                                                                                                                                                | Desktop supports multicurrency preferences and foreign-currency records.                                                                                                                                                                                                                                                                                                                                                                                       | Keep the narrow CAD/USD promise; finish foreign credits/refunds, bank transfers and migration before broadening currencies.                                                                |
+
+## Settings centre requirements
+
+QuickBooks Desktop exposes company preferences across Accounting, Bills, Checking, Inventory,
+Jobs and Estimates, Multicurrency, Payments, Payroll, Reminders, Reports, Sales, Sales Tax, Send
+Forms, Time and Expenses, and integrated applications. PennyWise should expose a single searchable
+settings catalogue with these owner-language groups:
+
+1. Company and accounting: identity, fiscal year, accounting method, numbering, rounding,
+   closing policy, base currency and multi-company defaults.
+2. People and access: members, custom roles, effective permissions, sensitive balances,
+   accountant access, sessions and connected credentials.
+3. Sales and customers: defaults, terms, deposits, estimates, progress billing, statements,
+   form/email templates, reminders and online payments.
+4. Purchases and suppliers: purchase orders, approvals, duplicate policy, expense defaults,
+   bill payment and remittance advice.
+5. Banking and cash: statement formats, connected feeds, review-gate toggle, exact rules,
+   reconciliation, cheque/print defaults and cash accounts.
+6. Tax and payroll: registrations, agencies, tax-code precedence, inclusive tax, adjustment
+   policy, filing calendar, payroll jurisdictions, schedules, deductions and provider status.
+7. Inventory, jobs and time: valuation, negative-stock policy, locations, authority rules,
+   reservations, jobs/classes, billable time and mileage.
+8. Documents and communications: templates, logos, email connections, batch send, attachments,
+   retention and print defaults.
+9. Reports and automation: report basis/default period, saved reports, recurring drafts,
+   reminders, budgets and approval boundaries.
+10. Data and integrations: Switching Centre, backups/restores, exports, Woo/Etsy, API apps,
+    webhooks, audit and data retention.
+11. Appearance and workspace: density, text scale, column layouts, toolbar/navigation,
+    window mode, accessible motion and saved views.
+
+Every setting must show scope (user, company, or organization), required permission, effective
+date when financial, current value, default, last changer, and a plain-language consequence.
+Search results must be keyboard/click navigable to the exact control.
+
+## Delivery phases
+
+### Phase 1 - beta trust and Canadian operations
+
+- production email, payment and live-bank provider acceptance;
+- backup/restore product workflow and recovery drill;
+- unified closing/tax/remittance settings and workpapers;
+- Canadian payroll completion only if payroll is marketed;
+- permission report and sensitive-balance controls;
+- Switching Centre resume, QuickBooks export checklist and control-total sign-off.
+
+### Phase 2 - contractor and owner advantage
+
+- job/class dimensions on every relevant posting line;
+- estimates-to-schedule-to-time-to-cost-to-progress-invoice workflow;
+- configurable standard contracts and document/email templates;
+- project profitability, estimate-versus-actual and budget-by-job reporting;
+- reviewable recurring bills, reminders and collections.
+
+### Phase 3 - advanced parity and differentiation
+
+- custom roles and typed custom fields;
+- inventory assemblies/reservations/serial-lot depth;
+- saved/scheduled/consolidated reports;
+- fixed-asset posting and Canadian CCA workpapers;
+- accountant engagement/sign-off packages;
+- tested multi-company online collaboration and optional web deployment.
+
+## Non-negotiable release rule
+
+An implemented screen is not parity evidence. Each area needs accounting invariants, permission
+denials, tenant isolation, idempotency/replay, concurrency, correction/undo behavior, printable
+output, accessibility, browser/desktop workflow tests, and production-provider evidence where an
+external service is involved.

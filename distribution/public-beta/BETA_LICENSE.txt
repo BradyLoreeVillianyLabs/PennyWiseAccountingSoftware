@@ -1,0 +1,76 @@
+CLEARLEDGER PUBLIC BETA LICENCE
+Version 1.0 - 2026-08-03
+
+Copyright (c) 2026 the ClearLedger project owner. All rights reserved.
+
+1. Beta licence. Subject to these terms, the owner grants you a limited,
+revocable, non-exclusive, non-transferable, royalty-free licence to install and
+use the supplied ClearLedger public-beta runtime for your own evaluation,
+testing, training, and internal bookkeeping during the beta period.
+
+2. Ownership. ClearLedger, its original code, visual design, documentation,
+trade dress, and supplied runtime remain the owner's property. This licence does
+not sell or assign the software or any intellectual-property right. Your
+business data remains yours.
+
+3. Restrictions. Except where applicable law expressly prevents the
+restriction, you may not resell, sublicense, redistribute, publish, rent, lease,
+white-label, operate as a service for third parties, remove ownership notices,
+circumvent a technical protection, reverse engineer, decompile, disassemble, or
+use the software or its non-public implementation to create a competing or
+derivative product. You may make reasonable backup copies for your licensed use.
+
+4. Feedback. You may choose to send feedback, defect reports, and suggestions.
+You grant the owner a perpetual, worldwide, royalty-free right to use that
+feedback without identifying you or disclosing your confidential information.
+Do not submit customer records, credentials, tax identifiers, or other sensitive
+data in a bug report.
+
+5. Third-party components. Third-party software is licensed under the terms
+identified in THIRD_PARTY_NOTICES.md. Those terms govern the corresponding
+components and are not reduced by this licence.
+
+6. Beta risk and records. The software is unfinished and may contain defects,
+lose availability, or produce incorrect results. You are responsible for
+backups, source documents, access controls, verification of opening and control
+balances, and deciding whether a workflow is suitable for your records. Keep
+the prior system or a complete readable archive until migration is reconciled.
+
+7. No professional advice or filing service. ClearLedger does not provide legal,
+tax, accounting, payroll, audit, or investment advice. Automation, reports,
+examples, and tax calculations require review appropriate to your business and
+jurisdiction. Unless a separately identified feature states otherwise, the beta
+does not file returns, remit taxes, run statutory payroll, or guarantee legal
+compliance.
+
+8. Privacy and providers. A local installation stores data on the computer or
+infrastructure you control. Optional external providers process data under
+their own terms and privacy practices. You must supply and protect your own
+provider credentials; credentials may not be included in a redistributed copy.
+
+9. Disclaimer. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE BETA IS PROVIDED
+"AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+INCLUDING MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, ACCURACY,
+NON-INFRINGEMENT, AVAILABILITY, OR DATA PRESERVATION. RIGHTS THAT CANNOT
+LEGALLY BE EXCLUDED REMAIN UNAFFECTED.
+
+10. Limitation of liability. TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE OWNER
+AND CONTRIBUTORS WILL NOT BE LIABLE FOR INDIRECT, INCIDENTAL, SPECIAL,
+CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE DAMAGES, LOST PROFITS, LOST REVENUE, LOST
+DATA, BUSINESS INTERRUPTION, TAX OR PENALTY AMOUNTS, OR THE COST OF SUBSTITUTE
+SERVICES ARISING FROM THE BETA. NON-EXCLUDABLE LIABILITY REMAINS LIMITED ONLY
+TO THE EXTENT THE LAW ALLOWS.
+
+11. Termination. This licence ends if you materially breach it or when the owner
+ends the public beta on reasonable notice. On termination, stop using and
+delete the runtime, but first use ClearLedger's organization export to retain
+your data and legally required records. Sections intended by their nature to
+survive termination continue to apply.
+
+12. Separate agreement and law. A later signed or accepted commercial agreement
+may replace these terms. Governing law and forum will be specified before a
+general commercial release; mandatory consumer and statutory rights apply
+regardless of this clause.
+
+By installing or using the public-beta runtime, you acknowledge that you have
+read and accepted these terms. If you do not accept them, do not use the beta.

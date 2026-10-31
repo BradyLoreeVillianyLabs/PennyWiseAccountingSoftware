@@ -1,0 +1,13 @@
+DROP POLICY IF EXISTS "OAuthRefreshToken_lookup_policy" ON "OAuthRefreshToken";
+DROP POLICY IF EXISTS "OAuthAccessToken_lookup_policy" ON "OAuthAccessToken";
+DROP POLICY IF EXISTS "OAuthAuthorizationCode_lookup_policy" ON "OAuthAuthorizationCode";
+DROP POLICY IF EXISTS "OAuthClient_lookup_policy" ON "OAuthClient";
+DROP POLICY IF EXISTS "OAuthRefreshToken_tenant_policy" ON "OAuthRefreshToken";
+DROP POLICY IF EXISTS "OAuthAccessToken_tenant_policy" ON "OAuthAccessToken";
+DROP POLICY IF EXISTS "OAuthAuthorizationCode_tenant_policy" ON "OAuthAuthorizationCode";
+DROP POLICY IF EXISTS "OAuthClient_tenant_policy" ON "OAuthClient";
+DROP TABLE IF EXISTS "OAuthRefreshToken";
+DROP TABLE IF EXISTS "OAuthAccessToken";
+DROP TABLE IF EXISTS "OAuthAuthorizationCode";
+DROP TABLE IF EXISTS "OAuthClient";
+DROP TYPE IF EXISTS "OAuthClientStatus";

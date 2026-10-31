@@ -1,0 +1,2 @@
+-- Preserve intercompany evidence and consolidation configuration on rollback;
+-- remove these records only through an explicit archival workflow.

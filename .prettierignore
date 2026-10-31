@@ -1,0 +1,13 @@
+coverage/
+dist/
+node_modules/
+packages/db/generated/
+packages/db/generated-client-d5/
+packages/db/generated-client-rebuilt/
+packages/db/tmp-prisma-client/
+.tmp/
+tmp/
+distribution/public-beta/output/
+distribution/public-beta/msi/*.wxs
+.playwright-cli/
+outputs/

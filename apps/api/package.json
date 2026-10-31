@@ -1,0 +1,48 @@
+{
+  "name": "@clearledger/api",
+  "version": "0.14.0-rc.1",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@clearledger/accounting-core": "workspace:*",
+    "@clearledger/db": "workspace:*",
+    "@clearledger/shared": "workspace:*",
+    "@napi-rs/canvas": "1.0.9",
+    "@paypal/paypal-server-sdk": "^2.5.0",
+    "@tesseract.js-data/eng": "1.0.0",
+    "fastify": "5.8.5",
+    "jose": "6.2.4",
+    "pdfjs-dist": "6.3.289",
+    "pdfkit": "0.19.1",
+    "read-excel-file": "9.3.5",
+    "sharp": "0.35.4",
+    "square": "^45.1.0",
+    "stripe": "^22.3.2",
+    "tesseract.js": "7.0.0",
+    "yauzl": "3.4.0",
+    "zod": "3.24.1"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "start": "node dist/index.js",
+    "test": "vitest run --config vitest.config.ts",
+    "test:integration": "node ../../scripts/run-integration-tests.mjs",
+    "test:performance": "vitest run --config vitest.performance.config.ts",
+    "typecheck": "tsc -b tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/pdfkit": "0.17.6",
+    "@types/yauzl": "2.10.3"
+  }
+}

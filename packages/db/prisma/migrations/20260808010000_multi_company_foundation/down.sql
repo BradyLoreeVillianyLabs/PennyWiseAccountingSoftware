@@ -1,0 +1,4 @@
+-- The forward migration is intentionally data-preserving. Company assignments
+-- are accounting provenance and must not be silently discarded by rollback.
+-- Rollback tooling should deploy a newer compatibility migration instead of
+-- dropping Company or companyId columns.

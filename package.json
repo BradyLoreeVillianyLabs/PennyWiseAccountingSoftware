@@ -1,0 +1,63 @@
+{
+  "name": "clearledger",
+  "version": "0.14.0-rc.1",
+  "private": true,
+  "type": "module",
+  "description": "Canada-first small-business accounting and invoicing platform",
+  "packageManager": "pnpm@10.13.1",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "fast-uri@3.1.4": "3.1.5",
+      "fast-uri@4.1.1": "4.1.2",
+      "deepmerge-ts": "8.0.0"
+    }
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.62.0",
+    "@types/node": "26.1.1",
+    "esbuild": "0.28.1",
+    "eslint": "10.8.0",
+    "prettier": "3.4.2",
+    "tsx": "4.23.1",
+    "typescript": "5.7.3",
+    "typescript-eslint": "8.65.0",
+    "vitest": "3.2.6"
+  },
+  "scripts": {
+    "build": "corepack pnpm db:generate && corepack pnpm -r --if-present run build",
+    "dev": "corepack pnpm -r --parallel --if-present run dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "typecheck": "tsc -b && tsc --noEmit -p apps/web/e2e/tsconfig.json",
+    "test": "node --test scripts/require-isolated-test-database.test.mjs scripts/pennywise-beta-activation.test.mjs distribution/windows-native/native-operations.test.mjs && corepack pnpm -r --if-present run test",
+    "test:integration": "node scripts/run-integration-tests.mjs",
+    "demo:seed-full": "node scripts/seed-full-demo-company.mjs",
+    "test:e2e": "node scripts/run-browser-tests.mjs",
+    "test:accessibility": "node scripts/verify-release-candidate.mjs --accessibility",
+    "test:performance": "corepack pnpm --filter @clearledger/web run build && node scripts/run-performance-tests.mjs && node scripts/verify-release-candidate.mjs --performance",
+    "test:security": "node scripts/verify-release-candidate.mjs --security",
+    "test:research": "node scripts/verify-competitive-research-matrix.mjs",
+    "payroll:automation": "node scripts/run-payroll-draft-automation.mjs",
+    "beta:provision-runtime": "node scripts/provision-pennywise-beta-runtime.mjs",
+    "verify:production-config": "node scripts/verify-production-config.mjs",
+    "product-analytics:report": "node scripts/report-product-analytics.mjs",
+    "test:release": "corepack pnpm test:research && corepack pnpm --filter @clearledger/web run build && node scripts/verify-release-candidate.mjs",
+    "db:generate": "corepack pnpm --filter @clearledger/db run generate",
+    "db:migrate": "corepack pnpm --filter @clearledger/db run migrate",
+    "db:migrate:dev": "corepack pnpm --filter @clearledger/db run migrate:dev",
+    "db:migrate:deploy": "corepack pnpm --filter @clearledger/db run migrate:deploy",
+    "db:rollback:verify": "node scripts/verify-migration-rollbacks.mjs",
+    "db:mcf-rollback-guard:verify": "tsx scripts/verify-mcf-rollback-guard.ts",
+    "db:backup:verify": "node scripts/verify-backup-restore.mjs",
+    "test:d6:evidence": "node scripts/verify-d6-evidence.mjs",
+    "db:reset": "corepack pnpm --filter @clearledger/db run reset",
+    "db:validate": "corepack pnpm --filter @clearledger/db run validate",
+    "check": "corepack pnpm format:check && corepack pnpm lint && corepack pnpm typecheck && corepack pnpm db:validate && corepack pnpm test:research && corepack pnpm test && corepack pnpm test:integration && corepack pnpm build"
+  }
+}

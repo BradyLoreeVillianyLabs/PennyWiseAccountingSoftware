@@ -1,0 +1,3 @@
+Customer No,Company,Email,Unused source note
+00042,Northwind Coffee,northwind@example.test,Preserve leading zeroes
+00043,Alpine Traders,alpine@example.test,Not imported

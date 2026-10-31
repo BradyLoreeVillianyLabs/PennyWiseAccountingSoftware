@@ -1,0 +1,11 @@
+{
+  "name": "@clearledger/web",
+  "version": "0.14.0-rc.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/verify-assets.mjs && node scripts/build-assets.mjs",
+    "dev": "node serve.mjs",
+    "test": "node scripts/verify-assets.mjs && node --test money.test.mjs strings.test.mjs controlled-share-auth.test.mjs"
+  }
+}

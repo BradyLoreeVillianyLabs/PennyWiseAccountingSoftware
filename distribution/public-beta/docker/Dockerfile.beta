@@ -1,0 +1,99 @@
+# syntax=docker/dockerfile:1.7
+FROM node:24.15.0-bookworm-slim@sha256:4e6b70dd6cbfc88c8157ba19aa3d9f9cce6ba4703576d55459e45efcbc9c5f5d AS build
+
+ARG CLEARLEDGER_VERSION=development
+WORKDIR /workspace
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates openssl \
+    && rm -rf /var/lib/apt/lists/* \
+    && corepack enable \
+    && corepack prepare pnpm@10.13.1 --activate
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml tsconfig.json tsconfig.base.json ./
+COPY apps/api/package.json apps/api/tsconfig.json ./apps/api/
+COPY apps/web/package.json ./apps/web/
+COPY packages/accounting-core/package.json packages/accounting-core/tsconfig.json ./packages/accounting-core/
+COPY packages/db/package.json packages/db/tsconfig.json ./packages/db/
+COPY packages/shared/package.json packages/shared/tsconfig.json ./packages/shared/
+RUN pnpm install --frozen-lockfile
+
+COPY apps/api/src ./apps/api/src
+COPY apps/web/index.html apps/web/app.js apps/web/money.js apps/web/pwa.js apps/web/styles.css apps/web/serve.mjs apps/web/service-worker.js apps/web/manifest.webmanifest apps/web/offline.html ./apps/web/
+COPY apps/web/icons ./apps/web/icons
+COPY apps/web/scripts ./apps/web/scripts
+COPY packages/accounting-core/src ./packages/accounting-core/src
+COPY packages/db/src ./packages/db/src
+COPY packages/db/prisma ./packages/db/prisma
+COPY packages/shared/src ./packages/shared/src
+
+RUN pnpm db:generate \
+    && pnpm build \
+    && mkdir -p /runtime-web \
+    && cp apps/web/serve.mjs /runtime-web/serve.mjs \
+    && cp -R apps/web/dist /runtime-web/dist \
+    && sed "s/__CLEARLEDGER_CACHE_VERSION__/${CLEARLEDGER_VERSION}/g" apps/web/dist/service-worker.js > /runtime-web/dist/service-worker.js \
+    && pnpm --filter @clearledger/api deploy --prod --legacy /runtime \
+    && db_package_path="$(readlink -f /runtime/node_modules/@clearledger/db)" \
+    && cd "${db_package_path}" \
+    && ./node_modules/.bin/prisma generate --schema prisma/schema.prisma \
+    && cd /workspace \
+    && rm -rf \
+      /runtime/.data \
+      /runtime/src \
+      /runtime/README.md \
+      /runtime/tsconfig.json \
+      /runtime/vitest.config.ts \
+      /runtime/vitest.integration.config.ts \
+      /runtime/vitest.performance.config.ts \
+    && for package_name in accounting-core db shared; do \
+      package_path="$(readlink -f "/runtime/node_modules/@clearledger/${package_name}")"; \
+      rm -rf "${package_path}/src" "${package_path}/tmp-prisma-client"; \
+      rm -f "${package_path}/README.md" "${package_path}/tsconfig.json"; \
+      find "${package_path}/dist" -type f \( -name '*.d.ts' -o -name '*.d.ts.map' -o -name '*.map' -o -name '.tsbuildinfo' \) -delete; \
+    done \
+    && find /runtime/dist -type f \( -name '*.d.ts' -o -name '*.d.ts.map' -o -name '*.map' -o -name '.tsbuildinfo' \) -delete \
+    && for artifact_root in \
+      /runtime/dist \
+      "$(readlink -f /runtime/node_modules/@clearledger/accounting-core)/dist" \
+      "$(readlink -f /runtime/node_modules/@clearledger/db)/dist" \
+      "$(readlink -f /runtime/node_modules/@clearledger/shared)/dist"; do \
+      unexpected_test_artifacts="$(find "${artifact_root}" -type f \( \
+        -name '*.test.js' -o \
+        -name '*.integration.js' -o \
+        -name '*.spec.js' -o \
+        -name 'test-utils.js' \
+      \) -print)"; \
+      if [ -n "${unexpected_test_artifacts}" ]; then \
+        printf 'Production runtime contains compiled test artifacts:\n%s\n' "${unexpected_test_artifacts}" >&2; \
+        exit 1; \
+      fi; \
+    done
+
+FROM node:24.15.0-bookworm-slim@sha256:4e6b70dd6cbfc88c8157ba19aa3d9f9cce6ba4703576d55459e45efcbc9c5f5d AS runtime
+
+ARG CLEARLEDGER_VERSION=development
+ARG CLEARLEDGER_CREATED=unknown
+LABEL org.opencontainers.image.title="ClearLedger Public Beta" \
+      org.opencontainers.image.version="${CLEARLEDGER_VERSION}" \
+      org.opencontainers.image.created="${CLEARLEDGER_CREATED}" \
+      org.opencontainers.image.source="source-reduced-private-build" \
+      org.opencontainers.image.licenses="LicenseRef-ClearLedger-Public-Beta"
+
+ENV NODE_ENV=development \
+    LOG_LEVEL=info \
+    CLEARLEDGER_BETA_RUNTIME=true
+WORKDIR /app
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl openssl \
+    && rm -rf /var/lib/apt/lists/* \
+    && mkdir -p /app/.data/documents /app/.data/logos \
+    && chown -R node:node /app
+
+COPY --from=build --chown=node:node /runtime ./
+COPY --from=build /runtime-web ./apps/web/
+
+VOLUME ["/app/.data"]
+EXPOSE 3000 3001
+USER node
+CMD ["node", "dist/index.js"]

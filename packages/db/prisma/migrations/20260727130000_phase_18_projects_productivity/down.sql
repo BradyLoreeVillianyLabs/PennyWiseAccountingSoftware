@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS "CaptureReview";
+DROP TABLE IF EXISTS "MileageLog";
+DROP TABLE IF EXISTS "ProjectTimeEntry";
+DROP TABLE IF EXISTS "Project";
+DROP TYPE IF EXISTS "MileageStatus";
+DROP TYPE IF EXISTS "CaptureKind";
+DROP TYPE IF EXISTS "CaptureReviewStatus";
+DROP TYPE IF EXISTS "TimeEntryStatus";
+DROP TYPE IF EXISTS "ProjectBillingMethod";
+DROP TYPE IF EXISTS "ProjectStatus";

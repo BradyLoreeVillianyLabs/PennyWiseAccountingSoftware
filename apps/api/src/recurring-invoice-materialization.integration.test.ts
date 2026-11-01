@@ -109,6 +109,7 @@ describe("recurring invoice materialization", () => {
     });
     expect(customer.statusCode).toBe(201);
     const customerId = customer.json<{ customer: { id: string } }>().customer.id;
+    const firstOccurrenceStartAt = new Date(Date.now() - 60_000).toISOString();
     const schedule = await app.inject({
       method: "POST",
       url: "/v1/recurring-schedules",
@@ -118,9 +119,8 @@ describe("recurring invoice materialization", () => {
         customerId,
         frequency: "MONTH",
         interval: 1,
-        dayOfMonth: 10,
         timeZone: "America/Edmonton",
-        startAt: "2026-09-10T09:00:00-06:00",
+        startAt: firstOccurrenceStartAt,
         missedOccurrencePolicy: "EVERY",
         invoiceMode: "DRAFT",
         template: {

@@ -252,6 +252,12 @@
   issue #35 may update package manifests, `pnpm-lock.yaml`, and `pnpm.overrides` to resolve
   dependency vulnerabilities that block CI. No application, UI, schema, migration, or accounting
   behavior changes are authorized by this entry.
+
+- Dependency maintenance authorization expanded by the owner on 2026-10-31 for issue #35: narrowly
+  scoped Zod 3-to-4 API compatibility fixes in `apps/api` and a formatting-only correction to
+  `docs/status/PB0_FIRST_COMMIT_INVENTORY.md` are authorized to restore CI. Preserve validation
+  semantics, API contracts, accounting logic, schemas, migrations, and UI behavior. Do not suppress
+  diagnostics or weaken validation; any behavioral change requires separate owner approval.
 - **Full product-gap build continuation (owner authorized 2026-09-11).**
   The owner instructed "build all" after the Wave 0 handoff. Execute the
   reconciled product-gap program in dependency order, recording each increment's

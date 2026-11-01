@@ -54,6 +54,7 @@ jobs:
       - name: Create disposable databases
         run: |
           psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_test;'
+          psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_browser_test;'
           psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_performance_test;'
           psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_clean_migrate_ci;'
           psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_reset_ci;'
@@ -128,7 +129,7 @@ jobs:
       - name: Browser end-to-end tests
         env:
           DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_ci?schema=public
-          TEST_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_test?schema=public
+          TEST_DATABASE_URL: postgresql://clearledger:clearledger_ci_only@localhost:5432/clearledger_browser_test?schema=public
         run: pnpm test:e2e
 
       - name: Build

@@ -247,6 +247,11 @@
   (module split with zero behaviour change). See `docs/pennywise/declutter/03_REVISION_PLAN.md` and
   `docs/tasks/ui-v2/U0-foundations.md`. Later U phases need separate authorization. No changes to
   `packages/accounting-core`, `packages/db`, or posting code are authorized by this entry.
+
+- Dependency maintenance authorized by the owner on 2026-10-31: the `deps` Wave 0 stream in
+  issue #35 may update package manifests, `pnpm-lock.yaml`, and `pnpm.overrides` to resolve
+  dependency vulnerabilities that block CI. No application, UI, schema, migration, or accounting
+  behavior changes are authorized by this entry.
 - **Full product-gap build continuation (owner authorized 2026-09-11).**
   The owner instructed "build all" after the Wave 0 handoff. Execute the
   reconciled product-gap program in dependency order, recording each increment's

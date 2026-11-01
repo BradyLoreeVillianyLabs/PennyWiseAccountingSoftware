@@ -200,9 +200,8 @@ describe("recurring invoice materialization", () => {
           customerId,
           frequency: "MONTH",
           interval: 1,
-          dayOfMonth: 10,
           timeZone: "America/Edmonton",
-          startAt: "2026-09-10T10:00:00-06:00",
+          startAt: firstOccurrenceStartAt,
           invoiceMode: "SEND",
           template: {
             currency: "CAD",

@@ -61,6 +61,9 @@ jobs:
           psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_backup_source_ci;'
           psql -d postgres -v ON_ERROR_STOP=1 -c 'CREATE DATABASE clearledger_restore_verify_ci;'
 
+      - name: Prisma client generation
+        run: pnpm db:generate
+
       - name: Formatting
         run: pnpm format:check
 
@@ -75,9 +78,6 @@ jobs:
 
       - name: Prisma validation
         run: pnpm db:validate
-
-      - name: Prisma client generation
-        run: pnpm db:generate
 
       - name: Clean migration deployment
         env:

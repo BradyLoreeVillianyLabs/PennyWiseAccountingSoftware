@@ -1,0 +1,356 @@
+        <section id="accountant-workspace" hidden aria-labelledby="accountant-heading">
+          <div class="section-heading">
+            <h1 id="accountant-heading">Accountant review</h1>
+            <button id="refresh-accountant" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <section class="accountant-workbench" aria-labelledby="accountant-workbench-heading">
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">Accountant workbench</p>
+                <h2 id="accountant-workbench-heading">Finish the work without switching tools</h2>
+                <p>
+                  PennyWise Accounting brings the common QuickBooks workaround jobs into one
+                  controlled review path. Each destination uses the existing tenant permissions,
+                  source evidence, idempotency, and posting safeguards.
+                </p>
+              </div>
+            </div>
+            <div class="accountant-workbench-grid">
+              <article class="accountant-workbench-card">
+                <span class="accountant-workbench-label">Move data</span>
+                <h3>Switching centre</h3>
+                <p>
+                  Map QuickBooks, spreadsheet, and supported exports, run a dry run, commit once,
+                  and reconcile the source totals before cutover.
+                </p>
+                <button
+                  class="secondary-command"
+                  type="button"
+                  data-help-destination="portability-workspace"
+                  data-help-target="data-import-form"
+                >
+                  Open switching centre
+                </button>
+              </article>
+              <article class="accountant-workbench-card">
+                <span class="accountant-workbench-label">Capture &amp; pay</span>
+                <h3>Evidence and AP review</h3>
+                <p>
+                  Hold receipts and bills for scan and human review, then create exactly one linked
+                  draft through the existing purchase services.
+                </p>
+                <button
+                  class="secondary-command"
+                  type="button"
+                  data-help-destination="purchases-workspace"
+                  data-help-target="evidence-inbox-heading"
+                >
+                  Open evidence inbox
+                </button>
+              </article>
+              <article class="accountant-workbench-card">
+                <span class="accountant-workbench-label">Reconcile</span>
+                <h3>Commerce review inbox</h3>
+                <p>
+                  Review WooCommerce and Etsy evidence, fees, tax, refunds, and SKU suggestions
+                  before anything can become accounting or inventory authority.
+                </p>
+                <button
+                  id="open-accountant-commerce-review"
+                  class="secondary-command"
+                  type="button"
+                  data-help-destination="integrations-workspace"
+                  data-help-target="commerce-inbox-heading"
+                >
+                  Open commerce review
+                </button>
+              </article>
+              <article class="accountant-workbench-card">
+                <span class="accountant-workbench-label">Advise</span>
+                <h3>Reports and books health</h3>
+                <p>
+                  Use posted-ledger reports, aging, cash views, variance context, and audit history
+                  as the evidence for decisions instead of an external reporting overlay.
+                </p>
+                <button
+                  class="secondary-command"
+                  type="button"
+                  data-help-destination="reports-workspace"
+                  data-help-target="report-filter-form"
+                >
+                  Open reports
+                </button>
+              </article>
+            </div>
+            <p class="accountant-workbench-boundary">
+              <strong>Safety boundary:</strong> provider imports, fuzzy matches, OCR suggestions,
+              and report calculations do not silently post or overwrite immutable history. Review
+              and explicit actions remain required.
+            </p>
+          </section>
+          <section aria-labelledby="fx-revaluation-heading">
+            <div class="section-heading">
+              <div>
+                <h3 id="fx-revaluation-heading">Foreign-currency revaluation</h3>
+                <p>
+                  Preview open foreign monetary positions at an exact closing rate. Posting creates
+                  the period-end entry and its automatic first-day reversal together.
+                </p>
+              </div>
+            </div>
+            <form id="fx-revaluation-form" class="inline-form">
+              <label>Valuation date <input name="valuationDate" type="date" required /></label>
+              <label
+                >Closing rate
+                <select name="rateSnapshotId" required></select
+              ></label>
+              <button type="submit">Preview revaluation</button>
+              <button id="post-fx-revaluation" type="button" class="secondary-command" disabled>
+                Post and reverse
+              </button>
+            </form>
+            <output id="fx-revaluation-result">Choose a valuation date and closing rate.</output>
+            <div class="table-wrap">
+              <table>
+                <caption class="sr-only">
+                  Foreign-currency revaluation preview
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Currency</th>
+                    <th>Carrying</th>
+                    <th>Base change</th>
+                    <th>Result</th>
+                  </tr>
+                </thead>
+                <tbody id="fx-revaluation-rows"></tbody>
+              </table>
+            </div>
+            <div class="table-wrap">
+              <table aria-label="Open foreign-currency monetary positions">
+                <caption>
+                  Open foreign-currency positions
+                </caption>
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Currency</th>
+                    <th>Outstanding</th>
+                    <th>Carrying value</th>
+                    <th>As of</th>
+                  </tr>
+                </thead>
+                <tbody id="fx-position-rows"></tbody>
+              </table>
+            </div>
+          </section>
+          <div class="columns">
+            <section>
+              <h3 id="manual-journal-form-heading">Manual journal workpaper</h3>
+              <p class="workpaper-boundary-note" id="manual-journal-boundary-note">
+                <strong>Non-posting workpaper</strong>
+                Editing replaces this draft in place and creates no duplicate ledger entry. Only
+                <em>Post to ledger</em> creates an authoritative journal.
+              </p>
+              <form id="manual-journal-form" class="form-grid">
+                <input name="draftId" type="hidden" />
+                <input name="version" type="hidden" />
+                <label>Description <input name="description" required maxlength="500" /></label>
+                <label>Effective date <input name="effectiveDate" type="date" required /></label>
+                <label>Reason <input name="reason" required maxlength="500" /></label>
+                <label class="check"
+                  ><input name="allowControlAccountPosting" type="checkbox" /> Control-account
+                  override</label
+                >
+                <fieldset class="manual-journal-lines wide-field">
+                  <legend>Journal lines</legend>
+                  <p id="manual-journal-lines-help" class="field-help">
+                    Add every debit and credit line in this workpaper. Debits and credits must
+                    balance before the workpaper can be saved. Maximum 500 lines.
+                  </p>
+                  <div class="manual-journal-line-editor">
+                    <div class="manual-journal-line-header" aria-hidden="true">
+                      <span>Line</span>
+                      <span>Account</span>
+                      <span>Description</span>
+                      <span>Debit</span>
+                      <span>Credit</span>
+                      <span>Action</span>
+                    </div>
+                    <div
+                      id="manual-journal-lines"
+                      class="manual-journal-line-list"
+                      role="list"
+                      aria-describedby="manual-journal-lines-help manual-journal-balance-status"
+                    ></div>
+                  </div>
+                  <div class="manual-journal-line-footer">
+                    <button id="add-manual-journal-line" class="secondary-command" type="button">
+                      Add line
+                    </button>
+                    <dl class="manual-journal-totals" aria-label="Journal line totals">
+                      <div>
+                        <dt>Debits</dt>
+                        <dd id="manual-journal-debit-total">CAD 0.00</dd>
+                      </div>
+                      <div>
+                        <dt>Credits</dt>
+                        <dd id="manual-journal-credit-total">CAD 0.00</dd>
+                      </div>
+                      <div>
+                        <dt>Difference</dt>
+                        <dd id="manual-journal-difference">CAD 0.00</dd>
+                      </div>
+                    </dl>
+                    <output id="manual-journal-balance-status" class="manual-journal-balance-status"
+                      >Add at least two balanced lines.</output
+                    >
+                  </div>
+                </fieldset>
+                <div class="form-actions">
+                  <button id="save-manual-journal-draft" type="submit">Create workpaper</button>
+                  <button
+                    id="cancel-manual-journal-edit"
+                    class="secondary-command"
+                    type="button"
+                    hidden
+                  >
+                    Stop editing
+                  </button>
+                </div>
+              </form>
+              <div class="table-toolbar">
+                <label
+                  >Find workpapers
+                  <input
+                    data-table-filter-target="manual-journal-drafts"
+                    placeholder="Date, description, or status"
+                  />
+                </label>
+                <output
+                  data-table-filter-count="manual-journal-drafts"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+                <button
+                  type="button"
+                  class="secondary-command"
+                  data-table-export="manual-journal-drafts"
+                >
+                  Download visible
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Description</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="manual-journal-drafts"></tbody>
+                </table>
+              </div>
+            </section>
+            <section>
+              <h3>Fiscal periods</h3>
+              <div class="table-toolbar">
+                <label
+                  >Find periods
+                  <input
+                    data-table-filter-target="accountant-periods"
+                    placeholder="Period, status, or check"
+                  />
+                </label>
+                <output
+                  data-table-filter-count="accountant-periods"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Period</th>
+                      <th>Status</th>
+                      <th>Checks</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="accountant-periods"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+          <section>
+            <h3>Review queue</h3>
+            <div class="table-toolbar">
+              <label
+                >Find review items
+                <input
+                  data-table-filter-target="accountant-review-items"
+                  placeholder="Category, finding, or target"
+                />
+              </label>
+              <output
+                data-table-filter-count="accountant-review-items"
+                role="status"
+                aria-live="polite"
+              ></output>
+              <button
+                type="button"
+                class="secondary-command"
+                data-table-export="accountant-review-items"
+              >
+                Download visible
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Finding</th>
+                    <th>Target</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="accountant-review-items"></tbody>
+              </table>
+            </div>
+          </section>
+          <div class="columns">
+            <section>
+              <h3>Journal trace</h3>
+              <form id="journal-trace-form" class="inline-form">
+                <label>Journal ID <input name="journalId" required /></label>
+                <button type="submit">Trace</button>
+              </form>
+              <output id="journal-trace-result"></output>
+            </section>
+            <section>
+              <h3>Audit history</h3>
+              <form id="audit-filter-form" class="inline-form">
+                <label>Event or action <input name="action" maxlength="100" /></label>
+                <button type="submit">Search</button>
+                <button id="export-audit" type="button" class="secondary-command">CSV</button>
+              </form>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Actor</th>
+                      <th>Action</th>
+                      <th>Resource</th>
+                    </tr>
+                  </thead>
+                  <tbody id="audit-events"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>

@@ -1,0 +1,682 @@
+        <section id="projects-workspace" hidden aria-labelledby="projects-heading">
+          <div class="section-heading">
+            <div>
+              <h1 id="projects-heading">CRM, calendar, and project planning</h1>
+              <p>
+                Plan jobs, record field work, and keep financial due dates visible without changing
+                the books.
+              </p>
+            </div>
+            <button id="refresh-projects" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <section
+            id="customer-relationships-panel"
+            class="customer-relationships-panel"
+            aria-labelledby="customer-relationships-heading"
+          >
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Client relationships</p>
+                <h2 id="customer-relationships-heading">Contacts, notes, and follow-up history</h2>
+                <p>
+                  Keep client context beside projects and the calendar. Relationship records are
+                  tenant-scoped, append-only for activity history, and never post accounting
+                  entries.
+                </p>
+              </div>
+              <label
+                >Client
+                <select id="crm-customer-select" aria-label="Client relationship customer"></select
+              ></label>
+            </div>
+            <div class="customer-relationships-grid">
+              <section aria-labelledby="crm-contact-form-heading">
+                <h3 id="crm-contact-form-heading">Contact</h3>
+                <form id="crm-contact-form" class="form-grid">
+                  <input name="contactId" type="hidden" />
+                  <input name="version" type="hidden" />
+                  <label>Name <input name="name" maxlength="200" required /></label>
+                  <label>Role <input name="role" maxlength="120" /></label>
+                  <label>Email <input name="email" type="email" maxlength="320" /></label>
+                  <label>Telephone <input name="telephone" maxlength="40" /></label>
+                  <label
+                    >Preferred channel
+                    <input
+                      name="preferredChannel"
+                      maxlength="80"
+                      placeholder="Email, phone, portal"
+                  /></label>
+                  <label class="wide-field"
+                    >Notes <textarea name="notes" maxlength="4000"></textarea>
+                  </label>
+                  <div class="form-actions">
+                    <button id="save-crm-contact" type="submit">Add contact</button>
+                    <button
+                      id="cancel-crm-contact-edit"
+                      class="secondary-command"
+                      type="button"
+                      hidden
+                    >
+                      Stop editing
+                    </button>
+                  </div>
+                </form>
+                <div class="table-wrap">
+                  <table aria-label="Client contacts">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Contact</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="crm-contacts"></tbody>
+                  </table>
+                </div>
+              </section>
+              <section aria-labelledby="crm-activity-form-heading">
+                <h3 id="crm-activity-form-heading">Record activity or note</h3>
+                <form id="crm-activity-form" class="form-grid">
+                  <label
+                    >Type
+                    <select name="activityType">
+                      <option value="NOTE">Note</option>
+                      <option value="CALL">Call</option>
+                      <option value="EMAIL">Email</option>
+                      <option value="MEETING">Meeting note</option>
+                      <option value="FOLLOW_UP">Follow-up</option>
+                      <option value="CUSTOM">Custom</option>
+                    </select></label
+                  >
+                  <label
+                    >Category
+                    <input name="category" maxlength="80" placeholder="Onboarding, service, tax…"
+                  /></label>
+                  <label
+                    >Contact
+                    <select name="contactId"></select
+                  ></label>
+                  <label>Occurred <input name="happenedAt" type="datetime-local" required /></label>
+                  <label class="wide-field">Subject <input name="subject" maxlength="240" /></label>
+                  <label class="wide-field"
+                    >Notes <textarea name="body" maxlength="10000" required></textarea>
+                  </label>
+                  <label
+                    >Related record type
+                    <select name="relatedResourceType">
+                      <option value="">None</option>
+                      <option value="PROJECT">Project</option>
+                      <option value="INVOICE">Invoice</option>
+                      <option value="ESTIMATE">Estimate</option>
+                      <option value="BILL">Bill</option>
+                    </select></label
+                  >
+                  <label
+                    >Related record ID
+                    <input name="relatedResourceId" type="text" placeholder="Optional UUID"
+                  /></label>
+                  <div class="form-actions"><button type="submit">Save activity</button></div>
+                </form>
+              </section>
+            </div>
+            <section aria-labelledby="crm-timeline-heading">
+              <div class="section-heading">
+                <div>
+                  <h3 id="crm-timeline-heading">Client timeline</h3>
+                  <p id="crm-timeline-summary" class="field-help"></p>
+                </div>
+                <button id="refresh-crm-timeline" class="secondary-command" type="button">
+                  Refresh timeline
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table aria-label="Client activity timeline">
+                  <thead>
+                    <tr>
+                      <th>When</th>
+                      <th>Type</th>
+                      <th>Title</th>
+                      <th>Details</th>
+                      <th>Status</th>
+                      <th>Linked item</th>
+                    </tr>
+                  </thead>
+                  <tbody id="crm-timeline"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+          <nav class="planning-tabs" aria-label="CRM, calendar, and planning views">
+            <button type="button" data-planning-tab="crm">Clients</button>
+            <button type="button" data-planning-tab="calendar" aria-current="page">Schedule</button>
+            <button type="button" data-planning-tab="projects">Jobs</button>
+            <button type="button" data-planning-tab="tasks">Tasks</button>
+            <button type="button" data-planning-tab="time">Time</button>
+            <button type="button" data-planning-tab="budgets">Budgets &amp; Forecasts</button>
+            <button type="button" data-planning-tab="capture">Receipt &amp; bill capture</button>
+          </nav>
+          <section id="calendar-panel" class="calendar-panel" aria-labelledby="calendar-heading">
+            <div class="calendar-panel-heading">
+              <div>
+                <p class="eyebrow">CRM &amp; job schedule</p>
+                <h2 id="calendar-heading">Planning calendar</h2>
+                <p>
+                  See appointments, jobs, follow-ups, and deadlines in one place. Drag a timed CRM
+                  event to move it; invoice and bill due dates stay read-only.
+                </p>
+              </div>
+              <output id="calendar-status" class="calendar-status" aria-live="polite"></output>
+            </div>
+            <div class="calendar-controls" role="group" aria-label="Calendar controls">
+              <button
+                id="calendar-previous"
+                class="secondary-command"
+                type="button"
+                aria-label="Previous calendar period"
+              >
+                Previous
+              </button>
+              <label>Date <input id="calendar-date" type="date" /></label>
+              <output
+                id="calendar-range-title"
+                class="calendar-range-title"
+                aria-live="polite"
+              ></output>
+              <button id="calendar-today" class="secondary-command" type="button">Today</button>
+              <button
+                id="calendar-next"
+                class="secondary-command"
+                type="button"
+                aria-label="Next calendar period"
+              >
+                Next
+              </button>
+              <button id="refresh-calendar" class="secondary-command" type="button">
+                Refresh calendar
+              </button>
+              <div class="calendar-view-switch" role="group" aria-label="Calendar view">
+                <button type="button" data-calendar-view="day" aria-pressed="false">Day</button>
+                <button type="button" data-calendar-view="week" aria-pressed="true">Week</button>
+                <button type="button" data-calendar-view="month" aria-pressed="false">Month</button>
+                <button type="button" data-calendar-view="agenda" aria-pressed="false">
+                  Agenda
+                </button>
+              </div>
+            </div>
+            <fieldset class="calendar-filters">
+              <legend>Show events</legend>
+              <label
+                ><input id="calendar-project-filter" type="checkbox" checked /> Project dates</label
+              >
+              <label
+                ><input id="calendar-work-item-filter" type="checkbox" checked /> Planning,
+                meetings, and milestones</label
+              >
+              <label
+                ><input id="calendar-invoice-filter" type="checkbox" checked /> Invoice due</label
+              >
+              <label><input id="calendar-bill-filter" type="checkbox" checked /> Bill due</label>
+              <label
+                >Status
+                <select id="calendar-authority-filter">
+                  <option value="ALL">All statuses</option>
+                  <option value="PLANNED">Planned</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="POSTED">Posted</option>
+                </select></label
+              >
+            </fieldset>
+            <aside class="calendar-legend" aria-label="Calendar legend">
+              <span><strong>Appointments</strong> Timed CRM events can be moved or edited</span>
+              <span><strong>Jobs</strong> Project dates and milestones stay visible all day</span>
+              <span><strong>Deadlines</strong> Open an invoice or bill to change its due date</span>
+            </aside>
+            <div id="calendar-loading" class="calendar-state" hidden>Loading calendar events…</div>
+            <div id="calendar-error" class="calendar-state" role="alert" hidden></div>
+            <div id="calendar-empty" class="calendar-state" hidden>
+              No events match this period and these filters.
+            </div>
+            <div
+              id="calendar-timed-grid"
+              class="calendar-timed-grid"
+              aria-label="Timed schedule"
+            ></div>
+            <div id="calendar-grid" class="calendar-grid" aria-label="Month calendar" hidden></div>
+            <section
+              id="calendar-event-details"
+              class="calendar-event-details"
+              aria-live="polite"
+              aria-labelledby="calendar-event-details-heading"
+            >
+              <h3 id="calendar-event-details-heading">Event details</h3>
+              <p>Select an event or time block to see the appointment, client, and job details.</p>
+            </section>
+            <section
+              id="calendar-agenda-section"
+              class="calendar-agenda"
+              aria-labelledby="calendar-agenda-heading"
+              hidden
+            >
+              <div class="section-heading">
+                <div>
+                  <h3 id="calendar-agenda-heading">Agenda</h3>
+                  <p>
+                    A complete table alternative for keyboard, screen-reader, zoom, and mobile use.
+                  </p>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table aria-label="Calendar agenda">
+                  <thead>
+                    <tr>
+                      <th>When</th>
+                      <th>Event</th>
+                      <th>Client or job</th>
+                      <th>Status</th>
+                      <th>Amount</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="calendar-agenda"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+          <section id="project-work-items-panel" aria-labelledby="project-work-items-heading">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Planning records</p>
+                <h2 id="project-work-items-heading">Planning events and work</h2>
+                <p>
+                  Assign work, expose blockers, and put dates on the shared calendar. These records
+                  never create accounting entries.
+                </p>
+              </div>
+              <button id="refresh-project-work-items" class="secondary-command" type="button">
+                Refresh tasks
+              </button>
+            </div>
+            <div class="work-item-summary" aria-label="Task summary">
+              <div><span id="work-item-open-count">0</span><small>Open</small></div>
+              <div><span id="work-item-blocked-count">0</span><small>Blocked</small></div>
+              <div><span id="work-item-due-count">0</span><small>Due soon</small></div>
+              <div><span id="work-item-complete-count">0</span><small>Completed</small></div>
+            </div>
+            <div class="work-item-layout">
+              <section class="work-item-editor" aria-labelledby="work-item-form-heading">
+                <h3 id="work-item-form-heading">New planning item</h3>
+                <form id="project-work-item-form" class="form-grid">
+                  <input name="workItemId" type="hidden" />
+                  <input name="version" type="hidden" />
+                  <label
+                    >Type
+                    <select name="kind" required>
+                      <option value="TASK">Task</option>
+                      <option value="MILESTONE">Milestone</option>
+                      <option value="REMINDER">Reminder</option>
+                      <option value="MEETING">Meeting</option>
+                      <option value="APPOINTMENT">Appointment</option>
+                      <option value="FOLLOW_UP">Follow-up</option>
+                    </select></label
+                  >
+                  <label
+                    >Priority
+                    <select name="priority" required>
+                      <option value="NORMAL">Normal</option>
+                      <option value="LOW">Low</option>
+                      <option value="HIGH">High</option>
+                      <option value="URGENT">Urgent</option>
+                    </select></label
+                  >
+                  <label class="wide-field"
+                    >Title <input name="title" required maxlength="200"
+                  /></label>
+                  <label
+                    >Project
+                    <select name="projectId">
+                      <option value="">No project</option>
+                    </select></label
+                  >
+                  <label
+                    >Client
+                    <select name="customerId">
+                      <option value="">No client</option>
+                    </select></label
+                  >
+                  <label
+                    >Contact
+                    <select name="contactId">
+                      <option value="">No contact</option>
+                    </select></label
+                  >
+                  <label
+                    >Assignee
+                    <select name="assigneeMembershipId">
+                      <option value="">Unassigned</option>
+                    </select></label
+                  >
+                  <label>Start date <input name="startDate" type="date" /></label>
+                  <label>Due date <input name="dueDate" type="date" /></label>
+                  <label>Start time <input name="startAt" type="datetime-local" /></label>
+                  <label>End time <input name="endAt" type="datetime-local" /></label>
+                  <label
+                    >Event type <input name="eventType" maxlength="80" placeholder="Custom type"
+                  /></label>
+                  <label
+                    >Custom status
+                    <input
+                      name="customStatus"
+                      maxlength="80"
+                      placeholder="Awaiting client, confirmed"
+                  /></label>
+                  <label
+                    >Category
+                    <input name="category" maxlength="80" placeholder="Client, delivery, tax…"
+                  /></label>
+                  <label
+                    >Label <input name="label" maxlength="80" placeholder="Optional visual label"
+                  /></label>
+                  <label>Location <input name="location" maxlength="500" /></label>
+                  <label
+                    >Related record type
+                    <select name="relatedResourceType">
+                      <option value="">None</option>
+                      <option value="PROJECT">Project</option>
+                      <option value="INVOICE">Invoice</option>
+                      <option value="ESTIMATE">Estimate</option>
+                      <option value="BILL">Bill</option>
+                    </select></label
+                  >
+                  <label
+                    >Related record ID <input name="relatedResourceId" placeholder="Optional UUID"
+                  /></label>
+                  <label class="wide-field"
+                    >Details <textarea name="description" maxlength="4000"></textarea>
+                  </label>
+                  <p id="work-item-date-help" class="field-help wide-field">
+                    Milestones require one due date. Tasks and reminders may use a start, a due
+                    date, or both.
+                  </p>
+                  <div class="form-actions">
+                    <button id="save-project-work-item" type="submit">Create planning item</button>
+                    <button
+                      id="cancel-project-work-item-edit"
+                      class="secondary-command"
+                      type="button"
+                      hidden
+                    >
+                      Stop editing
+                    </button>
+                  </div>
+                </form>
+              </section>
+              <section class="work-item-list-panel" aria-labelledby="work-item-list-heading">
+                <div class="section-heading">
+                  <div><h3 id="work-item-list-heading">Work plan</h3></div>
+                </div>
+                <div class="work-item-filters">
+                  <label
+                    >Type
+                    <select id="work-item-kind-filter">
+                      <option value="">All types</option>
+                      <option value="TASK">Tasks</option>
+                      <option value="MILESTONE">Milestones</option>
+                      <option value="REMINDER">Reminders</option>
+                      <option value="MEETING">Meetings</option>
+                      <option value="APPOINTMENT">Appointments</option>
+                      <option value="FOLLOW_UP">Follow-ups</option>
+                    </select></label
+                  >
+                  <label
+                    >Status
+                    <select id="work-item-status-filter">
+                      <option value="">All active statuses</option>
+                      <option value="TODO">To do</option>
+                      <option value="IN_PROGRESS">In progress</option>
+                      <option value="BLOCKED">Blocked</option>
+                      <option value="COMPLETED">Completed</option>
+                      <option value="CANCELLED">Cancelled</option>
+                    </select></label
+                  >
+                  <label
+                    >Project
+                    <select id="work-item-project-filter">
+                      <option value="">All projects</option>
+                    </select></label
+                  >
+                  <label
+                    >Custom status
+                    <input id="work-item-custom-status-filter" placeholder="Any custom status" />
+                  </label>
+                </div>
+                <div class="table-wrap">
+                  <table aria-label="Tasks, milestones, and reminders">
+                    <thead>
+                      <tr>
+                        <th>Item</th>
+                        <th>Dates</th>
+                        <th>Owner</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="project-work-items"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+            <section
+              id="project-work-item-details"
+              class="work-item-details"
+              aria-labelledby="project-work-item-details-heading"
+              aria-live="polite"
+            >
+              <h3 id="project-work-item-details-heading">Planning item details</h3>
+              <p>Select Details on an item to review its description and dependencies.</p>
+            </section>
+          </section>
+          <ol class="workflow-steps" aria-label="Project workflow">
+            <li class="is-current">Set up the job</li>
+            <li>Record work</li>
+            <li>Review evidence</li>
+            <li>Invoice approved work</li>
+          </ol>
+          <div class="columns">
+            <section>
+              <h3>New project</h3>
+              <form id="project-form" class="form-grid">
+                <div class="field-with-contextual-action">
+                  <label
+                    >Customer
+                    <select name="customerId" required></select
+                  ></label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="customer"
+                    data-contextual-origin-form="project-form"
+                    data-contextual-origin-workspace="projects-workspace"
+                    data-contextual-selection-name="customerId"
+                  >
+                    + Add customer
+                  </button>
+                </div>
+                <label>Project number <input name="projectNumber" required maxlength="40" /></label>
+                <label>Project name <input name="name" required maxlength="200" /></label>
+                <label
+                  >Billing method
+                  <select name="billingMethod">
+                    <option value="TIME_AND_MATERIALS">Time and materials</option>
+                    <option value="FIXED">Fixed price</option>
+                    <option value="NON_BILLABLE">Non-billable</option>
+                  </select></label
+                >
+                <label>Start date <input name="startDate" type="date" /></label>
+                <label>End date <input name="endDate" type="date" /></label>
+                <label>Budget (CAD) <input name="budgetMinor" inputmode="decimal" /></label>
+                <label class="wide-field"
+                  >Description <textarea name="description" maxlength="4000"></textarea>
+                </label>
+                <div class="form-actions"><button type="submit">Create project</button></div>
+              </form>
+            </section>
+            <section>
+              <h3>Record time</h3>
+              <form id="time-entry-form" class="form-grid">
+                <div class="field-with-contextual-action">
+                  <label
+                    >Project
+                    <select name="projectId" required></select
+                  ></label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="project"
+                    data-contextual-origin-form="time-entry-form"
+                    data-contextual-origin-workspace="projects-workspace"
+                    data-contextual-selection-name="projectId"
+                  >
+                    + Add project
+                  </button>
+                </div>
+                <label>Date <input name="entryDate" type="date" required /></label>
+                <label
+                  >Hours <input name="hours" inputmode="decimal" placeholder="1.5" required
+                /></label>
+                <label
+                  >Rate (CAD/hour) <input name="rateMinor" inputmode="decimal" required
+                /></label>
+                <label class="wide-field"
+                  >Description <input name="description" maxlength="2000"
+                /></label>
+                <label class="check"
+                  ><input name="billable" type="checkbox" checked /> Billable</label
+                >
+                <div class="form-actions"><button type="submit">Save time draft</button></div>
+              </form>
+            </section>
+          </div>
+          <div class="columns">
+            <section>
+              <h3>Log mileage</h3>
+              <form id="mileage-form" class="form-grid">
+                <div class="field-with-contextual-action">
+                  <label
+                    >Project
+                    <select name="projectId"></select
+                  ></label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="project"
+                    data-contextual-origin-form="mileage-form"
+                    data-contextual-origin-workspace="projects-workspace"
+                    data-contextual-selection-name="projectId"
+                  >
+                    + Add project
+                  </button>
+                </div>
+                <label>Date <input name="entryDate" type="date" required /></label>
+                <label>Distance (km) <input name="distance" inputmode="decimal" required /></label>
+                <label
+                  >Rate (CAD/km) <input name="reimbursementRateMinor" inputmode="decimal" required
+                /></label>
+                <label>Vehicle <input name="vehicleLabel" maxlength="120" /></label>
+                <label class="wide-field"
+                  >Purpose <input name="purpose" maxlength="500" required
+                /></label>
+                <div class="form-actions"><button type="submit">Save mileage draft</button></div>
+              </form>
+            </section>
+            <section>
+              <h3>Upload a receipt or supplier invoice</h3>
+              <!-- file signature, and structure are checked before local processing; this local beta does not include a malware scanner. -->
+              <p class="field-help">
+                Files are checked for allowed type, file signature, and structure before review.
+                Text files and embedded PDF text are inspected locally; photo and image-only PDF OCR
+                remains an explicit review item in this beta. This local beta does not include a
+                malware scanner; scan files with trusted security software before upload. They do
+                not post automatically.
+              </p>
+              <form id="capture-form" class="form-grid">
+                <div class="field-with-contextual-action">
+                  <label
+                    >Project
+                    <select name="projectId"></select
+                  ></label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="project"
+                    data-contextual-origin-form="capture-form"
+                    data-contextual-origin-workspace="projects-workspace"
+                    data-contextual-selection-name="projectId"
+                  >
+                    + Add project
+                  </button>
+                </div>
+                <label
+                  >Type
+                  <select name="kind">
+                    <option value="RECEIPT">Receipt</option>
+                    <option value="BILL">Supplier invoice / bill</option>
+                  </select></label
+                >
+                <label class="wide-field"
+                  >Receipt, invoice, or bill image
+                  <input
+                    name="file"
+                    type="file"
+                    accept="application/pdf,image/png,image/jpeg,image/webp,text/plain"
+                    required
+                /></label>
+                <div class="form-actions"><button type="submit">Upload for review</button></div>
+              </form>
+            </section>
+          </div>
+          <section>
+            <div class="section-heading">
+              <div>
+                <h2>Projects</h2>
+                <p>Select a project to review its work and evidence.</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table aria-label="Projects">
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Project</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Budget</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="projects"></tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h3 id="project-detail-heading">Selected project activity</h3>
+            <output id="project-detail" class="structured-output"></output>
+            <div class="table-wrap">
+              <table aria-label="Project time entries">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="project-activity"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>

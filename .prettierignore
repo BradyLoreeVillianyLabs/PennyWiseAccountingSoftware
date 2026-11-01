@@ -11,3 +11,5 @@ distribution/public-beta/output/
 distribution/public-beta/msi/*.wxs
 .playwright-cli/
 outputs/
+# Spliced into index.html at build time, so their indentation belongs to the assembled document.
+apps/web/src/partials/

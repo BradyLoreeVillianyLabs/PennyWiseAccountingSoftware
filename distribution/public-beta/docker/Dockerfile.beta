@@ -18,7 +18,9 @@ COPY packages/shared/package.json packages/shared/tsconfig.json ./packages/share
 RUN pnpm install --frozen-lockfile
 
 COPY apps/api/src ./apps/api/src
-COPY apps/web/index.html apps/web/app.js apps/web/money.js apps/web/pwa.js apps/web/styles.css apps/web/serve.mjs apps/web/service-worker.js apps/web/manifest.webmanifest apps/web/offline.html ./apps/web/
+COPY apps/web/index.html apps/web/app.js apps/web/money.js apps/web/strings.js apps/web/pwa.js apps/web/styles.css apps/web/serve.mjs apps/web/service-worker.js apps/web/manifest.webmanifest apps/web/offline.html ./apps/web/
+COPY apps/web/src ./apps/web/src
+COPY apps/web/styles ./apps/web/styles
 COPY apps/web/icons ./apps/web/icons
 COPY apps/web/scripts ./apps/web/scripts
 COPY packages/accounting-core/src ./packages/accounting-core/src

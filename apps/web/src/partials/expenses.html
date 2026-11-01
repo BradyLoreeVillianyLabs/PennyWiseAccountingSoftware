@@ -1,0 +1,641 @@
+        <section id="purchases-workspace" hidden aria-labelledby="purchases-heading">
+          <div class="section-heading">
+            <h1 id="purchases-heading">Purchases and payables</h1>
+            <button id="refresh-purchases" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <section id="purchase-request-section" aria-labelledby="purchase-request-heading">
+            <h3 id="purchase-request-heading">Purchase request</h3>
+            <p class="field-help">Requests require approval and do not post to the ledger.</p>
+            <form id="purchase-request-form" class="form-grid">
+              <label>Request number <input name="requestNumber" required maxlength="40" /></label>
+              <label
+                >Vendor
+                <select name="vendorId"></select
+              ></label>
+              <label>Requested date <input name="requestedDate" type="date" required /></label>
+              <label>Needed by <input name="neededByDate" type="date" /></label>
+              <label class="wide-field"
+                >Purpose <textarea name="purpose" required maxlength="1000"></textarea>
+              </label>
+              <label class="wide-field"
+                >Item or service <input name="description" required maxlength="500"
+              /></label>
+              <label
+                >Quantity <input name="quantity" value="1" inputmode="decimal" required
+              /></label>
+              <label
+                >Estimated unit cost (CAD) <input name="unitCostMinor" inputmode="decimal" required
+              /></label>
+              <label
+                >Expense or asset account
+                <select name="accountId"></select
+              ></label>
+              <div class="form-actions"><button type="submit">Create request draft</button></div>
+            </form>
+            <div class="table-wrap">
+              <table aria-label="Purchase requests">
+                <thead>
+                  <tr>
+                    <th>Request</th>
+                    <th>Purpose</th>
+                    <th>Vendor</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="purchase-requests"></tbody>
+              </table>
+            </div>
+          </section>
+          <div class="columns">
+            <section>
+              <h3>Vendor</h3>
+              <form id="vendor-form" class="form-grid">
+                <label>Vendor number <input name="vendorNumber" required maxlength="64" /></label>
+                <label>Legal name <input name="legalName" required maxlength="250" /></label>
+                <label>Display name <input name="displayName" required maxlength="250" /></label>
+                <label
+                  >Payment terms
+                  <input
+                    name="defaultPaymentTermsDays"
+                    type="number"
+                    min="0"
+                    max="3650"
+                    value="30"
+                    required
+                /></label>
+                <label
+                  >Default bill currency
+                  <select name="defaultCurrency">
+                    <option value="CAD">CAD</option>
+                    <option value="USD">USD</option>
+                  </select></label
+                >
+                <div class="form-actions">
+                  <button type="submit">Create vendor</button>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-cancel-contextual-create="vendor"
+                    hidden
+                  >
+                    Return to draft
+                  </button>
+                </div>
+              </form>
+            </section>
+            <section>
+              <h3>Bill draft</h3>
+              <form id="bill-form" class="form-grid">
+                <div class="field-with-contextual-action">
+                  <label
+                    >Supplier
+                    <select name="vendorId" required></select>
+                  </label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="vendor"
+                    data-contextual-origin-form="bill-form"
+                    data-contextual-origin-workspace="purchases-workspace"
+                    data-contextual-selection-name="vendorId"
+                  >
+                    + Add supplier
+                  </button>
+                </div>
+                <label
+                  >Vendor invoice
+                  <input
+                    name="vendorInvoiceNumber"
+                    required
+                    maxlength="128"
+                    aria-describedby="bill-duplicate-warning"
+                  />
+                  <output
+                    id="bill-duplicate-warning"
+                    class="duplicate-warning"
+                    role="status"
+                    aria-live="polite"
+                  ></output>
+                </label>
+                <label>Issue date <input name="issueDate" type="date" required /></label>
+                <section
+                  class="invoice-line-editor wide-field"
+                  aria-labelledby="bill-lines-heading"
+                >
+                  <div class="invoice-line-editor-heading">
+                    <div>
+                      <h4 id="bill-lines-heading">Bill lines</h4>
+                      <p class="field-help">
+                        Add each purchase line separately. The selected expense or asset account is
+                        required for every line.
+                      </p>
+                    </div>
+                    <button id="bill-add-line" class="secondary-command" type="button">
+                      + Add line
+                    </button>
+                  </div>
+                  <div
+                    id="bill-line-editor"
+                    class="invoice-line-editor-table"
+                    role="table"
+                    aria-label="Bill lines"
+                  ></div>
+                  <output
+                    id="bill-line-status"
+                    class="structured-output"
+                    role="status"
+                    aria-live="polite"
+                  ></output>
+                  <div class="invoice-totals" aria-live="polite">
+                    <strong>Estimated until saved</strong>
+                    <span id="bill-estimated-subtotal">Subtotal: $0.00</span>
+                    <span id="bill-estimated-discount">Discount: $0.00</span>
+                    <span id="bill-estimated-tax">Tax: calculated when saved</span>
+                    <strong id="bill-estimated-total">Total: $0.00</strong>
+                  </div>
+                </section>
+                <label
+                  >Bill currency
+                  <select name="currency" required>
+                    <option value="CAD">CAD</option>
+                    <option value="USD">USD</option>
+                  </select></label
+                >
+                <label class="wide-field"
+                  >Transaction-date rate
+                  <select name="fxRateSnapshotId"></select>
+                  <span class="field-help"
+                    >Required for a foreign-currency bill and restricted to the issue date.</span
+                  ></label
+                >
+                <div class="field-with-contextual-action">
+                  <label
+                    >Expense or asset account
+                    <select name="accountId" required></select>
+                  </label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="account"
+                    data-contextual-origin-form="bill-form"
+                    data-contextual-origin-workspace="purchases-workspace"
+                    data-contextual-selection-name="accountId"
+                    data-contextual-account-types="EXPENSE,ASSET"
+                  >
+                    + Add expense or asset account
+                  </button>
+                </div>
+                <div class="form-actions">
+                  <button type="submit" aria-label="Save bill draft">Save draft</button>
+                </div>
+              </form>
+              <div class="draft-recovery-controls bill-draft-recovery-controls">
+                <output
+                  id="bill-browser-draft-status"
+                  class="draft-recovery-status"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+                <button id="bill-clear-browser-draft" class="text-command" type="button" hidden>
+                  Discard local draft
+                </button>
+              </div>
+            </section>
+          </div>
+          <div class="columns">
+            <section>
+              <h3>Immediate expense</h3>
+              <form id="expense-form" class="form-grid">
+                <label>Reference <input name="reference" maxlength="128" /></label>
+                <label>Date <input name="expenseDate" type="date" required /></label>
+                <label
+                  >Method
+                  <select name="method">
+                    <option>CASH</option>
+                    <option>ELECTRONIC_TRANSFER</option>
+                    <option>CREDIT_CARD</option>
+                    <option>OWNER_PAID</option>
+                    <option>OTHER</option>
+                  </select></label
+                >
+                <label
+                  >Paying account
+                  <select name="payingAccountId" required></select
+                ></label>
+                <label
+                  >Expense description <input name="description" required maxlength="500"
+                /></label>
+                <label
+                  >Amount (CAD) <input name="unitCostMinor" inputmode="decimal" required
+                /></label>
+                <label
+                  >Expense or asset account
+                  <select name="accountId" required></select
+                ></label>
+                <div class="form-actions"><button type="submit">Record expense</button></div>
+              </form>
+            </section>
+            <section>
+              <h3>Bill payment</h3>
+              <form id="bill-payment-form" class="form-grid">
+                <label
+                  >Bill
+                  <select name="billId" required></select
+                ></label>
+                <label>Date <input name="paymentDate" type="date" required /></label>
+                <label
+                  >Amount (payment currency) <input name="amountMinor" inputmode="decimal" required
+                /></label>
+                <label
+                  >Payment currency
+                  <select name="currency" disabled>
+                    <option value="CAD">CAD</option>
+                    <option value="USD">USD</option>
+                  </select></label
+                >
+                <label
+                  >Method
+                  <select name="method">
+                    <option>ELECTRONIC_TRANSFER</option>
+                    <option>CHEQUE</option>
+                    <option>CASH</option>
+                    <option>CREDIT_CARD</option>
+                    <option>OTHER</option>
+                  </select></label
+                >
+                <label
+                  >Paying account
+                  <select name="payingAccountId" required></select
+                ></label>
+                <label>Reference <input name="reference" maxlength="128" /></label>
+                <label class="wide-field"
+                  >Settlement-date rate
+                  <select name="fxRateSnapshotId"></select>
+                  <span class="field-help"
+                    >Required for USD and restricted to the payment date.</span
+                  ></label
+                >
+                <div class="form-actions"><button type="submit">Record payment</button></div>
+              </form>
+            </section>
+          </div>
+          <section>
+            <h3>Vendor credit</h3>
+            <form id="vendor-credit-form" class="inline-form">
+              <label
+                >Bill
+                <select name="billId" required></select
+              ></label>
+              <label
+                >Credit number <input name="vendorCreditNumber" required maxlength="128"
+              /></label>
+              <label>Date <input name="issueDate" type="date" required /></label>
+              <label>Amount (CAD) <input name="amountMinor" inputmode="decimal" required /></label>
+              <label>Reason <input name="reason" required maxlength="1000" /></label>
+              <button type="submit">Post and apply credit</button>
+            </form>
+          </section>
+          <section>
+            <h3>Vendors</h3>
+            <div class="table-toolbar">
+              <label
+                >Find vendors
+                <input data-table-filter-target="vendors" placeholder="Name, number, or status" />
+              </label>
+              <output data-table-filter-count="vendors" role="status" aria-live="polite"></output>
+              <button type="button" class="secondary-command" data-table-export="vendors">
+                Download visible
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Vendor</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="vendors"></tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h3>Bills</h3>
+            <div class="table-toolbar">
+              <label
+                >Find bills
+                <input
+                  data-table-filter-target="bills"
+                  placeholder="Bill number, vendor, or status"
+                />
+              </label>
+              <output data-table-filter-count="bills" role="status" aria-live="polite"></output>
+              <button type="button" class="secondary-command" data-table-export="bills">
+                Download visible
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Vendor</th>
+                    <th>Due</th>
+                    <th>Outstanding</th>
+                    <th>Currency</th>
+                    <th>Base amount</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="bills"></tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h3>Accounts-payable aging</h3>
+            <output id="payables-aging"></output>
+          </section>
+          <section aria-labelledby="evidence-inbox-heading">
+            <div class="section-heading">
+              <div>
+                <h3 id="evidence-inbox-heading">Evidence inbox</h3>
+                <p>Review uploaded receipts and bills before they influence the ledger.</p>
+              </div>
+              <button id="refresh-evidence-inbox" class="secondary-command" type="button">
+                Refresh
+              </button>
+            </div>
+            <form id="evidence-filter-form" class="inline-form capture-inbox-filter-form">
+              <label
+                >Review state
+                <select name="status">
+                  <option value="">All states</option>
+                  <option value="RECEIVED">Received</option>
+                  <option value="REVIEW_REQUIRED">Needs review</option>
+                  <option value="APPROVED">Approved</option>
+                  <option value="REJECTED">Rejected</option>
+                </select>
+              </label>
+              <label
+                >Evidence type
+                <select name="kind">
+                  <option value="">Bills and receipts</option>
+                  <option value="BILL">Supplier bills</option>
+                  <option value="RECEIPT">Receipts</option>
+                </select>
+              </label>
+              <label
+                >Draft link
+                <select name="conversion">
+                  <option value="">All evidence</option>
+                  <option value="UNLINKED">Needs a draft</option>
+                  <option value="LINKED">Draft already linked</option>
+                </select>
+              </label>
+              <button type="submit">Apply filters</button>
+              <output id="evidence-inbox-summary" class="field-help" aria-live="polite"></output>
+            </form>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Uploaded</th>
+                    <th>Type</th>
+                    <th>Source evidence</th>
+                    <th>Review / scan</th>
+                    <th>Linked draft</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="evidence-inbox"></tbody>
+              </table>
+            </div>
+          </section>
+          <dialog
+            id="capture-conversion-dialog"
+            class="capture-conversion-dialog"
+            aria-labelledby="capture-conversion-heading"
+          >
+            <div class="capture-conversion-header">
+              <div>
+                <p class="section-kicker">Source-to-draft review</p>
+                <h2 id="capture-conversion-heading">Create a purchase draft from evidence</h2>
+                <p>
+                  Compare the original source with every field below. This creates one editable,
+                  non-posting draft; it never posts a journal.
+                </p>
+              </div>
+              <button id="close-capture-conversion" class="secondary-command" type="button">
+                Close
+              </button>
+            </div>
+            <div class="capture-conversion-layout">
+              <section class="capture-evidence-pane" aria-labelledby="capture-evidence-heading">
+                <div class="capture-pane-heading">
+                  <div>
+                    <p class="section-kicker">Original source</p>
+                    <h3 id="capture-evidence-heading">Evidence preview</h3>
+                  </div>
+                  <button id="download-capture-evidence" class="text-command" type="button">
+                    Download
+                  </button>
+                </div>
+                <dl class="capture-evidence-summary">
+                  <div>
+                    <dt>Type</dt>
+                    <dd id="capture-evidence-kind">—</dd>
+                  </div>
+                  <div>
+                    <dt>Review</dt>
+                    <dd id="capture-evidence-review-status">—</dd>
+                  </div>
+                  <div>
+                    <dt>File scan</dt>
+                    <dd id="capture-evidence-scan-status">—</dd>
+                  </div>
+                  <div>
+                    <dt>OCR evidence</dt>
+                    <dd id="capture-evidence-ocr-status">—</dd>
+                  </div>
+                </dl>
+                <section
+                  class="capture-extraction-summary"
+                  aria-labelledby="capture-extraction-heading"
+                >
+                  <div class="capture-pane-heading">
+                    <div>
+                      <p class="section-kicker">Local processing</p>
+                      <h4 id="capture-extraction-heading">Extracted accounting evidence</h4>
+                    </div>
+                    <span id="capture-processing-state" class="capture-status-tag is-review"
+                      >CAPTURED</span
+                    >
+                  </div>
+                  <p id="capture-extraction-guidance" class="field-help">
+                    OCR values are suggestions only. Confirm every value against the original
+                    source.
+                  </p>
+                  <dl id="capture-extraction-fields" class="capture-extraction-fields"></dl>
+                  <ul id="capture-extraction-reasons" class="capture-extraction-reasons"></ul>
+                </section>
+                <div
+                  id="capture-evidence-preview"
+                  class="capture-evidence-preview"
+                  role="region"
+                  aria-label="Source evidence preview"
+                  aria-busy="false"
+                >
+                  <p>Select evidence to preview it.</p>
+                </div>
+              </section>
+              <section class="capture-draft-pane" aria-labelledby="capture-draft-heading">
+                <p class="section-kicker">Human-reviewed draft</p>
+                <h3 id="capture-draft-heading">Draft details</h3>
+                <p id="capture-conversion-guard" class="capture-conversion-guard">
+                  Only approved, clean evidence can create a draft.
+                </p>
+                <form id="capture-conversion-form" class="capture-conversion-form">
+                  <input name="captureReviewId" type="hidden" />
+                  <input name="version" type="hidden" />
+                  <fieldset id="capture-conversion-fields">
+                    <legend>Choose the one draft this evidence should create</legend>
+                    <div class="capture-target-options">
+                      <label>
+                        <input name="target" type="radio" value="BILL" required />
+                        <span>
+                          <strong>Bill draft</strong>
+                          <small>Supplier invoice to review and post later</small>
+                        </span>
+                      </label>
+                      <label>
+                        <input name="target" type="radio" value="IMMEDIATE_EXPENSE" required />
+                        <span>
+                          <strong>Immediate expense draft</strong>
+                          <small>Receipt paid now, still unposted</small>
+                        </span>
+                      </label>
+                    </div>
+                    <p id="capture-target-help" class="field-help">
+                      Select a target explicitly. Bill evidence can create only a bill draft;
+                      receipt evidence can create only an immediate-expense draft.
+                    </p>
+                    <div id="capture-bill-fields" class="capture-target-fields form-grid" hidden>
+                      <label
+                        >Vendor
+                        <select name="billVendorId" required></select
+                      ></label>
+                      <label
+                        >Vendor invoice number
+                        <input name="vendorInvoiceNumber" maxlength="128" required
+                      /></label>
+                      <label>Issue date <input name="issueDate" type="date" required /></label>
+                      <label>Due date <input name="dueDate" type="date" /></label>
+                      <label
+                        >Payment terms (days)
+                        <input name="paymentTermsDays" type="number" min="0" max="3650"
+                      /></label>
+                      <label
+                        >Currency
+                        <select name="currency" required>
+                          <option value="CAD">CAD</option>
+                          <option value="USD">USD</option>
+                        </select></label
+                      >
+                    </div>
+                    <div id="capture-expense-fields" class="capture-target-fields form-grid" hidden>
+                      <label
+                        >Vendor (optional)
+                        <select name="expenseVendorId"></select
+                      ></label>
+                      <label>Reference <input name="reference" maxlength="128" /></label>
+                      <label>Expense date <input name="expenseDate" type="date" required /></label>
+                      <label
+                        >Payment method
+                        <select name="method" required>
+                          <option value="CASH">Cash</option>
+                          <option value="CHEQUE">Cheque</option>
+                          <option value="ELECTRONIC_TRANSFER">Electronic transfer</option>
+                          <option value="CREDIT_CARD">Credit card</option>
+                          <option value="OWNER_PAID">Owner paid</option>
+                          <option value="OTHER">Other</option>
+                        </select></label
+                      >
+                      <label class="wide-field"
+                        >Paying account
+                        <select name="payingAccountId" required></select
+                      ></label>
+                    </div>
+                    <div id="capture-line-fields" class="capture-line-fields form-grid" hidden>
+                      <h4 class="wide-field">Purchase line</h4>
+                      <label class="wide-field"
+                        >Description <input name="lineDescription" maxlength="500" required
+                      /></label>
+                      <label
+                        >Quantity <input name="quantity" inputmode="decimal" value="1" required
+                      /></label>
+                      <label
+                        >Unit cost
+                        <input name="unitCost" inputmode="decimal" placeholder="0.00" required
+                      /></label>
+                      <label
+                        >Discount <input name="discount" inputmode="decimal" placeholder="0.00"
+                      /></label>
+                      <label
+                        >Expense or asset account
+                        <select name="accountId" required></select
+                      ></label>
+                      <label class="wide-field"
+                        >Internal review note
+                        <textarea name="internalNotes" maxlength="10000"></textarea>
+                      </label>
+                    </div>
+                  </fieldset>
+                  <output id="capture-conversion-status" class="capture-conversion-status"></output>
+                  <div class="form-actions">
+                    <button id="submit-capture-conversion" type="submit" disabled>
+                      Select a draft target
+                    </button>
+                  </div>
+                </form>
+                <section
+                  id="capture-conversion-result"
+                  class="capture-conversion-result"
+                  aria-labelledby="capture-conversion-result-heading"
+                  hidden
+                >
+                  <p class="section-kicker">Linked result</p>
+                  <h3 id="capture-conversion-result-heading">Draft created once</h3>
+                  <p>
+                    The source evidence is permanently linked to this non-posting draft. No
+                    accounting entry was created.
+                  </p>
+                  <dl>
+                    <div>
+                      <dt>Draft</dt>
+                      <dd id="capture-linked-draft-type">—</dd>
+                    </div>
+                    <div>
+                      <dt>Status</dt>
+                      <dd>DRAFT · Not posted</dd>
+                    </div>
+                    <div>
+                      <dt>Linked ID</dt>
+                      <dd id="capture-linked-draft-id">—</dd>
+                    </div>
+                    <div>
+                      <dt>Accounting entries</dt>
+                      <dd id="capture-linked-accounting-count">0</dd>
+                    </div>
+                  </dl>
+                  <button id="open-capture-linked-draft" class="secondary-command" type="button">
+                    Open linked draft
+                  </button>
+                </section>
+              </section>
+            </div>
+          </dialog>
+        </section>

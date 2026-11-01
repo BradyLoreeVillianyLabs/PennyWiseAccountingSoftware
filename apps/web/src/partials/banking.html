@@ -1,0 +1,332 @@
+        <section id="banking-workspace" hidden aria-labelledby="banking-heading">
+          <div class="section-heading">
+            <div>
+              <h1 id="banking-heading">Banking</h1>
+              <p>
+                Bring in bank activity, review suggested matches, and reconcile with confidence.
+              </p>
+            </div>
+            <button id="refresh-banking" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <ol class="workflow-steps" aria-label="Banking workflow">
+            <li class="is-current">Connect or upload</li>
+            <li>Review matches</li>
+            <li>Resolve exceptions</li>
+            <li>Reconcile</li>
+          </ol>
+          <section class="bank-feed-card" aria-labelledby="bank-feed-heading">
+            <div class="section-heading compact-heading">
+              <div>
+                <h2 id="bank-feed-heading">Connected bank feeds</h2>
+                <p>
+                  Use your bank’s secure sign-in window. PennyWise never asks for or stores your
+                  online-banking password, and connected activity always lands in the review queue.
+                </p>
+              </div>
+              <button id="bank-feed-connect" class="secondary-command" type="button" disabled>
+                Connect securely
+              </button>
+            </div>
+            <div class="bank-feed-status-row">
+              <label
+                >PennyWise account
+                <select id="bank-feed-local-account" aria-describedby="bank-feed-status"></select>
+              </label>
+              <output id="bank-feed-status"></output>
+            </div>
+            <p class="field-hint" id="bank-feed-boundary">
+              CSV, OFX, and QFX uploads remain available even when connected feeds are unavailable.
+            </p>
+            <div id="bank-feed-connections" class="bank-feed-connections" aria-live="polite"></div>
+          </section>
+          <div class="columns">
+            <section>
+              <h3>Financial account</h3>
+              <form id="bank-account-form" class="form-grid">
+                <label>Name <input name="displayName" required maxlength="200" /></label>
+                <label
+                  >Type
+                  <select name="accountKind">
+                    <option value="BANK">Bank</option>
+                    <option value="CREDIT_CARD">Credit card</option>
+                  </select></label
+                >
+                <label
+                  >Masked reference
+                  <input
+                    name="maskedAccountReference"
+                    placeholder="****1234"
+                    required
+                    maxlength="64"
+                /></label>
+                <label>Institution <input name="financialInstitutionName" maxlength="200" /></label>
+                <label
+                  >Currency
+                  <select name="currency" required>
+                    <option value="CAD">CAD</option>
+                    <option value="USD">USD</option>
+                  </select></label
+                >
+                <label
+                  >Ledger account
+                  <select name="linkedLedgerAccountId" required></select
+                ></label>
+                <label>Opening date <input name="openingDate" type="date" required /></label>
+                <div class="form-actions"><button type="submit">Add account</button></div>
+              </form>
+            </section>
+            <section>
+              <h3>Upload a bank statement</h3>
+              <form id="bank-import-form" class="form-grid">
+                <label
+                  >Account
+                  <select name="bankAccountId" required></select
+                ></label>
+                <label
+                  >Format
+                  <select name="format">
+                    <option>CSV</option>
+                    <option>OFX</option>
+                    <option>QFX</option>
+                  </select></label
+                >
+                <label>Statement file <input name="statement" type="file" required /></label>
+                <div class="form-actions">
+                  <button type="submit">Review transactions</button>
+                </div>
+              </form>
+              <output id="bank-import-preview"></output>
+              <button id="commit-bank-import" type="button" disabled>
+                Add reviewed transactions
+              </button>
+            </section>
+          </div>
+          <section>
+            <h3>Review and match activity</h3>
+            <div class="table-toolbar">
+              <label
+                >Find bank activity
+                <input
+                  data-table-filter-target="bank-transactions"
+                  placeholder="Date, description, or status"
+                />
+              </label>
+              <output
+                data-table-filter-count="bank-transactions"
+                role="status"
+                aria-live="polite"
+              ></output>
+              <button type="button" class="secondary-command" data-table-export="bank-transactions">
+                Download visible
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Clear</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Direction</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="bank-transactions"></tbody>
+              </table>
+            </div>
+          </section>
+          <dialog id="bank-feed-mapping-dialog" aria-labelledby="bank-feed-mapping-heading">
+            <form id="bank-feed-mapping-form" class="form-grid compact-form">
+              <div class="section-heading compact-heading form-span">
+                <div>
+                  <h2 id="bank-feed-mapping-heading">Choose the account to connect</h2>
+                  <p>
+                    Link selected one or more bank accounts. Choose one pair now; repeat the secure
+                    connection for another PennyWise account if needed.
+                  </p>
+                </div>
+              </div>
+              <label
+                >PennyWise account
+                <select name="bankAccountId" required></select>
+              </label>
+              <label
+                >Bank account selected in the secure window
+                <select name="providerAccountReference" required></select>
+              </label>
+              <output id="bank-feed-mapping-status" class="form-span"></output>
+              <div class="form-actions form-span">
+                <button
+                  type="button"
+                  class="secondary-command"
+                  data-close-dialog="bank-feed-mapping-dialog"
+                >
+                  Cancel
+                </button>
+                <button type="submit">Connect this account</button>
+              </div>
+            </form>
+          </dialog>
+          <dialog
+            id="flinks-connect-dialog"
+            class="flinks-connect-dialog"
+            aria-labelledby="flinks-connect-heading"
+          >
+            <div class="dialog-heading">
+              <div>
+                <h2 id="flinks-connect-heading">Connect your bank securely</h2>
+                <p>
+                  This secure window is provided by Flinks. PennyWise never sees or stores your
+                  online-banking password or MFA answers.
+                </p>
+              </div>
+            </div>
+            <iframe
+              id="flinks-connect-frame"
+              title="Flinks secure bank connection"
+              referrerpolicy="strict-origin"
+            ></iframe>
+            <output id="flinks-connect-status" class="form-span"></output>
+            <div class="form-actions">
+              <button
+                type="button"
+                class="secondary-command"
+                data-close-dialog="flinks-connect-dialog"
+              >
+                Cancel secure connection
+              </button>
+            </div>
+          </dialog>
+          <div class="columns">
+            <section>
+              <h3>Categorize or split</h3>
+              <form id="bank-category-form" class="form-grid">
+                <label>Transaction <input name="transactionId" readonly required /></label>
+                <input name="version" type="hidden" />
+                <label
+                  >Category account
+                  <select name="accountId" required></select
+                ></label>
+                <label
+                  >Amount before tax (CAD) <input name="amountMinor" inputmode="decimal" required
+                /></label>
+                <label>Memo <input name="memo" maxlength="500" /></label>
+                <label
+                  >Second account
+                  <select name="secondAccountId">
+                    <option value="">None</option>
+                  </select></label
+                >
+                <label
+                  >Second amount (CAD) <input name="secondAmountMinor" inputmode="decimal"
+                /></label>
+                <div class="form-actions"><button type="submit">Post category</button></div>
+              </form>
+            </section>
+            <section>
+              <h3>Match posted transaction</h3>
+              <form id="bank-match-form" class="form-grid">
+                <label>Transaction <input name="transactionId" readonly required /></label>
+                <input name="version" type="hidden" />
+                <label>Journal ID <input name="targetJournalId" required /></label>
+                <label
+                  >Target type
+                  <select name="targetType">
+                    <option>INVOICE_PAYMENT</option>
+                    <option>PROCESSOR_SETTLEMENT</option>
+                    <option>BILL_PAYMENT</option>
+                    <option>IMMEDIATE_EXPENSE</option>
+                    <option>MANUAL_JOURNAL</option>
+                    <option>TRANSFER</option>
+                  </select></label
+                >
+                <label>Target ID <input name="targetId" required /></label>
+                <label
+                  >Amount (CAD) <input name="amountMinor" inputmode="decimal" required
+                /></label>
+                <div class="form-actions"><button type="submit">Confirm match</button></div>
+              </form>
+              <output id="bank-match-suggestions"></output>
+            </section>
+          </div>
+          <div class="columns">
+            <section>
+              <h3>Transfer</h3>
+              <form id="bank-transfer-form" class="form-grid">
+                <label
+                  >From
+                  <select name="sourceBankAccountId" required></select
+                ></label>
+                <label
+                  >To
+                  <select name="destinationBankAccountId" required></select
+                ></label>
+                <label>Date <input name="transferDate" type="date" required /></label>
+                <label
+                  >Amount (CAD) <input name="amountMinor" inputmode="decimal" required
+                /></label>
+                <label>Reference <input name="reference" maxlength="200" /></label>
+                <div class="form-actions"><button type="submit">Record transfer</button></div>
+              </form>
+            </section>
+            <section>
+              <h3>Advisory rule</h3>
+              <form id="bank-rule-form" class="form-grid">
+                <label>Name <input name="name" required maxlength="200" /></label>
+                <label
+                  >Priority <input name="priority" type="number" min="1" value="100" required
+                /></label>
+                <label>Description contains <input name="descriptionContains" required /></label>
+                <label
+                  >Suggested account
+                  <select name="accountId" required></select
+                ></label>
+                <div class="form-actions"><button type="submit">Save rule</button></div>
+              </form>
+            </section>
+          </div>
+          <section>
+            <h3>Statement reconciliation</h3>
+            <form id="bank-reconciliation-form" class="inline-form">
+              <label
+                >Account
+                <select name="bankAccountId" required></select
+              ></label>
+              <label>Start <input name="statementStartDate" type="date" required /></label>
+              <label>End <input name="statementEndDate" type="date" required /></label>
+              <label
+                >Opening balance (CAD)
+                <input name="openingStatementBalanceMinor" inputmode="decimal" required
+              /></label>
+              <label
+                >Closing balance (CAD)
+                <input name="closingStatementBalanceMinor" inputmode="decimal" required
+              /></label>
+              <button type="submit">Save reconciliation</button>
+            </form>
+            <output id="bank-reconciliation-summary"></output>
+            <button id="complete-bank-reconciliation" type="button" disabled>
+              Complete reconciliation
+            </button>
+          </section>
+          <section>
+            <h3>Bank accounts</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Account</th>
+                    <th>Type</th>
+                    <th>Currency</th>
+                    <th>Reference</th>
+                    <th>Last import</th>
+                    <th>Last reconciliation</th>
+                  </tr>
+                </thead>
+                <tbody id="bank-accounts"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>

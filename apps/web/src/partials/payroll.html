@@ -1,0 +1,318 @@
+        <section id="payroll-workspace" hidden aria-labelledby="payroll-heading">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Accountant mode</p>
+              <h1 id="payroll-heading">Payroll control centre</h1>
+              <p>
+                Prepare a controlled pay run, then calculate, review, approve, and post it with a
+                clear audit trail. PennyWise Accounting does not move payroll funds or file taxes.
+              </p>
+            </div>
+            <button id="refresh-payroll" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <section class="payroll-safety-strip" aria-label="Payroll safety boundaries">
+            <article>
+              <strong>Scheduled drafts</strong>
+              <span>Only from explicit periods and effective compensation</span>
+            </article>
+            <article>
+              <strong>Human controls</strong>
+              <span>Calculation, review, approval, and posting stay separate</span>
+            </article>
+            <article>
+              <strong>Provider gates</strong>
+              <span>Direct deposit and filing are not connected</span>
+            </article>
+          </section>
+          <output id="payroll-status" class="payroll-status"></output>
+          <dl
+            id="payroll-summary"
+            class="metric-grid payroll-summary"
+            aria-label="Payroll overview"
+          ></dl>
+
+          <section id="payroll-setup-section" aria-labelledby="payroll-setup-heading">
+            <div class="section-heading">
+              <div>
+                <h2 id="payroll-setup-heading">Set up the controlled workflow</h2>
+                <p>
+                  Use the released Alberta, Canada path only. U.S. and other rule packs remain
+                  validation-only.
+                </p>
+              </div>
+            </div>
+            <div class="payroll-workspace-grid">
+              <section class="payroll-card">
+                <h3>1. Ledger and statutory codes</h3>
+                <p class="field-help">
+                  Choose the accounts used by payroll postings. The base-code action adds only
+                  missing CA–AB mappings and never replaces a mapping your accountant already set.
+                </p>
+                <form id="payroll-settings-form" class="form-grid compact-form">
+                  <label
+                    >Payroll expense account
+                    <select name="defaultExpenseAccountId" required></select
+                  ></label>
+                  <label
+                    >Payroll liability account
+                    <select name="defaultLiabilityAccountId" required></select
+                  ></label>
+                  <label
+                    >Net-pay clearing account
+                    <select name="netPayClearingAccountId" required></select
+                  ></label>
+                  <label
+                    >Rule-pack identifier
+                    <input name="calculationRulePackId" value="clearledger-payroll-ca-ab" required
+                  /></label>
+                  <label
+                    >Rule-pack version
+                    <input name="calculationRulePackVersion" value="2026.2" required
+                  /></label>
+                  <div class="form-actions">
+                    <button id="save-payroll-settings" type="submit">Save payroll setup</button>
+                    <button id="ensure-ca-ab-payroll-codes" class="secondary-command" type="button">
+                      Add missing CA–AB base codes
+                    </button>
+                  </div>
+                </form>
+                <output id="payroll-code-status" class="field-help"></output>
+              </section>
+              <section class="payroll-card">
+                <h3>2. People and compensation</h3>
+                <p class="field-help">
+                  This screen intentionally does not collect government identifiers or bank details.
+                  Use approved encrypted onboarding before any payment-provider export.
+                </p>
+                <form id="payroll-worker-form" class="form-grid compact-form">
+                  <label>Worker number <input name="workerNumber" maxlength="80" required /></label>
+                  <label>Display name <input name="displayName" maxlength="200" required /></label>
+                  <label
+                    >Worker type
+                    <select name="kind">
+                      <option value="EMPLOYEE">Employee</option>
+                      <option value="CONTRACTOR">Contractor</option>
+                    </select></label
+                  >
+                  <label>Effective from <input name="effectiveFrom" type="date" required /></label>
+                  <label
+                    >Jurisdiction
+                    <select name="jurisdictionCode">
+                      <option value="CA-AB">Canada — Alberta (released)</option>
+                    </select></label
+                  >
+                  <label
+                    >Compensation type
+                    <select name="compensationKind">
+                      <option value="SALARY">Annual salary</option>
+                      <option value="HOURLY">Hourly rate</option>
+                      <option value="FIXED">Fixed amount per pay</option>
+                    </select></label
+                  >
+                  <label
+                    >Rate or annual salary
+                    <input name="rate" inputmode="decimal" placeholder="0.00" required
+                  /></label>
+                  <label
+                    >Hours per pay period
+                    <input
+                      name="hoursPerPeriod"
+                      inputmode="decimal"
+                      placeholder="Only for hourly pay"
+                  /></label>
+                  <fieldset class="payroll-td1-fields">
+                    <legend>TD1 claim codes</legend>
+                    <label
+                      >Federal
+                      <input name="federalClaimCode" type="number" min="0" max="10" value="1"
+                    /></label>
+                    <label
+                      >Alberta
+                      <input name="provincialClaimCode" type="number" min="0" max="10" value="1"
+                    /></label>
+                    <label
+                      >Additional tax per pay
+                      <input name="additionalTax" inputmode="decimal" placeholder="0.00"
+                    /></label>
+                  </fieldset>
+                  <button type="submit">Add worker</button>
+                </form>
+                <div class="table-wrap payroll-list-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Worker</th>
+                        <th>Type</th>
+                        <th>Secure data</th>
+                      </tr>
+                    </thead>
+                    <tbody id="payroll-workers"></tbody>
+                  </table>
+                </div>
+              </section>
+              <section class="payroll-card">
+                <h3>3. Pay schedule</h3>
+                <p class="field-help">
+                  Enabling scheduled drafts never calculates, approves, posts, pays, or files a run.
+                </p>
+                <form id="payroll-schedule-form" class="form-grid compact-form">
+                  <label
+                    >Schedule code
+                    <input name="code" maxlength="80" placeholder="BIWEEKLY" required
+                  /></label>
+                  <label
+                    >Schedule name
+                    <input name="name" maxlength="160" placeholder="Biweekly payroll" required
+                  /></label>
+                  <label
+                    >Frequency
+                    <select name="frequency">
+                      <option value="WEEKLY">Weekly</option>
+                      <option value="BIWEEKLY" selected>Biweekly</option>
+                      <option value="SEMIMONTHLY">Semi-monthly</option>
+                      <option value="MONTHLY">Monthly</option>
+                    </select></label
+                  >
+                  <label>Anchor pay date <input name="anchorPayDate" type="date" required /></label>
+                  <label class="check"
+                    ><input name="automaticDraftsEnabled" type="checkbox" /> Prepare a draft when an
+                    explicit period becomes due</label
+                  >
+                  <label
+                    >Draft lead days
+                    <input name="draftLeadDays" type="number" min="0" max="31" value="3" required
+                  /></label>
+                  <button type="submit">Add pay schedule</button>
+                </form>
+                <div class="table-wrap payroll-list-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Schedule</th>
+                        <th>Frequency</th>
+                        <th>Draft rule</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="payroll-schedules"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section id="payroll-runs-section" aria-labelledby="payroll-runs-heading">
+            <div class="section-heading">
+              <div>
+                <h2 id="payroll-runs-heading">Prepare, review, and record payroll</h2>
+                <p>
+                  Every pay period is visible before a draft exists, and every posting remains
+                  reviewable.
+                </p>
+              </div>
+            </div>
+            <div class="payroll-workspace-grid payroll-runs-grid">
+              <section class="payroll-card">
+                <h3>Plan an explicit pay period</h3>
+                <form id="payroll-period-form" class="form-grid compact-form">
+                  <label
+                    >Schedule
+                    <select name="scheduleId" required></select
+                  ></label>
+                  <label>Period starts <input name="periodStart" type="date" required /></label>
+                  <label>Period ends <input name="periodEnd" type="date" required /></label>
+                  <label>Pay date <input name="payDate" type="date" required /></label>
+                  <label>Sequence <input name="sequence" type="number" min="1" required /></label>
+                  <button type="submit">Save pay period</button>
+                </form>
+                <form id="payroll-automation-form" class="inline-form payroll-automation-form">
+                  <label
+                    >Check due periods as of <input name="asOfDate" type="date" required
+                  /></label>
+                  <button type="submit" class="secondary-command">Prepare due drafts</button>
+                </form>
+                <output id="payroll-automation-status" class="field-help"></output>
+              </section>
+              <section class="payroll-card">
+                <h3>Create a reviewable draft</h3>
+                <p class="field-help">
+                  Use an explicit period. PennyWise Accounting estimates no dates and moves no
+                  money.
+                </p>
+                <form id="payroll-scheduled-draft-form" class="form-grid compact-form">
+                  <label
+                    >Schedule
+                    <select name="scheduleId" required></select
+                  ></label>
+                  <label>Period starts <input name="periodStart" type="date" required /></label>
+                  <label>Period ends <input name="periodEnd" type="date" required /></label>
+                  <label>Pay date <input name="payDate" type="date" required /></label>
+                  <label>Sequence (optional) <input name="sequence" type="number" min="1" /></label>
+                  <button type="submit">Prepare payroll draft</button>
+                </form>
+              </section>
+              <section class="payroll-card payroll-remittance-card">
+                <h3>Remittances and payment exports</h3>
+                <p class="field-help">
+                  Posted payroll can create remittance records and a controlled payment export. A
+                  provider connection and government acceptance are still required before money
+                  movement or filing.
+                </p>
+                <div id="payroll-remittances" class="payroll-compact-list"></div>
+                <div id="payroll-payment-batches" class="payroll-compact-list"></div>
+              </section>
+            </div>
+            <section class="payroll-card payroll-runs-card">
+              <div class="section-heading">
+                <div>
+                  <h3>Pay runs</h3>
+                  <p>
+                    Open a run to see its workforce, calculated totals, and the next permitted
+                    action.
+                  </p>
+                </div>
+                <button id="print-payroll" class="secondary-command" type="button">Print</button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Pay date</th>
+                      <th>Run</th>
+                      <th>Status</th>
+                      <th>Workers</th>
+                      <th>Remittances</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="payroll-runs"></tbody>
+                </table>
+              </div>
+              <section id="payroll-run-detail" class="payroll-run-detail" hidden aria-live="polite">
+                <div class="section-heading">
+                  <div>
+                    <h3 id="payroll-run-detail-heading">Pay run details</h3>
+                    <p id="payroll-run-detail-summary"></p>
+                  </div>
+                  <div id="payroll-run-detail-actions" class="form-actions"></div>
+                </div>
+                <div class="table-wrap">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Worker</th>
+                        <th>Jurisdiction</th>
+                        <th>Draft gross</th>
+                        <th>Gross</th>
+                        <th>Deductions</th>
+                        <th>Net pay</th>
+                      </tr>
+                    </thead>
+                    <tbody id="payroll-run-workers"></tbody>
+                  </table>
+                </div>
+                <output id="payroll-run-detail-status" class="field-help"></output>
+              </section>
+            </section>
+          </section>
+        </section>

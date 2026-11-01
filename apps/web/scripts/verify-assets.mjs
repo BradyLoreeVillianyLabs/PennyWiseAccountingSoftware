@@ -1,6 +1,12 @@
 import { access, readFile } from "node:fs/promises";
 import { constants } from "node:fs";
 import { resolve } from "node:path";
+import {
+  assembleIndexHtml,
+  readWebScripts,
+  readWebStyles,
+  verifyModuleBoundaries
+} from "./web-sources.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 for (const file of [
@@ -18,7 +24,8 @@ for (const file of [
 ]) {
   await access(resolve(root, file), constants.R_OK);
 }
-const html = await readFile(resolve(root, "index.html"), "utf8");
+await verifyModuleBoundaries(root);
+const html = await assembleIndexHtml(root);
 const normalizedHtml = html.replace(/\s+/g, " ");
 for (const required of [
   '<meta name="theme-color" content="#142a3b"',
@@ -278,8 +285,8 @@ for (const required of [
     throw new Error(`Identity web asset is missing ${required}.`);
   }
 }
-const script = await readFile(resolve(root, "app.js"), "utf8");
-const stylesheet = await readFile(resolve(root, "styles.css"), "utf8");
+const script = await readWebScripts(root);
+const stylesheet = await readWebStyles(root);
 for (const required of [
   'id="sales-delivery-boundary"',
   'id="payment-provider-boundary"',

@@ -1,0 +1,81 @@
+        <section id="fulfilment-workspace" hidden aria-labelledby="fulfilment-heading">
+          <div class="section-heading workspace-heading">
+            <div>
+              <p class="section-kicker">Orders</p>
+              <h1 id="fulfilment-heading">Orders &amp; fulfilment</h1>
+              <p id="fulfilment-intro">
+                Store orders arrive here for review. Nothing is posted to your books until you
+                convert an order yourself.
+              </p>
+            </div>
+            <div class="fulfilment-toolbar-actions">
+              <label class="fulfilment-filter"
+                >Show
+                <select id="fulfilment-status-filter" aria-label="Filter orders by status">
+                  <option value="">Awaiting review</option>
+                  <option value="REVIEW_REQUIRED">Review required</option>
+                  <option value="NORMALIZED">Reviewed</option>
+                  <option value="RECEIVED">Received</option>
+                  <option value="DEAD_LETTER">Failed</option>
+                </select>
+              </label>
+              <button id="refresh-fulfilment" class="secondary-command" type="button">
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <div
+            id="fulfilment-status"
+            class="fulfilment-status"
+            role="status"
+            aria-live="polite"
+            hidden
+          ></div>
+
+          <div class="fulfilment-layout">
+            <section class="fulfilment-orders-panel" aria-labelledby="fulfilment-orders-heading">
+              <div class="section-heading">
+                <h2 id="fulfilment-orders-heading">Orders to review</h2>
+              </div>
+              <ul id="fulfilment-order-list" class="fulfilment-order-list">
+                <li class="empty-state">Loading orders…</li>
+              </ul>
+            </section>
+
+            <section class="fulfilment-detail-panel" aria-labelledby="fulfilment-detail-heading">
+              <div class="section-heading">
+                <h2 id="fulfilment-detail-heading">Order detail</h2>
+              </div>
+              <div id="fulfilment-detail" class="fulfilment-detail">
+                <p class="empty-state">Choose an order to see what converting it would create.</p>
+              </div>
+            </section>
+          </div>
+
+          <section id="fulfilment-picking-section" aria-labelledby="fulfilment-picking-heading">
+            <div class="section-heading">
+              <h2 id="fulfilment-picking-heading">Picking</h2>
+              <p>
+                A picking slip is a warehouse document. Producing or reprinting one never changes
+                your books.
+              </p>
+            </div>
+            <div id="fulfilment-picking" class="fulfilment-picking">
+              <p class="empty-state">Convert an order to produce a picking slip.</p>
+            </div>
+          </section>
+
+          <section id="fulfilment-shipping-section" aria-labelledby="fulfilment-shipping-heading">
+            <div class="section-heading">
+              <h2 id="fulfilment-shipping-heading">Shipping</h2>
+              <p>
+                Labels are bought on your own carrier account. PennyWise Accounting never buys,
+                resells, or refunds postage.
+              </p>
+            </div>
+            <div id="fulfilment-shipping" class="fulfilment-shipping">
+              <p class="empty-state">Loading carrier accounts…</p>
+            </div>
+          </section>
+        </section>

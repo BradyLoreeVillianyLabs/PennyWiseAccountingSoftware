@@ -1,0 +1,328 @@
+        <section id="payments-workspace" hidden aria-labelledby="payments-heading">
+          <div class="section-heading">
+            <h1 id="payments-heading">Payments</h1>
+            <button
+              id="refresh-payments"
+              class="icon-button"
+              type="button"
+              title="Refresh payments"
+              aria-label="Refresh payments"
+            >
+              &#8635;
+            </button>
+          </div>
+          <div class="payments-columns">
+            <section id="own-account-payment-section">
+              <h3>Owner's online payment account</h3>
+              <p class="field-help">
+                Optional for local installs. The account belongs to your business; PennyWise does
+                not hold funds. Credentials are encrypted and are never shown again.
+              </p>
+              <form id="own-payment-account-form" class="form-grid">
+                <label
+                  >Provider
+                  <select name="provider" required>
+                    <option value="STRIPE">Stripe</option>
+                    <option value="SQUARE">Square</option>
+                  </select>
+                </label>
+                <label
+                  >Environment
+                  <select name="mode" required>
+                    <option value="test">Test / sandbox</option>
+                    <option value="live">Live</option>
+                  </select>
+                </label>
+                <label class="wide-field"
+                  >Secret or access token
+                  <input name="credential" type="password" autocomplete="new-password" required
+                /></label>
+                <label id="own-payment-location-field"
+                  >Square location ID (required for Square)
+                  <input name="locationId" autocomplete="off"
+                /></label>
+                <div class="form-actions">
+                  <button type="submit">Test and save account</button>
+                </div>
+              </form>
+              <output id="own-payment-account-status" aria-live="polite"></output>
+              <div id="own-payment-accounts" class="stacked-list" aria-live="polite"></div>
+            </section>
+            <section id="hosted-payment-provider-section">
+              <h3>Online payment provider</h3>
+              <p id="payment-account-status">Checking availability</p>
+              <p id="payment-provider-boundary" class="non-posting-callout" role="note">
+                <strong>Not included in this beta:</strong> PennyWise Accounting does not collect,
+                transfer, or refund money. Record a manual payment or refund only after the funds
+                move through a service outside PennyWise Accounting.
+              </p>
+              <div class="form-actions">
+                <button id="connect-payment-account" type="button" hidden>
+                  Connect payment provider
+                </button>
+                <button
+                  id="disconnect-payment-account"
+                  class="secondary-command"
+                  type="button"
+                  hidden
+                >
+                  Disconnect
+                </button>
+              </div>
+            </section>
+            <section id="hosted-payment-settings-section" hidden>
+              <h3>Payment settings</h3>
+              <form id="payment-settings-form" class="form-grid">
+                <label
+                  >Payment clearing
+                  <select name="clearingAccountId" required></select
+                ></label>
+                <label
+                  >Processing fees
+                  <select name="feeExpenseAccountId" required></select
+                ></label>
+                <label class="check"
+                  ><input name="allowPartialPayments" type="checkbox" />Allow partial
+                  payments</label
+                >
+                <label
+                  >Minimum partial amount (CAD)
+                  <input name="minimumPartialMinor" required value="1.00" inputmode="decimal"
+                /></label>
+                <div class="form-actions"><button type="submit">Save settings</button></div>
+              </form>
+            </section>
+          </div>
+          <section id="durable-payment-link-section">
+            <h3>Create a durable pay link</h3>
+            <p class="field-help">
+              Use a connected owner account to create a provider-hosted link that stays separate
+              from the short-lived checkout flow. Payment confirmation is polled and posted once.
+            </p>
+            <form id="durable-payment-link-form" class="form-grid">
+              <label
+                >Posted invoice
+                <select name="invoiceId" required></select>
+              </label>
+              <label
+                >Provider
+                <select name="provider" required>
+                  <option value="STRIPE">Stripe</option>
+                  <option value="SQUARE">Square</option>
+                </select>
+              </label>
+              <div class="form-actions"><button type="submit">Create pay link</button></div>
+            </form>
+            <output id="durable-payment-link-status" aria-live="polite"></output>
+            <div id="durable-payment-links" class="stacked-list" aria-live="polite"></div>
+          </section>
+          <section id="payment-instructions-section">
+            <div class="section-heading">
+              <div>
+                <h3>How customers can pay</h3>
+                <p class="field-help">
+                  These instructions are copied into newly finalized invoices. PennyWise never moves
+                  money, and security answers are never stored.
+                </p>
+              </div>
+            </div>
+            <form id="payment-instructions-form" class="form-grid">
+              <label class="wide-field"
+                >Legacy payment note
+                <textarea name="legacyInstructions" maxlength="4000"></textarea>
+              </label>
+              <fieldset class="wide-field payment-method-fieldset">
+                <legend>Accepted methods</legend>
+                <label class="check"
+                  ><input name="methodKey" type="checkbox" value="E_TRANSFER" /> Interac
+                  e-Transfer</label
+                >
+                <div class="payment-method-details" data-payment-method-details="E_TRANSFER">
+                  <label>Recipient email <input name="eTransferEmail" type="email" /></label>
+                  <label class="check"
+                    ><input name="eTransferAutodeposit" type="checkbox" /> Autodeposit
+                    enabled</label
+                  >
+                </div>
+                <label class="check"
+                  ><input name="methodKey" type="checkbox" value="EFT" /> Direct deposit /
+                  EFT</label
+                >
+                <div class="payment-method-details" data-payment-method-details="EFT">
+                  <label>Institution <input name="eftInstitution" /></label>
+                  <label>Transit number <input name="eftTransit" /></label>
+                  <label>Account number <input name="eftAccount" /></label>
+                  <span class="field-help"
+                    >Full bank numbers are never returned to settings; enter them only when
+                    replacing them.</span
+                  >
+                </div>
+                <label class="check"
+                  ><input name="methodKey" type="checkbox" value="CHEQUE" /> Cheque</label
+                >
+                <div class="payment-method-details" data-payment-method-details="CHEQUE">
+                  <label>Payable to <input name="chequePayableTo" /></label>
+                  <label
+                    >Mailing address <textarea name="chequeAddress" maxlength="1000"></textarea>
+                  </label>
+                </div>
+                <label class="check"
+                  ><input name="methodKey" type="checkbox" value="PAY_ONLINE" /> Pay online
+                  link</label
+                >
+                <div class="payment-method-details" data-payment-method-details="PAY_ONLINE">
+                  <label
+                    >https URL <input name="paymentUrl" type="url" placeholder="https://"
+                  /></label>
+                </div>
+                <label class="check"
+                  ><input name="methodKey" type="checkbox" value="CASH" /> Cash</label
+                >
+                <label class="check"
+                  ><input name="methodKey" type="checkbox" value="OTHER" /> Other</label
+                >
+                <div class="payment-method-details" data-payment-method-details="OTHER">
+                  <label
+                    >Description <input name="otherPaymentDescription" maxlength="1000"
+                  /></label>
+                </div>
+              </fieldset>
+              <output
+                id="payment-instructions-status"
+                class="field-help"
+                aria-live="polite"
+              ></output>
+              <div class="form-actions">
+                <button type="submit">Save payment instructions</button>
+              </div>
+            </form>
+          </section>
+          <section>
+            <h3>Record manual payment</h3>
+            <form id="manual-payment-form" class="form-grid">
+              <label
+                >Customer
+                <select name="customerId" required></select
+              ></label>
+              <label
+                >Invoice
+                <select name="invoiceId" required></select
+              ></label>
+              <label
+                >Receiving account
+                <select name="receivingAccountId" required></select
+              ></label>
+              <label
+                >Payment currency
+                <select name="currency" disabled>
+                  <option value="CAD">CAD</option>
+                  <option value="USD">USD</option>
+                </select></label
+              >
+              <label
+                >Method
+                <select name="methodCategory">
+                  <option value="CASH">Cash</option>
+                  <option value="CHEQUE">Cheque</option>
+                  <option value="ELECTRONIC_TRANSFER">Electronic transfer</option>
+                  <option value="EXTERNAL_CARD">External card</option>
+                  <option value="OTHER">Other</option>
+                </select></label
+              >
+              <label
+                >Amount (payment currency) <input name="amountMinor" required inputmode="decimal"
+              /></label>
+              <label
+                >Allocation (payment currency)
+                <input name="allocationMinor" required inputmode="decimal"
+              /></label>
+              <label>Payment date <input name="paymentDate" type="date" required /></label>
+              <label class="wide-field"
+                >Settlement-date rate
+                <select name="fxRateSnapshotId"></select>
+                <span class="field-help"
+                  >Required for USD and restricted to the payment date.</span
+                ></label
+              >
+              <label>Reference <input name="reference" maxlength="300" /></label>
+              <div class="form-actions"><button type="submit">Record payment</button></div>
+            </form>
+          </section>
+          <section>
+            <h3>Payment history</h3>
+            <div class="table-toolbar">
+              <label
+                >Find payments
+                <input
+                  data-table-filter-target="payments"
+                  placeholder="Status, amount, or reference"
+                />
+              </label>
+              <output data-table-filter-count="payments" role="status" aria-live="polite"></output>
+              <button type="button" class="secondary-command" data-table-export="payments">
+                Download visible
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Status</th>
+                    <th>Amount</th>
+                    <th>Unapplied</th>
+                    <th>Refunded</th>
+                    <th><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="payments"></tbody>
+              </table>
+            </div>
+            <output id="payment-detail"></output>
+          </section>
+          <div class="payments-columns">
+            <section>
+              <h3>Record a refund</h3>
+              <p class="field-help">
+                For a manual payment, send the money outside PennyWise Accounting first. This form
+                records the completed refund in the books; it does not move funds.
+              </p>
+              <form id="refund-form" class="form-grid">
+                <label
+                  >Payment
+                  <select name="paymentId" required></select
+                ></label>
+                <label
+                  >Amount (CAD) <input name="amountMinor" required inputmode="decimal"
+                /></label>
+                <label
+                  >Treatment
+                  <select name="treatment">
+                    <option value="CUSTOMER_CREDIT">Existing customer credit</option>
+                    <option value="UNAPPLIED_PAYMENT">Unapplied payment</option>
+                    <option value="CREDIT_NOTE_AND_REFUND">Credit note and refund</option>
+                  </select></label
+                >
+                <label>Reason <textarea name="reason" required maxlength="1000"></textarea></label>
+                <div class="form-actions">
+                  <button id="refund-submit" type="submit">Record refund already paid</button>
+                </div>
+              </form>
+            </section>
+            <section>
+              <h3>Disputes</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Status</th>
+                      <th>Amount</th>
+                      <th>Reason</th>
+                      <th><span class="sr-only">Actions</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="payment-disputes"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+        </section>

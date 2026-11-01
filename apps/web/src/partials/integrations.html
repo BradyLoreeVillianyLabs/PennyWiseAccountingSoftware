@@ -1,0 +1,982 @@
+        <section id="integrations-workspace" hidden aria-labelledby="integrations-heading">
+          <div class="section-heading">
+            <div>
+              <h1 id="integrations-heading">Commerce integrations</h1>
+              <p>
+                Bring WooCommerce and Etsy activity into one review queue without a paid connector
+                plugin.
+              </p>
+            </div>
+            <div class="form-actions">
+              <button id="load-commerce-demo" class="secondary-command" type="button" hidden>
+                Try a safe sample order
+              </button>
+              <button id="refresh-integrations" class="secondary-command" type="button">
+                Refresh
+              </button>
+            </div>
+          </div>
+
+          <section class="email-connections-panel" aria-labelledby="email-connections-heading">
+            <div class="section-heading compact-heading">
+              <div>
+                <p class="section-kicker">Customer communications</p>
+                <h2 id="email-connections-heading">Connect customer email</h2>
+                <p>
+                  Authorize Gmail or Microsoft, or configure your own SMTP relay. Credentials stay
+                  encrypted and are never shown here.
+                </p>
+              </div>
+            </div>
+            <div id="email-connections-list" class="email-connections-list" aria-live="polite">
+              <p class="empty-state">Checking available email connections...</p>
+            </div>
+            <p id="email-configuration-status" class="email-configuration-status" role="status">
+              Checking email delivery configuration…
+            </p>
+            <p class="field-help">
+              A mailbox is used only after an explicit invoice or estimate email action. Nothing is
+              sent automatically when you connect, select, or disconnect a mailbox.
+            </p>
+          </section>
+
+          <nav
+            id="commerce-view-navigation"
+            class="tabs commerce-view-navigation"
+            aria-label="Commerce integration sections"
+          >
+            <button
+              class="tab"
+              type="button"
+              data-commerce-view-target="review"
+              aria-pressed="true"
+            >
+              Review queue
+            </button>
+            <button
+              class="tab"
+              type="button"
+              data-commerce-view-target="catalog"
+              aria-pressed="false"
+            >
+              Catalog &amp; SKU matching
+            </button>
+            <button
+              class="tab"
+              type="button"
+              data-commerce-view-target="inventory"
+              aria-pressed="false"
+            >
+              Inventory automation
+            </button>
+            <button
+              class="tab"
+              type="button"
+              data-commerce-view-target="connections"
+              aria-pressed="false"
+            >
+              Connections
+            </button>
+          </nav>
+
+          <aside
+            class="integration-safety-note"
+            data-commerce-view="review"
+            aria-labelledby="integration-safety-heading"
+          >
+            <div>
+              <span class="status-pill">Review mode</span>
+              <h2 id="integration-safety-heading">Imports cannot change your books</h2>
+              <p>
+                Connectors collect and reconcile source evidence. They do not create invoices,
+                payments, inventory movements, tax entries, or journals. Every imported event stays
+                visible in the commerce inbox for review.
+              </p>
+            </div>
+            <dl class="integration-safety-metrics">
+              <div>
+                <dt>Accounting entries</dt>
+                <dd>0</dd>
+              </div>
+              <div>
+                <dt>Backfill limit</dt>
+                <dd>90 days</dd>
+              </div>
+              <div>
+                <dt>Released currencies</dt>
+                <dd>CAD · USD</dd>
+              </div>
+            </dl>
+          </aside>
+
+          <section
+            id="commerce-catalog-view"
+            data-commerce-view="catalog"
+            hidden
+            aria-labelledby="commerce-catalog-heading"
+          >
+            <div class="section-heading">
+              <div>
+                <h2 id="commerce-catalog-heading">Turn channel products into a clean item list</h2>
+                <p>
+                  Import product evidence, compare identifiers, and approve each match yourself.
+                  Suggestions never become accounting or inventory authority on their own.
+                </p>
+              </div>
+            </div>
+            <ol class="commerce-stage-rail" aria-label="Catalog review stages">
+              <li><strong>1</strong><span>Bring in products</span></li>
+              <li><strong>2</strong><span>Compare exact identifiers</span></li>
+              <li><strong>3</strong><span>Approve the item match</span></li>
+              <li><strong>4</strong><span>Choose inventory rules</span></li>
+            </ol>
+            <form id="catalog-poll-form" class="form-grid commerce-catalog-toolbar">
+              <label
+                >Store
+                <select name="connectorId" data-connector-select="ALL" required></select
+              ></label>
+              <label
+                >Products per request
+                <select name="pageSize">
+                  <option value="10">10</option>
+                  <option value="25" selected>25</option>
+                </select>
+              </label>
+              <label
+                >Pages this run
+                <select name="maxPages">
+                  <option value="1">1</option>
+                  <option value="5" selected>5</option>
+                  <option value="10">10</option>
+                </select>
+              </label>
+              <div class="form-actions commerce-catalog-actions">
+                <button type="submit">Import product list</button>
+                <button id="continue-catalog-poll" class="secondary-command" type="button" disabled>
+                  Continue import
+                </button>
+                <button
+                  id="open-product-spreadsheet-import"
+                  class="secondary-command"
+                  type="button"
+                >
+                  Use a spreadsheet instead
+                </button>
+                <button id="open-catalog-bulk-create" class="secondary-command" type="button">
+                  Create reviewed items
+                </button>
+              </div>
+            </form>
+            <output
+              id="catalog-operation-status"
+              class="structured-output compact-output"
+              aria-live="polite"
+            ></output>
+            <dl id="catalog-review-summary" class="metric-grid"></dl>
+            <div class="commerce-catalog-layout">
+              <section class="commerce-catalog-list-panel" aria-labelledby="catalog-list-heading">
+                <div class="section-heading compact-heading">
+                  <div>
+                    <h3 id="catalog-list-heading">Channel products</h3>
+                    <p>
+                      Choose a variation to review its SKU, evidence, images, and possible matches.
+                    </p>
+                  </div>
+                  <label class="inline-filter"
+                    >Find a product
+                    <input
+                      id="catalog-product-filter"
+                      type="search"
+                      placeholder="Name, SKU, barcode, or part number"
+                    />
+                  </label>
+                </div>
+                <div id="catalog-product-list" class="commerce-catalog-list" role="list"></div>
+              </section>
+              <section
+                class="commerce-catalog-detail-panel"
+                aria-labelledby="catalog-selection-heading"
+              >
+                <div id="catalog-selection" aria-live="polite">
+                  <div class="commerce-empty-state">
+                    <h3 id="catalog-selection-heading">Select a channel product</h3>
+                    <p>
+                      PennyWise Accounting keeps imported product facts separate from approved item
+                      mappings.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section
+            id="commerce-inventory-sync-view"
+            data-commerce-view="inventory"
+            hidden
+            aria-labelledby="commerce-inventory-sync-heading"
+          >
+            <div class="section-heading">
+              <div>
+                <h2 id="commerce-inventory-sync-heading">
+                  Inventory automation with a named authority
+                </h2>
+                <p>
+                  Automation starts off. First approve an item match, choose one location, and
+                  decide which system is allowed to settle quantity differences.
+                </p>
+              </div>
+              <button id="refresh-inventory-sync" class="secondary-command" type="button">
+                Refresh inventory review
+              </button>
+            </div>
+            <div class="inventory-authority-guide" aria-label="Inventory authority choices">
+              <div>
+                <strong>Manual review</strong>
+                <span>Compare quantities only. Nothing is changed automatically.</span>
+              </div>
+              <div>
+                <strong>PennyWise Accounting</strong>
+                <span>Local on-hand quantity can be queued to update the channel.</span>
+              </div>
+              <div>
+                <strong>Sales channel</strong>
+                <span>A reviewed conflict can create a local inventory adjustment.</span>
+              </div>
+            </div>
+            <dl id="inventory-sync-summary" class="metric-grid"></dl>
+            <section class="inventory-policy-editor" aria-labelledby="inventory-policy-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <h3 id="inventory-policy-heading">Approve an inventory rule</h3>
+                  <p id="inventory-policy-mapping-summary">
+                    Approve a catalog match before configuring inventory.
+                  </p>
+                </div>
+              </div>
+              <form id="inventory-sync-policy-form" class="form-grid">
+                <input name="version" type="hidden" />
+                <label
+                  >Approved channel item
+                  <select name="catalogVariantId" required></select
+                ></label>
+                <label
+                  >PennyWise Accounting location
+                  <select name="locationId" required></select
+                ></label>
+                <label
+                  >Quantity authority
+                  <select name="sourceOfTruth" required>
+                    <option value="MANUAL_REVIEW">Manual review only</option>
+                    <option value="LOCAL">PennyWise Accounting is authoritative</option>
+                    <option value="CHANNEL">Sales channel is authoritative</option>
+                  </select></label
+                >
+                <label
+                  >Expected quantity
+                  <input
+                    name="desiredQuantity"
+                    inputmode="decimal"
+                    placeholder="Optional, for example 24"
+                  />
+                </label>
+                <label class="checkbox-row form-span"
+                  ><input name="enabled" type="checkbox" /> Enable automatic quantity comparison
+                </label>
+                <label class="checkbox-row form-span inventory-policy-approval" hidden
+                  ><input name="approval" type="checkbox" /> I approve this named system as the
+                  quantity authority for this item and location.
+                </label>
+                <p id="inventory-policy-effect" class="non-posting-callout form-span">
+                  Manual review records evidence and conflicts only. It cannot update either system.
+                </p>
+                <div class="form-actions form-span">
+                  <button type="submit">Save reviewed rule</button>
+                  <button id="reset-inventory-policy" class="secondary-command" type="button">
+                    Clear form
+                  </button>
+                </div>
+              </form>
+              <output
+                id="inventory-policy-status"
+                class="structured-output compact-output"
+                aria-live="polite"
+              ></output>
+            </section>
+            <section aria-labelledby="inventory-policy-list-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <h3 id="inventory-policy-list-heading">Saved rules</h3>
+                  <p>
+                    Every row names its channel, item, location, authority, and automation state.
+                  </p>
+                </div>
+              </div>
+              <div class="table-wrap">
+                <table aria-label="Inventory synchronization rules">
+                  <thead>
+                    <tr>
+                      <th>Channel item</th>
+                      <th>PennyWise Accounting item</th>
+                      <th>Location</th>
+                      <th>Authority</th>
+                      <th>Automation</th>
+                      <th>Last evidence</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventory-sync-policies"></tbody>
+                </table>
+              </div>
+            </section>
+            <section aria-labelledby="inventory-conflicts-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <h3 id="inventory-conflicts-heading">Quantity differences to resolve</h3>
+                  <p>
+                    Differences are evidence, not errors. PennyWise Accounting waits for the action
+                    allowed by the saved authority rule.
+                  </p>
+                </div>
+                <label class="inline-filter"
+                  >Status
+                  <select id="inventory-conflict-filter">
+                    <option value="OPEN">Open</option>
+                    <option value="">All</option>
+                    <option value="RESOLVED">Resolved</option>
+                    <option value="IGNORED">Ignored</option>
+                  </select></label
+                >
+              </div>
+              <div class="table-wrap">
+                <table aria-label="Inventory quantity conflicts">
+                  <thead>
+                    <tr>
+                      <th>Item and location</th>
+                      <th>Channel observed</th>
+                      <th>Expected</th>
+                      <th>Difference</th>
+                      <th>Authority</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventory-sync-conflicts"></tbody>
+                </table>
+              </div>
+            </section>
+            <details class="integration-webhook-details inventory-operation-details">
+              <summary>Inventory delivery queue</summary>
+              <p class="form-guidance">
+                Provider updates are retried from an auditable queue. Failed deliveries never change
+                local quantity.
+              </p>
+              <div class="form-actions">
+                <button id="process-inventory-operations" type="button">
+                  Process pending updates
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table aria-label="Inventory provider update queue">
+                  <thead>
+                    <tr>
+                      <th>Requested</th>
+                      <th>Status</th>
+                      <th>Attempts</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="inventory-sync-operations"></tbody>
+                </table>
+              </div>
+            </details>
+          </section>
+
+          <section data-commerce-view="connections" hidden aria-labelledby="add-store-heading">
+            <div class="section-heading">
+              <div>
+                <h2 id="add-store-heading">Add a store or shop</h2>
+                <p>Each organization can connect more than one store on either platform.</p>
+              </div>
+            </div>
+            <div id="connector-provider-cards" class="connector-provider-grid"></div>
+            <form id="connector-draft-form" class="form-grid connector-create-form">
+              <label
+                >Platform
+                <select name="providerKey" required>
+                  <option value="WOOCOMMERCE">WooCommerce</option>
+                  <option value="ETSY">Etsy</option>
+                </select>
+              </label>
+              <label
+                >Store name in PennyWise Accounting
+                <input
+                  name="displayName"
+                  maxlength="120"
+                  placeholder="Main online store"
+                  required
+                />
+              </label>
+              <div class="form-actions"><button type="submit">Add store</button></div>
+            </form>
+          </section>
+
+          <div class="integration-setup-grid" data-commerce-view="connections" hidden>
+            <section aria-labelledby="woo-connect-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <h2 id="woo-connect-heading">Connect WooCommerce</h2>
+                  <p>Uses WooCommerce core REST API v3. Start with a read-only key.</p>
+                </div>
+              </div>
+              <form id="woocommerce-connect-form" class="form-grid">
+                <label
+                  >WooCommerce store
+                  <select name="connectorId" data-connector-select="WOOCOMMERCE" required></select>
+                </label>
+                <label
+                  >Public store URL
+                  <input
+                    name="storeUrl"
+                    type="url"
+                    placeholder="https://shop.example.com"
+                    required
+                  />
+                </label>
+                <label
+                  >Consumer key
+                  <input name="consumerKey" type="password" autocomplete="off" required />
+                </label>
+                <label
+                  >Consumer secret
+                  <input name="consumerSecret" type="password" autocomplete="off" required />
+                </label>
+                <label
+                  >Backfill from
+                  <input name="backfillStart" type="date" required />
+                </label>
+                <label
+                  >Through
+                  <input name="backfillEnd" type="date" required />
+                </label>
+                <p class="form-guidance form-span">
+                  In WordPress: WooCommerce → Settings → Advanced → REST API → Add key. Read access
+                  is enough for polling; read/write is needed only if PennyWise Accounting registers
+                  webhooks for you.
+                </p>
+                <div class="form-actions form-span">
+                  <button type="submit">Connect and test</button>
+                </div>
+              </form>
+            </section>
+
+            <section aria-labelledby="etsy-connect-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <h2 id="etsy-connect-heading">Connect Etsy</h2>
+                  <p>Secure OAuth requests only shop and transaction read access.</p>
+                </div>
+              </div>
+              <form id="etsy-oauth-form" class="form-grid">
+                <label
+                  >Etsy shop
+                  <select name="connectorId" data-connector-select="ETSY" required></select>
+                </label>
+                <label
+                  >App key (keystring)
+                  <input name="apiKey" type="password" autocomplete="off" required />
+                </label>
+                <label
+                  >Shared secret
+                  <input name="sharedSecret" type="password" autocomplete="off" required />
+                </label>
+                <label
+                  >Shop ID <span class="field-hint">optional if Etsy returns it</span>
+                  <input name="shopId" inputmode="numeric" />
+                </label>
+                <p class="form-guidance form-span">
+                  Etsy redirects back to this browser after authorization. Access tokens are
+                  encrypted and refreshed automatically. Buyer email access is not requested.
+                </p>
+                <div class="form-actions form-span">
+                  <button type="submit">Authorize with Etsy</button>
+                </div>
+              </form>
+              <p class="etsy-trademark-note">
+                The term “Etsy” is a trademark of Etsy, Inc. This application uses the Etsy API but
+                is not endorsed or certified by Etsy, Inc.
+              </p>
+            </section>
+          </div>
+
+          <section
+            data-commerce-view="connections"
+            hidden
+            aria-labelledby="connected-stores-heading"
+          >
+            <div class="section-heading">
+              <div>
+                <h2 id="connected-stores-heading">Connected stores</h2>
+                <p>Health, sync, webhook, pause, reconnect, and removal controls stay together.</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table aria-label="Connected commerce stores">
+                <thead>
+                  <tr>
+                    <th>Store</th>
+                    <th>Platform</th>
+                    <th>Connection</th>
+                    <th>Last sync</th>
+                    <th>Webhook</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="connector-installations"></tbody>
+              </table>
+            </div>
+            <details class="integration-webhook-details">
+              <summary>Configure an Etsy webhook</summary>
+              <form id="etsy-webhook-form" class="form-grid compact-form">
+                <label
+                  >Etsy shop
+                  <select name="connectorId" data-connector-select="ETSY" required></select
+                ></label>
+                <label
+                  >Signing secret
+                  <input
+                    name="signingSecret"
+                    type="password"
+                    autocomplete="off"
+                    placeholder="whsec_…"
+                    required
+                /></label>
+                <label class="form-span">Webhook URL <input name="webhookUrl" readonly /></label>
+                <p class="form-guidance form-span">
+                  Subscribe to order.paid, order.canceled, order.shipped, and order.delivered in
+                  Etsy’s Webhook Portal, then save the signing secret here.
+                </p>
+                <div class="form-actions form-span">
+                  <button type="submit">Save signing secret</button>
+                </div>
+              </form>
+            </details>
+            <output
+              id="connector-operation-status"
+              class="structured-output compact-output"
+            ></output>
+          </section>
+
+          <div class="integration-setup-grid" data-commerce-view="connections" hidden>
+            <section aria-labelledby="sync-settings-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <h2 id="sync-settings-heading">Synchronize a date range</h2>
+                  <p>Polling also catches edits or refunds a webhook did not include.</p>
+                </div>
+              </div>
+              <form id="connector-sync-form" class="form-grid">
+                <label
+                  >Store
+                  <select name="connectorId" data-connector-select="ALL" required></select
+                ></label>
+                <label>From <input name="from" type="date" required /></label>
+                <label>To <input name="to" type="date" required /></label>
+                <label
+                  >Work per run
+                  <select name="maxPages">
+                    <option value="1">Quick · 1 page</option>
+                    <option value="3" selected>Standard · 3 pages</option>
+                    <option value="10">Extended · 10 pages</option>
+                  </select>
+                </label>
+                <div class="form-actions form-span">
+                  <button type="submit">Start sync</button>
+                  <button id="continue-connector-sync" type="button" disabled>Continue sync</button>
+                </div>
+              </form>
+            </section>
+
+            <section aria-labelledby="mapping-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <h2 id="mapping-heading">Import rules</h2>
+                  <p>Unknown or ambiguous mappings always stop for review.</p>
+                </div>
+              </div>
+              <form id="connector-mapping-form" class="form-grid">
+                <label
+                  >Store
+                  <select name="connectorId" data-connector-select="ALL" required></select
+                ></label>
+                <label
+                  >Customer records
+                  <select name="customerStrategy">
+                    <option value="UNCONFIGURED">Ask during review</option>
+                    <option value="POOLED">Use one marketplace customer</option>
+                    <option value="INDIVIDUAL">Create individual customers later</option>
+                  </select>
+                </label>
+                <label class="form-span"
+                  >SKU mappings
+                  <span class="field-hint">one per line: store SKU = PennyWise Accounting SKU</span>
+                  <textarea
+                    name="skuMappings"
+                    rows="4"
+                    placeholder="MUG-BLUE = CL-MUG-BLUE"
+                  ></textarea>
+                </label>
+                <label class="form-span"
+                  >Tax mappings
+                  <span class="field-hint"
+                    >one per line: provider rate ID or label = PennyWise tax code</span
+                  >
+                  <textarea name="taxMappings" rows="3" placeholder="12 = GST5"></textarea>
+                </label>
+                <label class="form-span"
+                  >Tax remittance responsibility
+                  <select name="taxRemittanceResponsibility">
+                    <option value="REVIEW_REQUIRED">
+                      Review each jurisdiction before conversion
+                    </option>
+                    <option value="SELLER">Seller remits the mapped tax</option>
+                    <option value="MARKETPLACE">Marketplace remits the mapped tax</option>
+                  </select>
+                  <span class="field-hint"
+                    >Confirm this from your nexus, registration, product, and
+                    marketplace-facilitator evidence. PennyWise does not infer that Etsy,
+                    WooCommerce, or a payment provider remits tax.</span
+                  >
+                </label>
+                <label class="form-span"
+                  >Per-tax remittance overrides
+                  <span class="field-hint"
+                    >one per line: provider rate ID or label = SELLER or MARKETPLACE</span
+                  >
+                  <textarea
+                    name="taxRemittanceMappings"
+                    rows="3"
+                    placeholder="GST = SELLER&#10;BC PST = MARKETPLACE"
+                  ></textarea>
+                  <span class="field-hint"
+                    >Use this when one order contains taxes remitted by different parties. An
+                    aggregate Etsy tax field that cannot be separated should remain in review.</span
+                  >
+                </label>
+                <div class="form-actions form-span">
+                  <button type="submit">Save import rules</button>
+                </div>
+              </form>
+            </section>
+          </div>
+
+          <section data-commerce-view="review" aria-labelledby="commerce-inbox-heading">
+            <div class="section-heading">
+              <div>
+                <h2 id="commerce-inbox-heading">Commerce review inbox</h2>
+                <p>Provider evidence and reconciliation issues remain visible and non-posting.</p>
+              </div>
+              <label class="inline-filter"
+                >Status
+                <select id="commerce-inbox-filter">
+                  <option value="">All</option>
+                  <option value="REVIEW_REQUIRED">Needs review</option>
+                  <option value="NORMALIZED">Reviewed</option>
+                  <option value="DEAD_LETTER">Cannot process</option>
+                </select></label
+              >
+            </div>
+            <div id="commerce-inbox-summary" class="metric-grid"></div>
+            <div class="table-wrap">
+              <table aria-label="Commerce review inbox">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Platform / store</th>
+                    <th>Event</th>
+                    <th>Total</th>
+                    <th>Review findings</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="commerce-inbox-events"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <dialog
+            id="commerce-conversion-dialog"
+            class="commerce-dialog"
+            aria-labelledby="commerce-conversion-heading"
+          >
+            <form id="commerce-conversion-form" class="form-grid">
+              <div class="dialog-heading form-span">
+                <div>
+                  <h2 id="commerce-conversion-heading">Review order conversion</h2>
+                  <p>
+                    Compare the provider evidence with the assembled invoice before creating a
+                    draft. Posting remains a separate invoice action.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="secondary-command dialog-close"
+                  data-close-dialog="commerce-conversion-dialog"
+                  aria-label="Close order conversion review"
+                >
+                  Close
+                </button>
+              </div>
+              <output
+                id="commerce-conversion-provider-evidence"
+                class="structured-output form-span commerce-conversion-preview"
+                aria-live="polite"
+              ></output>
+              <output
+                id="commerce-conversion-draft-preview"
+                class="structured-output form-span commerce-conversion-preview"
+              ></output>
+              <output
+                id="commerce-conversion-gaps"
+                class="structured-output form-span commerce-conversion-preview"
+              ></output>
+              <label class="form-span"
+                >If rejecting, record why
+                <textarea
+                  id="commerce-conversion-rejection-reason"
+                  rows="3"
+                  maxlength="2000"
+                  placeholder="Explain what needs correction or further evidence."
+                ></textarea>
+              </label>
+              <div class="form-actions form-span">
+                <button id="commerce-conversion-reject" type="button" class="secondary-command">
+                  Reject conversion
+                </button>
+                <button id="commerce-conversion-confirm" type="button" disabled>
+                  Confirm and create draft
+                </button>
+              </div>
+            </form>
+          </dialog>
+
+          <dialog id="catalog-product-dialog" class="commerce-dialog">
+            <form id="catalog-product-form" class="form-grid">
+              <div class="dialog-heading form-span">
+                <div>
+                  <h2>Create a PennyWise Accounting inventory item</h2>
+                  <p>
+                    Product facts are prefilled from the channel. Account choices remain explicit
+                    and the new match will still wait for your approval.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="secondary-command dialog-close"
+                  data-close-dialog="catalog-product-dialog"
+                  aria-label="Close create item dialog"
+                >
+                  Close
+                </button>
+              </div>
+              <label>SKU <input name="sku" maxlength="80" required /></label>
+              <label>Name <input name="name" maxlength="200" required /></label>
+              <label
+                >Sales price (CAD)
+                <input name="salesPriceMinor" value="0.00" inputmode="decimal" required
+              /></label>
+              <label
+                >Reorder quantity <input name="reorderPoint" value="0" inputmode="decimal" required
+              /></label>
+              <label
+                >Income
+                <select name="incomeAccountId" required></select
+              ></label>
+              <label
+                >Inventory asset
+                <select name="inventoryAssetAccountId" required></select
+              ></label>
+              <label
+                >Cost of goods
+                <select name="costOfGoodsSoldAccountId" required></select
+              ></label>
+              <label
+                >Purchase clearing
+                <select name="purchaseClearingAccountId" required></select
+              ></label>
+              <label
+                >Adjustment gain
+                <select name="adjustmentGainAccountId" required></select
+              ></label>
+              <label
+                >Inventory loss
+                <select name="inventoryLossAccountId" required></select
+              ></label>
+              <label
+                >Default location
+                <select name="defaultLocationId" required></select
+              ></label>
+              <label
+                >Verified product image
+                <select name="productImageReference">
+                  <option value="">Do not attach an image reference</option>
+                </select>
+              </label>
+              <p class="non-posting-callout form-span">
+                Creating the item does not post a journal or move inventory. You will approve its
+                channel match on the next screen.
+              </p>
+              <div class="form-actions form-span">
+                <button type="submit">Create item for this product</button>
+                <button
+                  type="button"
+                  class="secondary-command"
+                  data-close-dialog="catalog-product-dialog"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </dialog>
+
+          <dialog id="catalog-bulk-product-dialog" class="commerce-dialog">
+            <form id="catalog-bulk-product-form" class="form-grid">
+              <div class="dialog-heading form-span">
+                <div>
+                  <h2>Create selected channel products as inventory items</h2>
+                  <p>
+                    This creates item definitions from the source facts you select. It does not
+                    create on-hand quantities, inventory movements, invoices, or journals.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="secondary-command dialog-close"
+                  data-close-dialog="catalog-bulk-product-dialog"
+                  aria-label="Close create reviewed items dialog"
+                >
+                  Close
+                </button>
+              </div>
+              <p id="catalog-bulk-product-summary" class="form-guidance form-span"></p>
+              <fieldset class="catalog-bulk-selection form-span">
+                <legend>Channel variations to create</legend>
+                <div id="catalog-bulk-product-selection" class="catalog-bulk-selection-list"></div>
+              </fieldset>
+              <label
+                >Sales price (CAD)
+                <input name="salesPriceMinor" value="0.00" inputmode="decimal" required
+              /></label>
+              <label
+                >Reorder quantity <input name="reorderPoint" value="0" inputmode="decimal" required
+              /></label>
+              <label
+                >Income
+                <select name="incomeAccountId" required></select
+              ></label>
+              <label
+                >Inventory asset
+                <select name="inventoryAssetAccountId" required></select
+              ></label>
+              <label
+                >Cost of goods
+                <select name="costOfGoodsSoldAccountId" required></select
+              ></label>
+              <label
+                >Purchase clearing
+                <select name="purchaseClearingAccountId" required></select
+              ></label>
+              <label
+                >Adjustment gain
+                <select name="adjustmentGainAccountId" required></select
+              ></label>
+              <label
+                >Inventory loss
+                <select name="inventoryLossAccountId" required></select
+              ></label>
+              <label
+                >Default location
+                <select name="defaultLocationId" required></select
+              ></label>
+              <label class="checkbox-row form-span"
+                ><input name="attachFirstIngestedImage" type="checkbox" checked /> Attach the first
+                verified channel image when there is one
+              </label>
+              <label class="checkbox-row form-span"
+                ><input name="confirmMappings" type="checkbox" /> I explicitly approve the exact
+                source-to-new-item mapping for every selected row
+              </label>
+              <p class="non-posting-callout form-span">
+                Stock quantities stay unchanged. After creating items, use a reviewed opening count,
+                purchase receipt, or an approved inventory authority rule to establish quantity.
+              </p>
+              <div class="form-actions form-span">
+                <button type="submit">Create selected items</button>
+                <button
+                  type="button"
+                  class="secondary-command"
+                  data-close-dialog="catalog-bulk-product-dialog"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </dialog>
+
+          <dialog id="inventory-conflict-dialog" class="commerce-dialog">
+            <form id="inventory-conflict-form" class="form-grid">
+              <div class="dialog-heading form-span">
+                <div>
+                  <h2>Resolve a quantity difference</h2>
+                  <p id="inventory-conflict-dialog-summary"></p>
+                </div>
+                <button
+                  type="button"
+                  class="secondary-command dialog-close"
+                  data-close-dialog="inventory-conflict-dialog"
+                  aria-label="Close inventory conflict dialog"
+                >
+                  Close
+                </button>
+              </div>
+              <label
+                >Resolution
+                <select name="action" required></select>
+              </label>
+              <label data-conflict-field="effectiveDate" hidden
+                >Effective date <input name="effectiveDate" type="date"
+              /></label>
+              <label data-conflict-field="unitCost" hidden
+                >Unit cost (CAD) <input name="unitCost" inputmode="decimal" placeholder="Optional"
+              /></label>
+              <label class="form-span"
+                >Review note
+                <textarea
+                  name="reason"
+                  rows="3"
+                  maxlength="1000"
+                  placeholder="Explain why this resolution is appropriate"
+                ></textarea>
+              </label>
+              <label
+                class="checkbox-row form-span inventory-conflict-approval"
+                data-conflict-field="approval"
+                hidden
+                ><input name="approval" type="checkbox" /> I approve a local inventory adjustment
+                from the channel evidence shown above.</label
+              >
+              <p id="inventory-conflict-effect" class="non-posting-callout form-span"></p>
+              <div class="form-actions form-span">
+                <button type="submit">Apply reviewed resolution</button>
+                <button
+                  type="button"
+                  class="secondary-command"
+                  data-close-dialog="inventory-conflict-dialog"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </dialog>
+        </section>

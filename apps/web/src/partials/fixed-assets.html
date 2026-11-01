@@ -1,0 +1,248 @@
+        <section id="fixed-assets-workspace" hidden aria-labelledby="fixed-assets-heading">
+          <div class="section-heading">
+            <div>
+              <h1 id="fixed-assets-heading">Fixed asset register</h1>
+              <p>Classify long-lived assets and review their book-depreciation schedules.</p>
+            </div>
+            <button id="refresh-fixed-assets" class="secondary-command" type="button">
+              Refresh
+            </button>
+          </div>
+          <section class="workflow-preferences-card" aria-labelledby="fixed-assets-safety-heading">
+            <h2 id="fixed-assets-safety-heading">Register-only safeguard</h2>
+            <p>
+              <strong>NON-POSTING:</strong> This workspace does not create journal entries, record
+              disposals, or calculate tax or CCA claims. Accountant review is required before a
+              draft becomes a registered reference. Registered records are frozen; corrections
+              remain unavailable until a future reviewed-version workflow is approved.
+            </p>
+          </section>
+          <div class="columns">
+            <section id="fixed-asset-class-section">
+              <h2>Asset class setup</h2>
+              <p class="field-help">
+                Set book defaults and account mappings for authorized review. These mappings do not
+                post.
+              </p>
+              <form id="fixed-asset-class-form" class="form-grid">
+                <label>Class code <input name="code" required maxlength="40" /></label>
+                <label>Class name <input name="name" required maxlength="200" /></label>
+                <label
+                  >Book method
+                  <select name="defaultBookMethod" required>
+                    <option value="STRAIGHT_LINE">Straight line</option>
+                    <option value="NONE">No book depreciation</option>
+                  </select>
+                </label>
+                <label
+                  >Convention
+                  <select name="defaultBookConvention" required>
+                    <option value="FULL_MONTH">Full month</option>
+                    <option value="NEXT_MONTH">Start next month</option>
+                  </select>
+                </label>
+                <label
+                  >Useful life (months)
+                  <input
+                    name="defaultUsefulLifeMonths"
+                    type="number"
+                    min="1"
+                    max="1200"
+                    step="1"
+                    value="60"
+                    required
+                  />
+                </label>
+                <label
+                  >Residual value (%)
+                  <input
+                    name="defaultResidualRatioPercent"
+                    inputmode="decimal"
+                    value="0"
+                    aria-describedby="fixed-asset-residual-help"
+                  />
+                  <span id="fixed-asset-residual-help" class="field-help"
+                    >Enter 0 to 100, with up to four decimal places.</span
+                  >
+                </label>
+                <label
+                  >Default asset account
+                  <select name="defaultAssetAccountId" required></select>
+                </label>
+                <label
+                  >Default accumulated depreciation
+                  <select name="defaultAccumulatedAccountId" required></select>
+                </label>
+                <label
+                  >Default depreciation expense
+                  <select name="defaultDepreciationExpenseId" required></select>
+                </label>
+                <label class="wide-field"
+                  >Description <textarea name="description" maxlength="1000"></textarea>
+                </label>
+                <div class="form-actions"><button type="submit">Create asset class</button></div>
+              </form>
+            </section>
+            <section id="fixed-asset-draft-section">
+              <h2>Asset draft</h2>
+              <p class="field-help">
+                Save a register draft from a source reference. Choose the ledger treatment before
+                accountant registration.
+              </p>
+              <form id="fixed-asset-form" class="form-grid">
+                <input name="assetId" type="hidden" />
+                <input name="version" type="hidden" />
+                <label
+                  >Asset class
+                  <select name="fixedAssetClassId" required></select>
+                  <span
+                    id="fixed-asset-class-guidance"
+                    class="field-help"
+                    aria-live="polite"
+                  ></span>
+                </label>
+                <label>Asset number <input name="assetNumber" required maxlength="40" /></label>
+                <label>Asset name <input name="name" required maxlength="200" /></label>
+                <label>Acquisition date <input name="acquiredOn" type="date" required /></label>
+                <label>In-service date <input name="inServiceOn" type="date" required /></label>
+                <label
+                  >Acquisition cost (CAD)
+                  <input name="acquisitionCostMinor" inputmode="decimal" required />
+                </label>
+                <label
+                  >Residual value (CAD)
+                  <input
+                    name="residualValueMinor"
+                    inputmode="decimal"
+                    aria-describedby="fixed-asset-residual-value-help"
+                  />
+                  <span id="fixed-asset-residual-value-help" class="field-help"
+                    >Leave blank to use the class percentage.</span
+                  >
+                </label>
+                <label
+                  >Opening accumulated depreciation (CAD)
+                  <input name="openingAccumulatedDepreciationMinor" inputmode="decimal" value="0" />
+                </label>
+                <label
+                  >Opening balance date
+                  <input name="openingBalanceDate" type="date" />
+                </label>
+                <label
+                  >Remaining useful life (months)
+                  <input
+                    name="remainingUsefulLifeMonths"
+                    type="number"
+                    min="1"
+                    max="1200"
+                    step="1"
+                  />
+                </label>
+                <label
+                  >Ledger treatment
+                  <select name="ledgerTreatment" required>
+                    <option value="UNDECIDED">Needs authorized review</option>
+                    <option value="ALREADY_RECORDED">Acquisition already recorded</option>
+                    <option value="OPENING_BALANCE">Opening balance</option>
+                    <option value="RECLASSIFICATION_REQUIRED">Reclassification required</option>
+                  </select>
+                </label>
+                <label class="wide-field"
+                  >Source reference <input name="sourceReference" required maxlength="500" />
+                  <span class="field-help"
+                    >For example, a bill number, opening-balance workpaper, or accountant
+                    reference.</span
+                  >
+                </label>
+                <label
+                  >Asset account
+                  <select name="assetAccountId"></select>
+                </label>
+                <label
+                  >Accumulated depreciation account
+                  <select name="accumulatedDepreciationAccountId"></select>
+                </label>
+                <label
+                  >Depreciation expense account
+                  <select name="depreciationExpenseAccountId"></select>
+                </label>
+                <label>Serial number <input name="serialNumber" maxlength="200" /></label>
+                <label>Location <input name="location" maxlength="300" /></label>
+                <label class="wide-field"
+                  >Description <textarea name="description" maxlength="1000"></textarea>
+                </label>
+                <label class="wide-field"
+                  >Review notes <textarea name="notes" maxlength="2000"></textarea>
+                </label>
+                <div class="form-actions">
+                  <button id="save-fixed-asset" type="submit">Create asset draft</button>
+                  <button
+                    id="cancel-fixed-asset-edit"
+                    class="secondary-command"
+                    type="button"
+                    hidden
+                  >
+                    Cancel edit
+                  </button>
+                </div>
+              </form>
+            </section>
+          </div>
+          <section>
+            <h2>Asset classes</h2>
+            <div class="table-wrap">
+              <table aria-label="Fixed asset classes">
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Book method</th>
+                    <th>Useful life</th>
+                    <th>Default accounts</th>
+                  </tr>
+                </thead>
+                <tbody id="fixed-asset-classes"></tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h2>Register</h2>
+            <div class="table-wrap">
+              <table aria-label="Fixed asset register">
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Asset and class</th>
+                    <th>Dates</th>
+                    <th>Cost</th>
+                    <th>Status and treatment</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="fixed-assets"></tbody>
+              </table>
+            </div>
+          </section>
+          <section aria-labelledby="fixed-asset-preview-heading">
+            <h2 id="fixed-asset-preview-heading">NON-POSTING depreciation preview</h2>
+            <p class="field-help">
+              This schedule is a deterministic planning preview for authorized review. It never
+              posts depreciation. A registered record remains frozen after preview.
+            </p>
+            <output id="fixed-asset-preview" class="structured-output"
+              >Choose Preview on an asset to inspect its schedule.</output
+            >
+            <div class="table-wrap">
+              <table aria-label="Non-posting depreciation schedule">
+                <thead>
+                  <tr>
+                    <th>Period</th>
+                    <th>Depreciation</th>
+                    <th>Accumulated</th>
+                    <th>Net book value</th>
+                  </tr>
+                </thead>
+                <tbody id="fixed-asset-depreciation-schedule"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>

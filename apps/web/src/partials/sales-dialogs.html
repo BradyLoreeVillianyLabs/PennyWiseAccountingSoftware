@@ -1,0 +1,203 @@
+    <dialog
+      id="credit-note-dialog"
+      class="commerce-dialog credit-note-dialog"
+      aria-labelledby="credit-note-heading"
+      aria-describedby="credit-note-description"
+    >
+      <div class="dialog-heading">
+        <div>
+          <h2 id="credit-note-heading" data-i18n="creditNote.title">Issue a credit note</h2>
+          <p id="credit-note-description" data-i18n="creditNote.description">
+            This creates and posts a full credit against the selected invoice. It does not move
+            money.
+          </p>
+        </div>
+      </div>
+      <p id="credit-note-source" class="structured-output"></p>
+      <form id="credit-note-form" class="form-grid">
+        <label
+          ><span data-i18n="creditNote.issueDate">Issue date</span>
+          <input name="issueDate" type="date" required
+        /></label>
+        <label class="wide-field"
+          ><span data-i18n="creditNote.reason">Reason</span>
+          <textarea name="reason" maxlength="500" required></textarea>
+        </label>
+        <label class="check wide-field"
+          ><input name="fullCredit" type="checkbox" checked />
+          <span data-i18n="creditNote.fullCredit">Credit the full remaining invoice amount</span>
+        </label>
+        <fieldset id="credit-note-line-selection" class="wide-field" hidden>
+          <legend>Choose lines or amounts to credit</legend>
+          <p class="field-help">
+            Select one or more invoice lines and enter a credit amount for each. The amount cannot
+            exceed the line's remaining eligible value.
+          </p>
+          <div id="credit-note-lines" class="credit-note-lines"></div>
+        </fieldset>
+        <output id="credit-note-status" class="structured-output" role="status"></output>
+        <div class="form-actions">
+          <button id="credit-note-submit" type="submit" data-i18n="creditNote.createAndPost">
+            Create and post credit note
+          </button>
+          <button
+            type="button"
+            class="secondary-command"
+            data-close-dialog="credit-note-dialog"
+            data-i18n="creditNote.cancel"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <dialog
+      id="void-invoice-dialog"
+      class="commerce-dialog"
+      aria-labelledby="void-invoice-heading"
+      aria-describedby="void-invoice-description"
+    >
+      <div class="dialog-heading">
+        <div>
+          <h2 id="void-invoice-heading">Void invoice</h2>
+          <p id="void-invoice-description">
+            Voiding reverses the posted receivables journal and leaves an auditable reversal. It
+            does not erase the invoice or move money.
+          </p>
+        </div>
+      </div>
+      <p id="void-invoice-source" class="structured-output"></p>
+      <form id="void-invoice-form" class="form-grid">
+        <label class="wide-field"
+          >Reason
+          <textarea name="reason" maxlength="500" required></textarea>
+        </label>
+        <output id="void-invoice-status" class="structured-output" role="status"></output>
+        <div class="form-actions">
+          <button id="void-invoice-submit" class="danger-command" type="submit">
+            Void invoice
+          </button>
+          <button type="button" class="secondary-command" data-close-dialog="void-invoice-dialog">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </dialog>
+    <dialog
+      id="invoice-detail-dialog"
+      class="commerce-dialog invoice-detail-dialog"
+      aria-labelledby="invoice-detail-heading"
+      aria-describedby="invoice-detail-summary"
+    >
+      <div class="dialog-heading">
+        <div>
+          <h2 id="invoice-detail-heading">Invoice details</h2>
+          <p id="invoice-detail-summary">
+            Review the posted state, allocations, delivery, and linked records.
+          </p>
+        </div>
+      </div>
+      <div id="invoice-detail-content" class="invoice-detail-content"></div>
+      <form id="invoice-detail-attachment-form" class="form-grid">
+        <label class="wide-field"
+          >Add attachment
+          <input name="file" type="file" />
+          <span class="field-help"
+            >Attachments are retained with the invoice and are not sent automatically.</span
+          >
+        </label>
+        <div class="form-actions">
+          <button type="submit">Upload attachment</button>
+          <button id="invoice-detail-resend" class="secondary-command" type="button" hidden>
+            Resend email
+          </button>
+          <button id="invoice-detail-revoke-link" class="danger-command" type="button" hidden>
+            Revoke public link
+          </button>
+        </div>
+      </form>
+      <div class="form-actions">
+        <button id="invoice-detail-preview" class="secondary-command" type="button">
+          Open preview
+        </button>
+        <button type="button" class="secondary-command" data-close-dialog="invoice-detail-dialog">
+          Close
+        </button>
+      </div>
+    </dialog>
+    <dialog
+      id="customer-detail-dialog"
+      class="commerce-dialog customer-detail-dialog"
+      aria-labelledby="customer-detail-heading"
+      aria-describedby="customer-detail-summary"
+    >
+      <div class="dialog-heading">
+        <div>
+          <h2 id="customer-detail-heading">Customer details</h2>
+          <p id="customer-detail-summary">
+            Review balance, invoices, payments, and statement activity.
+          </p>
+        </div>
+      </div>
+      <div id="customer-detail-content" class="customer-detail-content"></div>
+      <div class="form-actions">
+        <button type="button" class="secondary-command" data-close-dialog="customer-detail-dialog">
+          Close
+        </button>
+      </div>
+    </dialog>
+    <dialog
+      id="invoice-send-dialog"
+      class="commerce-dialog invoice-send-dialog"
+      aria-labelledby="invoice-send-heading"
+      aria-describedby="invoice-send-description"
+    >
+      <div class="dialog-heading">
+        <div>
+          <h2 id="invoice-send-heading">Send invoice</h2>
+          <p id="invoice-send-description">
+            Review the recipients and message before sending or opening your own email app.
+          </p>
+        </div>
+      </div>
+      <p id="invoice-send-source" class="structured-output"></p>
+      <form id="invoice-send-form" class="form-grid">
+        <label class="wide-field"
+          >To
+          <input
+            name="recipientEmails"
+            type="text"
+            required
+            maxlength="2000"
+            placeholder="customer@example.com, another@example.com"
+            autocomplete="email"
+          />
+          <span class="field-help">Separate multiple recipients with commas or semicolons.</span>
+        </label>
+        <label class="check wide-field"
+          ><input name="ccMe" type="checkbox" checked />
+          <span>CC me</span>
+        </label>
+        <label class="wide-field"
+          >Subject
+          <input name="subject" type="text" required maxlength="998" />
+        </label>
+        <label class="wide-field"
+          >Message
+          <textarea name="message" maxlength="10000" rows="8"></textarea>
+        </label>
+        <output id="invoice-send-status" class="structured-output" role="status"></output>
+        <div class="form-actions">
+          <button id="invoice-send-prepare" class="secondary-command" type="button" hidden>
+            Download PDF and open email app
+          </button>
+          <button id="invoice-send-submit" type="submit">Send invoice email</button>
+          <button id="invoice-send-mark-manual" class="secondary-command" type="button" hidden>
+            Mark as sent
+          </button>
+          <button type="button" class="secondary-command" data-close-dialog="invoice-send-dialog">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </dialog>

@@ -64,6 +64,9 @@ jobs:
       - name: Prisma client generation
         run: pnpm db:generate
 
+      - name: Database package type build
+        run: pnpm --filter @clearledger/db run build
+
       - name: Formatting
         run: pnpm format:check
 

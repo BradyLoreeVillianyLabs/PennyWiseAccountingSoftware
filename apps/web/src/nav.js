@@ -18,19 +18,58 @@ import {
 
 const leftNavigationStorageKey = "clearledger_left_navigation_v3";
 const leftNavigationDefinitions = [
-  { key: "owner", label: "Owner workspace", icon: "O", workspaceId: "owner-workspace" },
-  { key: "home", label: "Home", icon: "⌂", workspaceId: "overview-workspace" },
-  { key: "sales", label: "Receivables & sales", icon: "↗", workspaceId: "sales-workspace" },
+  {
+    key: "owner",
+    tier: "more",
+    featureKey: "owner",
+    label: "Owner workspace",
+    icon: "O",
+    workspaceId: "owner-workspace"
+  },
+  {
+    key: "home",
+    tier: "primary",
+    featureKey: "home",
+    label: "Home",
+    icon: "⌂",
+    workspaceId: "overview-workspace"
+  },
+  {
+    key: "sales",
+    tier: "primary",
+    featureKey: "sales",
+    label: "Receivables & sales",
+    icon: "↗",
+    workspaceId: "sales-workspace"
+  },
   {
     key: "payables",
+    tier: "primary",
+    featureKey: "expenses",
     label: "Payables & purchases",
     icon: "↙",
     workspaceId: "purchases-workspace"
   },
-  { key: "pos", label: "Point of sale", icon: "▦", workspaceId: "pos-workspace" },
-  { key: "payments", label: "Payments & refunds", icon: "$", workspaceId: "payments-workspace" },
+  {
+    key: "pos",
+    tier: "more",
+    featureKey: "pos",
+    label: "Point of sale",
+    icon: "▦",
+    workspaceId: "pos-workspace"
+  },
+  {
+    key: "payments",
+    tier: "more",
+    featureKey: "payments",
+    label: "Payments & refunds",
+    icon: "$",
+    workspaceId: "payments-workspace"
+  },
   {
     key: "crm",
+    tier: "primary",
+    featureKey: "contacts",
     label: "CRM & clients",
     icon: "♧",
     workspaceId: "projects-workspace",
@@ -38,6 +77,8 @@ const leftNavigationDefinitions = [
   },
   {
     key: "calendar",
+    tier: "more",
+    featureKey: "calendar",
     label: "Calendar",
     icon: "□",
     workspaceId: "projects-workspace",
@@ -45,6 +86,8 @@ const leftNavigationDefinitions = [
   },
   {
     key: "projects",
+    tier: "more",
+    featureKey: "projects",
     label: "Project planning",
     icon: "◆",
     workspaceId: "projects-workspace",
@@ -52,25 +95,92 @@ const leftNavigationDefinitions = [
   },
   {
     key: "fulfilment",
+    tier: "more",
+    featureKey: "fulfilment",
     label: "Orders & fulfilment",
     icon: "▷",
     workspaceId: "fulfilment-workspace"
   },
-  { key: "contracts", label: "Contracts", icon: "C", workspaceId: "contracts-workspace" },
-  { key: "banking", label: "Banking", icon: "▤", workspaceId: "banking-workspace" },
-  { key: "inventory", label: "Inventory", icon: "▥", workspaceId: "inventory-workspace" },
-  { key: "tax", label: "Tax centre", icon: "%", workspaceId: "accountant-workspace" },
-  { key: "payroll", label: "Payroll", icon: "P", workspaceId: "payroll-workspace" },
-  { key: "switching", label: "Switching centre", icon: "⇄", workspaceId: "portability-workspace" },
+  {
+    key: "contracts",
+    tier: "more",
+    featureKey: "contracts",
+    label: "Contracts",
+    icon: "C",
+    workspaceId: "contracts-workspace"
+  },
+  {
+    key: "banking",
+    tier: "primary",
+    featureKey: "banking",
+    label: "Banking",
+    icon: "▤",
+    workspaceId: "banking-workspace"
+  },
+  {
+    key: "inventory",
+    tier: "more",
+    featureKey: "inventory",
+    label: "Inventory",
+    icon: "▥",
+    workspaceId: "inventory-workspace"
+  },
+  {
+    key: "tax",
+    tier: "primary",
+    featureKey: "taxes",
+    label: "Tax centre",
+    icon: "%",
+    workspaceId: "accountant-workspace"
+  },
+  {
+    key: "payroll",
+    tier: "more",
+    featureKey: "payroll",
+    label: "Payroll",
+    icon: "P",
+    workspaceId: "payroll-workspace"
+  },
+  {
+    key: "switching",
+    tier: "more",
+    featureKey: "switching",
+    label: "Switching centre",
+    icon: "⇄",
+    workspaceId: "portability-workspace"
+  },
   {
     key: "integrations",
+    tier: "more",
+    featureKey: "integrations",
     label: "External integrations",
     icon: "⌘",
     workspaceId: "integrations-workspace"
   },
-  { key: "reports", label: "Reports & insights", icon: "▥", workspaceId: "reports-workspace" },
-  { key: "settings", label: "Company settings", icon: "⚙", workspaceId: "setup-workspace" },
-  { key: "help", label: "Help & learning", icon: "?", workspaceId: "help-workspace" }
+  {
+    key: "reports",
+    tier: "primary",
+    featureKey: "reports",
+    label: "Reports & insights",
+    icon: "▥",
+    workspaceId: "reports-workspace"
+  },
+  {
+    key: "settings",
+    tier: "admin",
+    featureKey: "settings",
+    label: "Company settings",
+    icon: "⚙",
+    workspaceId: "setup-workspace"
+  },
+  {
+    key: "help",
+    tier: "admin",
+    featureKey: "help",
+    label: "Help & learning",
+    icon: "?",
+    workspaceId: "help-workspace"
+  }
 ];
 const leftNavigationKeys = new Set(leftNavigationDefinitions.map((item) => item.key));
 export let leftNavigationState = readLeftNavigationState();

@@ -12,7 +12,7 @@ import {
 } from "./shipping-schemas.js";
 import { ShippingService } from "../services/shipping/shipping-service.js";
 
-const idParam = z.object({ id: z.string().uuid() }).strict();
+const idParam = z.object({ id: z.uuid() }).strict();
 
 export function registerShippingRoutes(
   app: FastifyInstance,

@@ -12,55 +12,55 @@ The root .config/dotnet-tools.json file is retained because the Windows MSI buil
 
 ## Flagged paths
 
-| Path | Size | Finding |
-|---|---:|---|
-| .github/prompts/wd5-secrets-in-logs.prompt.md | 0 MiB | sensitive-looking path |
-| apps/api/src/auth/api-credential-identity-adapter.ts | 0 MiB | sensitive-looking path |
-| apps/api/src/phase22-api-credentials.integration.test.ts | 0.01 MiB | sensitive-looking path |
-| apps/api/src/phase22-oauth.integration.test.ts | 0.01 MiB | high-entropy string >32 chars at line(s) 81 |
-| apps/api/src/services/api-credential-service.ts | 0.01 MiB | sensitive-looking path |
-| apps/api/src/smtp-local-server.integration.test.ts | 0.01 MiB | high-entropy string >32 chars at line(s) 8 |
-| apps/web/app.js | 1.05 MiB | high-entropy string >32 chars at line(s) 86 |
-| distribution/wordpress-site/design-reference/clearledger-landing-hero.png | 1.36 MiB | binary |
-| distribution/wordpress-site/design-reference/clearledger-landing-sections.png | 1.34 MiB | binary |
-| docs/design/compact-home-dashboard-desktop.png | 1.09 MiB | binary |
-| docs/design/compact-home-dashboard-mobile.png | 0.88 MiB | binary |
-| docs/pennywise/owner-mode/invoice-designer-concept.png | 1.31 MiB | binary |
-| docs/pennywise/owner-mode/owner-workspace-concept.png | 1.08 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/01-command-center.png | 1.23 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/02-cash-workbench.png | 1.32 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/03-reconciliation-cockpit.png | 1.53 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/04-sales-list.png | 1.54 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/05-bills-workbench.png | 1.39 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/06-contact-workspace.png | 1.49 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/07-ledger-workbench.png | 1.69 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/08-report-studio.png | 1.34 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/09-tax-center.png | 1.21 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/10-operations-workspace.png | 1.3 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/11-settings-admin.png | 1.3 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/12-invoice-editor.png | 1.19 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/13-journal-entry.png | 1.23 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/14-month-close.png | 1.3 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/15-payroll-workbench.png | 1.28 MiB | binary |
-| docs/pennywise/pennywise-ui-atlas/16-onboarding-import.png | 1.32 MiB | binary |
-| docs/QUICKBOOKS_DESKTOP_FEATURE_GAP_REVIEW_2026-08-13.md | 0.02 MiB | high-entropy string >32 chars at line(s) 36 |
-| docs/research/Accounting Software Feature Demand and Monetization in the United States and Canada.pdf | 0.21 MiB | binary |
-| docs/status/CURRENT_PHASE.md | 0.04 MiB | high-entropy string >32 chars at line(s) 517 |
-| docs/status/I1_INVOICING_ONLY_REPORT_2026-09-11.md | 0 MiB | high-entropy string >32 chars at line(s) 40 |
-| docs/status/I8_OVERDUE_FOLLOW_UP_AND_STATEMENTS_REPORT_2026-09-11.md | 0 MiB | high-entropy string >32 chars at line(s) 65 |
-| docs/tasks/CUSTOMER_REQUIRED_INTEGRATIONS_PROMPT_2026-09-08.md | 0.01 MiB | high-entropy string >32 chars at line(s) 54 |
-| docs/tasks/product-gap-program/C4-accountant-period-package.md | 0 MiB | high-entropy string >32 chars at line(s) 26 |
-| docs/tasks/product-gap-program/DECISIONS-currency-reporting-workflow.md | 0.05 MiB | high-entropy string >32 chars at line(s) 564,566,576,579 |
-| docs/tasks/product-gap-program/F1-bank-detail-secret-and-test-fidelity.md | 0 MiB | sensitive-looking path |
-| docs/tasks/product-gap-program/MODEL-TAKEOVER.md | 0.01 MiB | high-entropy string >32 chars at line(s) 158 |
-| docs/tasks/product-gap-program/README.md | 0.02 MiB | high-entropy string >32 chars at line(s) 123 |
-| docs/tasks/product-gap-program/REVIEW-panel-critique-2026-09-11.md | 0.03 MiB | high-entropy string >32 chars at line(s) 164,193 |
-| docs/tasks/product-gap-program/VERIFICATION-LEDGER.md | 0.03 MiB | high-entropy string >32 chars at line(s) 73 |
-| docs/tasks/ROBUST_PAYROLL_IMPLEMENTATION_PROMPT_2026-08-09.md | 0.03 MiB | high-entropy string >32 chars at line(s) 34 |
-| docs/tasks/workflow-debugging/WD5-secrets-in-logs-and-diagnostics.md | 0 MiB | sensitive-looking path |
-| packages/db/prisma/migrations/20260727200000_phase_22_api_credentials/down.sql | 0 MiB | sensitive-looking path |
-| packages/db/prisma/migrations/20260727200000_phase_22_api_credentials/migration.sql | 0 MiB | sensitive-looking path |
-| pnpm-lock.yaml | 0.13 MiB | high-entropy string >32 chars at line(s) 133,140,147,154,161 |
+| Path                                                                                                  |     Size | Finding                                                      |
+| ----------------------------------------------------------------------------------------------------- | -------: | ------------------------------------------------------------ |
+| .github/prompts/wd5-secrets-in-logs.prompt.md                                                         |    0 MiB | sensitive-looking path                                       |
+| apps/api/src/auth/api-credential-identity-adapter.ts                                                  |    0 MiB | sensitive-looking path                                       |
+| apps/api/src/phase22-api-credentials.integration.test.ts                                              | 0.01 MiB | sensitive-looking path                                       |
+| apps/api/src/phase22-oauth.integration.test.ts                                                        | 0.01 MiB | high-entropy string >32 chars at line(s) 81                  |
+| apps/api/src/services/api-credential-service.ts                                                       | 0.01 MiB | sensitive-looking path                                       |
+| apps/api/src/smtp-local-server.integration.test.ts                                                    | 0.01 MiB | high-entropy string >32 chars at line(s) 8                   |
+| apps/web/app.js                                                                                       | 1.05 MiB | high-entropy string >32 chars at line(s) 86                  |
+| distribution/wordpress-site/design-reference/clearledger-landing-hero.png                             | 1.36 MiB | binary                                                       |
+| distribution/wordpress-site/design-reference/clearledger-landing-sections.png                         | 1.34 MiB | binary                                                       |
+| docs/design/compact-home-dashboard-desktop.png                                                        | 1.09 MiB | binary                                                       |
+| docs/design/compact-home-dashboard-mobile.png                                                         | 0.88 MiB | binary                                                       |
+| docs/pennywise/owner-mode/invoice-designer-concept.png                                                | 1.31 MiB | binary                                                       |
+| docs/pennywise/owner-mode/owner-workspace-concept.png                                                 | 1.08 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/01-command-center.png                                               | 1.23 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/02-cash-workbench.png                                               | 1.32 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/03-reconciliation-cockpit.png                                       | 1.53 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/04-sales-list.png                                                   | 1.54 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/05-bills-workbench.png                                              | 1.39 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/06-contact-workspace.png                                            | 1.49 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/07-ledger-workbench.png                                             | 1.69 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/08-report-studio.png                                                | 1.34 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/09-tax-center.png                                                   | 1.21 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/10-operations-workspace.png                                         |  1.3 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/11-settings-admin.png                                               |  1.3 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/12-invoice-editor.png                                               | 1.19 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/13-journal-entry.png                                                | 1.23 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/14-month-close.png                                                  |  1.3 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/15-payroll-workbench.png                                            | 1.28 MiB | binary                                                       |
+| docs/pennywise/pennywise-ui-atlas/16-onboarding-import.png                                            | 1.32 MiB | binary                                                       |
+| docs/QUICKBOOKS_DESKTOP_FEATURE_GAP_REVIEW_2026-08-13.md                                              | 0.02 MiB | high-entropy string >32 chars at line(s) 36                  |
+| docs/research/Accounting Software Feature Demand and Monetization in the United States and Canada.pdf | 0.21 MiB | binary                                                       |
+| docs/status/CURRENT_PHASE.md                                                                          | 0.04 MiB | high-entropy string >32 chars at line(s) 517                 |
+| docs/status/I1_INVOICING_ONLY_REPORT_2026-09-11.md                                                    |    0 MiB | high-entropy string >32 chars at line(s) 40                  |
+| docs/status/I8_OVERDUE_FOLLOW_UP_AND_STATEMENTS_REPORT_2026-09-11.md                                  |    0 MiB | high-entropy string >32 chars at line(s) 65                  |
+| docs/tasks/CUSTOMER_REQUIRED_INTEGRATIONS_PROMPT_2026-09-08.md                                        | 0.01 MiB | high-entropy string >32 chars at line(s) 54                  |
+| docs/tasks/product-gap-program/C4-accountant-period-package.md                                        |    0 MiB | high-entropy string >32 chars at line(s) 26                  |
+| docs/tasks/product-gap-program/DECISIONS-currency-reporting-workflow.md                               | 0.05 MiB | high-entropy string >32 chars at line(s) 564,566,576,579     |
+| docs/tasks/product-gap-program/F1-bank-detail-secret-and-test-fidelity.md                             |    0 MiB | sensitive-looking path                                       |
+| docs/tasks/product-gap-program/MODEL-TAKEOVER.md                                                      | 0.01 MiB | high-entropy string >32 chars at line(s) 158                 |
+| docs/tasks/product-gap-program/README.md                                                              | 0.02 MiB | high-entropy string >32 chars at line(s) 123                 |
+| docs/tasks/product-gap-program/REVIEW-panel-critique-2026-09-11.md                                    | 0.03 MiB | high-entropy string >32 chars at line(s) 164,193             |
+| docs/tasks/product-gap-program/VERIFICATION-LEDGER.md                                                 | 0.03 MiB | high-entropy string >32 chars at line(s) 73                  |
+| docs/tasks/ROBUST_PAYROLL_IMPLEMENTATION_PROMPT_2026-08-09.md                                         | 0.03 MiB | high-entropy string >32 chars at line(s) 34                  |
+| docs/tasks/workflow-debugging/WD5-secrets-in-logs-and-diagnostics.md                                  |    0 MiB | sensitive-looking path                                       |
+| packages/db/prisma/migrations/20260727200000_phase_22_api_credentials/down.sql                        |    0 MiB | sensitive-looking path                                       |
+| packages/db/prisma/migrations/20260727200000_phase_22_api_credentials/migration.sql                   |    0 MiB | sensitive-looking path                                       |
+| pnpm-lock.yaml                                                                                        | 0.13 MiB | high-entropy string >32 chars at line(s) 133,140,147,154,161 |
 
 ## Prospective first-commit files
 
@@ -162,7 +162,7 @@ The root .config/dotnet-tools.json file is retained because the Windows MSI buil
 - apps/api/src/receivables-follow-up.integration.test.ts
 - apps/api/src/recurring-invoice-materialization.integration.test.ts
 - apps/api/src/security-hardening.test.ts
-- apps/api/src/services/__fixtures__/cadeft-reference-output.txt
+- apps/api/src/services/**fixtures**/cadeft-reference-output.txt
 - apps/api/src/services/accountant-service.ts
 - apps/api/src/services/account-presets.ts
 - apps/api/src/services/account-service.ts

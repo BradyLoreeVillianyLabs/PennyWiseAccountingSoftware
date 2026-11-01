@@ -34,14 +34,14 @@ describe("exact currency arithmetic", () => {
     expect(formatCurrencyAmount(-10_025n, registry.get("USD"))).toBe("-100.25");
     expect(parseCurrencyAmount("125", registry.get("JPY"))).toBe(125n);
     expect(formatCurrencyAmount(1_234n, registry.get("KWD"))).toBe("1.234");
-    expect(() => parseCurrencyAmount("1.001", registry.get("CAD"))).toThrowError(
+    expect(() => parseCurrencyAmount("1.001", registry.get("CAD"))).toThrow(
       "no more than 2 decimal"
     );
   });
 
   it("reduces decimal rates to immutable exact rationals", () => {
     expect(parseExactRate("1.3500")).toEqual({ numerator: 27n, denominator: 20n });
-    expect(() => parseExactRate("0")).toThrowError("positive decimal rate");
+    expect(() => parseExactRate("0")).toThrow("positive decimal rate");
   });
 
   it("allocates residuals by largest remainder and preserves total", () => {

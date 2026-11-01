@@ -452,7 +452,7 @@ const idParamSchema = z.object({
 });
 const authenticationQuerySchema = z.object({
   returnTo: z.string().optional(),
-  loginHint: z.string().email().optional()
+  loginHint: z.email().optional()
 });
 const callbackQuerySchema = z.object({ code: z.string().min(1), state: z.string().min(32) });
 const bankOfCanadaRateSuggestionQuerySchema = z
@@ -2324,12 +2324,11 @@ export function buildApp(options: BuildAppOptions = {}) {
     const result = await invoiceDocumentService.publicView(token);
     const payment = await paymentService.publicCheckoutEligibility(token);
     const query = z
-      .object({
+      .looseObject({
         payment: z.enum(["success", "cancelled"]).optional(),
         checkout: idSchema.optional(),
         capture: z.enum(["requested"]).optional()
       })
-      .passthrough()
       .parse(request.query);
     const paymentStatuses = query.payment ? await paymentService.publicPaymentStatus(token) : [];
     return reply
@@ -3331,7 +3330,7 @@ function registerPortabilityRoutes(
     const context = await requireOrganizationContext(request, prisma, identityAdapter);
     const params = idParamSchema.parse(request.params);
     const body = z
-      .object({ mapping: z.record(z.string().trim().min(1).max(100)).default({}) })
+      .object({ mapping: z.record(z.string(), z.string().trim().min(1).max(100)).default({}) })
       .strict()
       .parse(request.body);
     return {
@@ -3382,7 +3381,7 @@ function registerPortabilityRoutes(
     const body = z
       .object({
         sourceReportName: z.string().trim().min(1).max(160),
-        sourceReportDate: z.string().date(),
+        sourceReportDate: z.iso.date(),
         sourceReportChecksum: z
           .string()
           .trim()
@@ -4585,7 +4584,7 @@ function registerSalesRoutes(
   app.post("/v1/payment-account/connect", async (request, reply) => {
     const context = await requireOrganizationContext(request, prisma, identityAdapter);
     const input = z
-      .object({ returnUrl: z.string().url().max(2000) })
+      .object({ returnUrl: z.url().max(2000) })
       .strict()
       .parse(request.body);
     return reply
@@ -4658,7 +4657,7 @@ const jsonInputSchema: z.ZodType<Prisma.InputJsonValue> = z.lazy(() =>
     z.number(),
     z.boolean(),
     z.array(jsonInputSchema),
-    z.record(jsonInputSchema)
+    z.record(z.string(), jsonInputSchema)
   ])
 );
 const purchaseLineSchema = z
@@ -4681,9 +4680,9 @@ const vendorSchema = z
     additionalContacts: jsonInputSchema.optional(),
     remittanceAddress: jsonInputSchema.optional(),
     serviceAddress: jsonInputSchema.optional(),
-    email: z.string().email().max(320).nullable().optional(),
+    email: z.email().max(320).nullable().optional(),
     telephone: z.string().max(64).nullable().optional(),
-    website: z.string().url().max(2048).nullable().optional(),
+    website: z.url().max(2048).nullable().optional(),
     businessIdentifier: z.string().max(128).nullable().optional(),
     defaultPaymentTermsDays: z.number().int().min(0).max(3650).optional(),
     defaultCurrency: z
@@ -5156,7 +5155,7 @@ function registerInventoryRoutes(
         binId: idSchema.nullable().optional(),
         lotId: idSchema.nullable().optional(),
         statusId: idSchema.nullable().optional(),
-        expiresAt: z.string().datetime({ offset: true }).nullable().optional()
+        expiresAt: z.iso.datetime({ offset: true }).nullable().optional()
       })
       .strict()
       .parse(request.body);

@@ -534,6 +534,75 @@ export function buildOpenApiDocument() {
       "/v1/reports/general-ledger": {
         get: { summary: "Return posted general-ledger detail", tags: ["Reports"] }
       },
+      "/v1/ui/home-summary": {
+        get: {
+          summary: "Return tenant-scoped, read-only home summary figures",
+          description:
+            "Summary amounts use existing reports and serialize money as minor-unit strings.",
+          tags: ["UI summaries"],
+          parameters: [
+            {
+              name: "asOf",
+              in: "query",
+              required: true,
+              schema: { type: "string", format: "date" }
+            }
+          ]
+        }
+      },
+      "/v1/ui/attention-queue": {
+        get: {
+          summary: "Return up to five tenant-scoped items requiring attention",
+          tags: ["UI summaries"],
+          parameters: [
+            {
+              name: "asOf",
+              in: "query",
+              required: true,
+              schema: { type: "string", format: "date" }
+            }
+          ]
+        }
+      },
+      "/v1/ui/landing/{module}": {
+        get: {
+          summary: "Return read-only KPIs for a UI module landing page",
+          tags: ["UI summaries"],
+          parameters: [
+            {
+              name: "module",
+              in: "path",
+              required: true,
+              schema: {
+                type: "string",
+                enum: ["sales", "expenses", "banking", "contacts", "taxes"]
+              }
+            },
+            {
+              name: "asOf",
+              in: "query",
+              required: true,
+              schema: { type: "string", format: "date" }
+            }
+          ]
+        }
+      },
+      "/v1/ui/tax-calendar": {
+        get: {
+          summary: "Return configured upcoming remittance dates",
+          description:
+            "GST/HST dates are omitted when filing-frequency configuration is unavailable.",
+          tags: ["UI summaries"],
+          parameters: [
+            {
+              name: "asOf",
+              in: "query",
+              required: true,
+              schema: { type: "string", format: "date" }
+            }
+          ]
+        }
+      },
       "/v1/setup": {
         get: { summary: "Return resumable organization setup state", tags: ["Company setup"] }
       },

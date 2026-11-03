@@ -13,6 +13,10 @@ describe("OpenAPI document", () => {
     expect(document.info.version).toBe(publicApiVersion);
     expect(paths).toContain("/v1/journals");
     expect(paths).toContain("/v1/reports/trial-balance");
+    expect(paths).toContain("/v1/ui/home-summary");
+    expect(paths).toContain("/v1/ui/attention-queue");
+    expect(paths).toContain("/v1/ui/landing/{module}");
+    expect(paths).toContain("/v1/ui/tax-calendar");
     expect(paths).toContain("/v1/auth/sign-in");
     expect(paths).toContain("/v1/invitations/accept");
     expect(paths).toContain("/v1/invoices");

@@ -1,0 +1,150 @@
+        <section id="planning-workspace" hidden aria-labelledby="planning-heading">
+          <div class="section-heading">
+            <div>
+              <h1 id="planning-heading">Budgets and cash planning</h1>
+              <p>Compare plans with posted activity and inspect every projected cash driver.</p>
+            </div>
+            <button id="refresh-planning" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <nav class="planning-tabs" aria-label="CRM, calendar, and planning views">
+            <button type="button" data-planning-tab="crm">CRM &amp; clients</button>
+            <button type="button" data-planning-tab="calendar">Calendar</button>
+            <button type="button" data-planning-tab="projects">Projects</button>
+            <button type="button" data-planning-tab="tasks">Tasks &amp; milestones</button>
+            <button type="button" data-planning-tab="time">Time</button>
+            <button type="button" data-planning-tab="budgets" aria-current="page">
+              Budgets &amp; Forecasts
+            </button>
+            <button type="button" data-planning-tab="capture">Receipt &amp; bill capture</button>
+          </nav>
+          <div class="columns">
+            <section>
+              <h2>Manual cash assumption</h2>
+              <form id="cash-assumption-form" class="form-grid">
+                <label>Week starting <input name="weekStart" type="date" required /></label>
+                <label
+                  >Direction
+                  <select name="direction">
+                    <option value="INFLOW">Money in</option>
+                    <option value="OUTFLOW">Money out</option>
+                  </select>
+                </label>
+                <label>Label <input name="label" required maxlength="160" /></label>
+                <label
+                  >Amount (CAD) <input name="amountMinor" inputmode="decimal" required
+                /></label>
+                <label class="wide-field">Notes <input name="note" maxlength="500" /></label>
+                <div class="form-actions"><button type="submit">Add assumption</button></div>
+              </form>
+              <div class="table-wrap">
+                <table aria-label="Manual cash assumptions">
+                  <thead>
+                    <tr>
+                      <th>Week</th>
+                      <th>Label</th>
+                      <th>Direction</th>
+                      <th>Amount</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cash-assumptions"></tbody>
+                </table>
+              </div>
+            </section>
+            <section>
+              <h2>13-week outlook</h2>
+              <p class="field-help">
+                Invoices and bills are projected; owner assumptions are labelled separately.
+              </p>
+              <div class="table-wrap">
+                <table aria-label="13-week cash forecast">
+                  <thead>
+                    <tr>
+                      <th>Week</th>
+                      <th>Opening</th>
+                      <th>Inflows</th>
+                      <th>Outflows</th>
+                      <th>Closing</th>
+                      <th>Drivers</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cash-forecast"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+          <section>
+            <h2>Budget builder</h2>
+            <form id="budget-form" class="form-grid">
+              <label>Name <input name="name" required maxlength="120" /></label>
+              <label
+                >Period
+                <select name="periodType">
+                  <option value="MONTH">Monthly</option>
+                  <option value="WEEK">Weekly</option>
+                </select>
+              </label>
+              <label>Start <input name="startDate" type="date" required /></label>
+              <label>End <input name="endDate" type="date" required /></label>
+              <label
+                >Account
+                <select name="accountId"></select
+              ></label>
+              <label>Period starting <input name="periodStart" type="date" /></label>
+              <label>Planned amount (CAD) <input name="plannedMinor" inputmode="decimal" /></label>
+              <label>Line note <input name="lineNote" maxlength="500" /></label>
+              <div class="form-actions">
+                <button id="add-budget-line" class="secondary-command" type="button">
+                  Add budget line
+                </button>
+                <button type="submit">Create budget draft</button>
+              </div>
+            </form>
+            <div class="table-wrap">
+              <table aria-label="Budget draft lines">
+                <thead>
+                  <tr>
+                    <th>Account</th>
+                    <th>Period</th>
+                    <th>Planned</th>
+                    <th>Note</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="budget-draft-lines"></tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h2>Budgets</h2>
+            <div class="table-wrap">
+              <table aria-label="Budget plans">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Dates</th>
+                    <th>Period</th>
+                    <th>Status</th>
+                    <th>Lines</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="budgets"></tbody>
+              </table>
+            </div>
+            <div class="table-wrap">
+              <table aria-label="Selected budget versus actual">
+                <thead>
+                  <tr>
+                    <th>Account</th>
+                    <th>Period</th>
+                    <th>Planned</th>
+                    <th>Actual</th>
+                    <th>Variance</th>
+                  </tr>
+                </thead>
+                <tbody id="budget-detail"></tbody>
+              </table>
+            </div>
+          </section>
+        </section>

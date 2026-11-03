@@ -1,0 +1,429 @@
+        <section id="overview-workspace" class="workspace-view" hidden>
+          <div class="home-toolbar workspace-heading">
+            <div>
+              <h1>Overview</h1>
+              <p id="home-as-of-label" role="status">As of today</p>
+            </div>
+            <div class="home-toolbar-actions">
+              <label class="home-as-of-control"
+                >Show as of
+                <input id="home-as-of-input" type="date" aria-describedby="home-as-of-help" />
+              </label>
+              <button id="refresh-home-dashboard" class="secondary-command" type="button">
+                Refresh
+              </button>
+              <button
+                id="configure-dashboard"
+                class="secondary-command"
+                type="button"
+                aria-haspopup="dialog"
+                aria-controls="dashboard-editor"
+              >
+                Configure dashboard
+              </button>
+              <button
+                id="toggle-dashboard-help"
+                class="secondary-command"
+                type="button"
+                aria-expanded="true"
+                aria-controls="dashboard-help-panel"
+              >
+                Hide help
+              </button>
+              <label class="dashboard-privacy-toggle">
+                <input id="hide-dashboard-amounts" type="checkbox" />
+                Hide amounts
+              </label>
+            </div>
+          </div>
+          <div
+            id="home-data-status"
+            class="home-data-status"
+            role="status"
+            aria-live="polite"
+            hidden
+          >
+            <span id="home-data-status-message"></span>
+            <button id="home-data-status-action" class="text-command" type="button" hidden>
+              Try again
+            </button>
+          </div>
+          <p id="home-as-of-help" class="field-help home-as-of-help">
+            Balances and review counts use this date. Your selection is saved for this business in
+            this browser.
+          </p>
+          <section
+            id="home-command-center"
+            class="home-command-center"
+            aria-labelledby="home-command-center-heading"
+          >
+            <aside id="home-tool-pane" class="home-tool-pane" aria-label="Home tool pane">
+              <p class="section-kicker">Quick access</p>
+              <h2 id="home-command-center-heading">Business center</h2>
+              <p>Open the familiar task centers, then keep the full workspace available below.</p>
+              <button type="button" class="home-tool-pane-primary" data-open-task-finder>
+                Find a task
+              </button>
+              <button
+                type="button"
+                class="home-tool-pane-secondary"
+                data-open-dashboard-preferences
+              >
+                Customize this home
+              </button>
+            </aside>
+            <div class="home-command-groups">
+              <section class="home-command-group" aria-labelledby="home-sales-tools-heading">
+                <div class="home-command-group-heading">
+                  <span class="home-command-group-icon" aria-hidden="true">$</span>
+                  <div>
+                    <p class="section-kicker">Customers and revenue</p>
+                    <h3 id="home-sales-tools-heading">Sales and customers</h3>
+                  </div>
+                </div>
+                <div class="home-command-grid">
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="projects-workspace"
+                    data-home-planning-tab="crm"
+                    data-home-target="customer-relationships-heading"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">◎</span
+                    ><span
+                      ><strong>Customers and contacts</strong
+                      ><small>CRM, notes, and follow-up</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="sales-workspace"
+                    data-home-target="invoice-designer-section"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">▤</span
+                    ><span
+                      ><strong>Invoices and estimates</strong
+                      ><small>Create, preview, and send</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="payments-workspace"
+                    data-home-target="manual-payment-form"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">↗</span
+                    ><span><strong>Payments</strong><small>Record and review receipts</small></span>
+                  </button>
+                </div>
+              </section>
+              <section class="home-command-group" aria-labelledby="home-purchases-tools-heading">
+                <div class="home-command-group-heading">
+                  <span class="home-command-group-icon" aria-hidden="true">✓</span>
+                  <div>
+                    <p class="section-kicker">Spend and fulfilment</p>
+                    <h3 id="home-purchases-tools-heading">Purchases and operations</h3>
+                  </div>
+                </div>
+                <div class="home-command-grid">
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="purchases-workspace"
+                    data-home-target="vendor-form"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">▥</span
+                    ><span
+                      ><strong>Vendors and bills</strong
+                      ><small>Suppliers, bills, and expenses</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="projects-workspace"
+                    data-home-planning-tab="capture"
+                    data-home-target="capture-form"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">▧</span
+                    ><span
+                      ><strong>Receipt capture</strong
+                      ><small>Store evidence before review</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="inventory-workspace"
+                    data-home-target="inventory-heading"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">□</span
+                    ><span
+                      ><strong>Inventory and SKUs</strong
+                      ><small>Stock, products, and matching</small></span
+                    >
+                  </button>
+                </div>
+              </section>
+              <section class="home-command-group" aria-labelledby="home-accounting-tools-heading">
+                <div class="home-command-group-heading">
+                  <span class="home-command-group-icon" aria-hidden="true">≡</span>
+                  <div>
+                    <p class="section-kicker">Control and insight</p>
+                    <h3 id="home-accounting-tools-heading">Banking and accounting</h3>
+                  </div>
+                </div>
+                <div class="home-command-grid">
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="banking-workspace"
+                    data-home-target="bank-import-form"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">⌁</span
+                    ><span
+                      ><strong>Banking and reconciliation</strong
+                      ><small>Import, match, and reconcile</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="reports-workspace"
+                    data-home-target="report-filter-form"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">▥</span
+                    ><span
+                      ><strong>Reports and Books Health</strong
+                      ><small>Read-only financial answers</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="accountant-workspace"
+                    data-home-target="accountant-workbench-heading"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">✓</span
+                    ><span
+                      ><strong>Accountant review</strong
+                      ><small>Close checks and audit trail</small></span
+                    >
+                  </button>
+                </div>
+              </section>
+              <section class="home-command-group" aria-labelledby="home-company-tools-heading">
+                <div class="home-command-group-heading">
+                  <span class="home-command-group-icon" aria-hidden="true">⚙</span>
+                  <div>
+                    <p class="section-kicker">Company and tools</p>
+                    <h3 id="home-company-tools-heading">Company tools</h3>
+                  </div>
+                </div>
+                <div class="home-command-grid">
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="projects-workspace"
+                    data-home-planning-tab="calendar"
+                    data-home-target="calendar-heading"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">◷</span
+                    ><span
+                      ><strong>Calendar and projects</strong
+                      ><small>Plan dates, work, and follow-ups</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="portability-workspace"
+                    data-home-target="data-import-source-guide-heading"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">⇄</span
+                    ><span
+                      ><strong>Switching Centre</strong><small>Move data with evidence</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="integrations-workspace"
+                    data-home-target="integrations-heading"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">⊕</span
+                    ><span
+                      ><strong>WooCommerce and Etsy</strong
+                      ><small>Connect and review channels</small></span
+                    >
+                  </button>
+                  <button
+                    type="button"
+                    class="home-command-card"
+                    data-home-workspace="setup-workspace"
+                    data-home-target="profile-form"
+                  >
+                    <span class="home-command-icon" aria-hidden="true">⚙</span
+                    ><span
+                      ><strong>Company settings</strong
+                      ><small>Tax, currency, branding, and defaults</small></span
+                    >
+                  </button>
+                </div>
+              </section>
+            </div>
+          </section>
+          <div id="home-dashboard-grid" class="home-dashboard">
+            <dl
+              id="home-business-summary"
+              class="home-summary-band"
+              aria-label="Business summary"
+            ></dl>
+            <section
+              id="home-attention-section"
+              class="attention-panel"
+              aria-labelledby="attention-heading"
+            >
+              <div class="section-heading">
+                <h2 id="attention-heading">Needs attention</h2>
+              </div>
+              <div id="home-attention-list" class="attention-list">
+                <p class="empty-state">Loading your next tasks…</p>
+              </div>
+            </section>
+            <section
+              id="home-cash-section"
+              class="cash-overview"
+              aria-labelledby="cash-overview-heading"
+            >
+              <div class="section-heading">
+                <h2 id="cash-overview-heading">Cash &amp; tax</h2>
+                <button type="button" class="text-command" data-quick-workspace="reports-workspace">
+                  View report
+                </button>
+              </div>
+              <dl id="home-cash-overview" class="cash-overview-list"></dl>
+            </section>
+            <section
+              id="books-health-card"
+              class="books-health-card"
+              aria-labelledby="books-health-heading"
+            >
+              <div class="books-health-header">
+                <h2 id="books-health-heading">Books Health</h2>
+                <p
+                  id="books-health-summary"
+                  class="books-health-summary"
+                  role="status"
+                  aria-live="polite"
+                >
+                  Checking five areas…
+                </p>
+                <div class="books-health-controls">
+                  <label class="books-health-filter"
+                    >Show
+                    <select
+                      id="books-health-severity-filter"
+                      aria-label="Filter Books Health checks"
+                    >
+                      <option value="ALL">All checks</option>
+                      <option value="BLOCKER">Action needed</option>
+                      <option value="WARNING">Review</option>
+                      <option value="NOTICE">Notices</option>
+                    </select>
+                  </label>
+                  <button
+                    id="toggle-books-health"
+                    class="text-command"
+                    type="button"
+                    aria-expanded="false"
+                    aria-controls="books-health-findings"
+                    hidden
+                  >
+                    View all checks
+                  </button>
+                  <button id="refresh-books-health" class="secondary-command" type="button">
+                    Refresh
+                  </button>
+                </div>
+              </div>
+              <div id="books-health-findings" class="books-health-findings">
+                <p class="empty-state">Loading Books Health…</p>
+              </div>
+              <p id="books-health-disclaimer" class="books-health-disclaimer">
+                Automated checks support review; they do not replace an accountant, tax advice, or
+                provider confirmation.
+              </p>
+            </section>
+            <div id="home-quick-actions" class="quick-actions" aria-label="Quick actions">
+              <button type="button" data-quick-workspace="sales-workspace">Create invoice</button>
+              <button type="button" data-quick-workspace="banking-workspace">Review banking</button>
+              <button type="button" data-quick-workspace="reports-workspace">Run report</button>
+              <button type="button" data-quick-workspace="setup-workspace">Update settings</button>
+            </div>
+            <div id="home-getting-started" class="home-disclosures">
+              <details class="home-disclosure">
+                <summary>Setup checklist</summary>
+                <section
+                  id="activation-card"
+                  class="activation-card"
+                  aria-labelledby="activation-heading"
+                  hidden
+                >
+                  <div class="section-heading">
+                    <div>
+                      <h2 id="activation-heading">Get ready to send your first invoice</h2>
+                      <p id="activation-summary">
+                        A few guided steps will make your books ready for everyday work.
+                      </p>
+                    </div>
+                    <button id="activation-refresh" class="secondary-command" type="button">
+                      Refresh checklist
+                    </button>
+                  </div>
+                  <ol id="activation-checklist" class="activation-checklist"></ol>
+                </section>
+              </details>
+            </div>
+          </div>
+          <aside
+            id="dashboard-help-panel"
+            class="dashboard-help-panel"
+            aria-labelledby="dashboard-help-heading"
+          >
+            <div class="dashboard-help-header">
+              <div>
+                <p class="section-kicker">Help &amp; learning</p>
+                <h2 id="dashboard-help-heading">Getting started</h2>
+              </div>
+              <button
+                id="close-dashboard-help"
+                class="text-command"
+                type="button"
+                aria-label="Hide dashboard help"
+              >
+                Hide
+              </button>
+            </div>
+            <p class="dashboard-help-intro">
+              Follow six practical steps. Nothing is posted or sent until you choose the related
+              action.
+            </p>
+            <progress id="dashboard-help-progress" value="1" max="6">1 of 6</progress>
+            <p id="dashboard-help-step-count" class="help-step-count">Step 1 of 6</p>
+            <h3 id="dashboard-help-step-title">Set up your company</h3>
+            <p id="dashboard-help-step-summary"></p>
+            <ul id="dashboard-help-step-checklist" class="help-step-checklist"></ul>
+            <div class="guided-tour-navigation">
+              <button id="dashboard-help-previous" class="secondary-command" type="button">
+                Previous
+              </button>
+              <button id="dashboard-help-next" class="secondary-command" type="button">Next</button>
+            </div>
+            <button id="dashboard-help-open-step" type="button">Open this task</button>
+            <button id="open-help-index" class="secondary-command" type="button">
+              Browse all help
+            </button>
+          </aside>
+        </section>

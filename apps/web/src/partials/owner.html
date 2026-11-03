@@ -1,0 +1,99 @@
+        <section
+          id="owner-workspace"
+          class="workspace-view owner-workspace"
+          hidden
+          aria-labelledby="owner-heading"
+        >
+          <div class="section-heading owner-workspace-heading">
+            <div>
+              <p class="section-kicker">Owner workspace</p>
+              <h1 id="owner-heading">Run today’s business</h1>
+              <p>
+                Jobs, customers, estimates, invoices, and agreements—without accounting clutter.
+              </p>
+            </div>
+            <button id="open-accountant-workspace" class="secondary-command" type="button">
+              Open accountant workspace
+            </button>
+          </div>
+          <div class="owner-quick-actions" aria-label="Owner quick actions">
+            <button type="button" data-owner-action="invoice">New invoice</button>
+            <button type="button" data-owner-action="estimate">New estimate</button>
+            <button type="button" data-owner-action="job">Plan job</button>
+            <button type="button" data-owner-action="contact">Add customer</button>
+            <button type="button" data-owner-action="contract">Create contract</button>
+          </div>
+          <dl
+            id="owner-workspace-metrics"
+            class="owner-workspace-metrics"
+            aria-label="Business priorities"
+          >
+            <div>
+              <dt>Open invoices</dt>
+              <dd>Loading…</dd>
+            </div>
+            <div>
+              <dt>Estimates to follow up</dt>
+              <dd>Loading…</dd>
+            </div>
+            <div>
+              <dt>Active jobs</dt>
+              <dd>Loading…</dd>
+            </div>
+            <div>
+              <dt>Draft agreements</dt>
+              <dd>Loading…</dd>
+            </div>
+          </dl>
+          <div class="owner-workspace-grid">
+            <section class="owner-workspace-card" aria-labelledby="owner-today-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Plan</p>
+                  <h2 id="owner-today-heading">Today and next</h2>
+                </div>
+                <button type="button" class="text-command" data-owner-action="calendar">
+                  Open calendar
+                </button>
+              </div>
+              <div id="owner-today-list" class="owner-workspace-list">
+                <p class="empty-state">Loading appointments and work…</p>
+              </div>
+            </section>
+            <section class="owner-workspace-card" aria-labelledby="owner-attention-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Act</p>
+                  <h2 id="owner-attention-heading">Customer follow-up</h2>
+                </div>
+                <button type="button" class="text-command" data-owner-action="sales">
+                  Open sales
+                </button>
+              </div>
+              <div id="owner-attention-list" class="owner-workspace-list">
+                <p class="empty-state">Loading customer work…</p>
+              </div>
+            </section>
+            <section
+              class="owner-workspace-card owner-workspace-wide"
+              aria-labelledby="owner-jobs-heading"
+            >
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Deliver</p>
+                  <h2 id="owner-jobs-heading">Active jobs and agreements</h2>
+                </div>
+                <button type="button" class="text-command" data-owner-action="contracts">
+                  Open contracts
+                </button>
+              </div>
+              <div id="owner-jobs-list" class="owner-workspace-list">
+                <p class="empty-state">Loading jobs and contracts…</p>
+              </div>
+            </section>
+          </div>
+          <p class="owner-workspace-disclaimer">
+            Owner mode simplifies navigation only. Posting rules, permissions, tax settings, and the
+            accountant workspace remain available when needed.
+          </p>
+        </section>

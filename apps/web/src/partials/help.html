@@ -1,0 +1,413 @@
+        <section id="help-workspace" hidden aria-labelledby="help-workspace-heading">
+          <div class="section-heading workspace-heading">
+            <div>
+              <p class="section-kicker">Help &amp; learning</p>
+              <h1 id="help-workspace-heading">Learn PennyWise Accounting one task at a time</h1>
+              <p>
+                Start with the guided path or search for the job you need to finish. Every link
+                opens the exact workspace where that work happens.
+              </p>
+            </div>
+            <button id="restart-guided-tour" class="secondary-command" type="button">
+              Restart tutorial
+            </button>
+          </div>
+
+          <section class="help-demo-company" data-demo-company-option hidden>
+            <div>
+              <p class="section-kicker">Want to explore before entering your own data?</p>
+              <h2>Open a complete fictional company</h2>
+              <p>
+                PennyWise Accounting can add a separate Canadian service-business demo with
+                realistic records and balanced sample books. Your existing organization's data stays
+                unchanged, and the finished demo opens as a separate company.
+              </p>
+            </div>
+            <button type="button" data-create-demo-company>Create demo company</button>
+          </section>
+
+          <div class="help-learning-layout">
+            <section class="guided-tour-card" aria-labelledby="guided-tour-heading">
+              <div class="help-card-heading">
+                <div>
+                  <p class="section-kicker">Guided getting started</p>
+                  <h2 id="guided-tour-heading">Prepare for everyday work</h2>
+                </div>
+                <p id="guided-tour-step-count" class="help-step-count">Step 1 of 6</p>
+              </div>
+              <p>
+                Follow six practical steps. Nothing is posted or sent until you choose the related
+                action.
+              </p>
+              <progress id="guided-tour-progress" value="1" max="6">1 of 6</progress>
+              <div class="guided-tour-step" aria-live="polite">
+                <h3 id="guided-tour-title">Set up your company</h3>
+                <p id="guided-tour-summary"></p>
+                <ul id="guided-tour-checklist" class="help-step-checklist"></ul>
+              </div>
+              <div class="guided-tour-navigation">
+                <button id="guided-tour-previous" class="secondary-command" type="button">
+                  Previous
+                </button>
+                <button id="guided-tour-next" class="secondary-command" type="button">
+                  Next step
+                </button>
+                <button id="guided-tour-open-step" type="button">Open this task</button>
+              </div>
+            </section>
+
+            <section class="help-index-panel" aria-labelledby="help-index-heading">
+              <div class="help-card-heading">
+                <div>
+                  <p class="section-kicker">Task index</p>
+                  <h2 id="help-index-heading">What do you need help with?</h2>
+                </div>
+              </div>
+              <label class="help-search-label" for="help-search">
+                Search help topics
+                <input
+                  id="help-search"
+                  type="search"
+                  placeholder="Try invoices, currency, banking, or imports"
+                  autocomplete="off"
+                />
+              </label>
+              <output id="help-search-status" class="help-search-status" aria-live="polite"
+                >Showing all 9 help topics.</output
+              >
+              <div id="help-topic-grid" class="help-topic-grid">
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="company profile fiscal year currency tax accounts opening balances branding settings"
+                >
+                  <span class="help-topic-label">Set up</span>
+                  <h3>Company setup</h3>
+                  <p>
+                    Business details, fiscal year, CAD or USD, taxes, accounts, opening balances,
+                    invoice branding, and workflow preferences.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="setup-workspace"
+                    data-help-target="setup-tabs"
+                  >
+                    Open company settings
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="customer product service estimate invoice preview sales send post"
+                >
+                  <span class="help-topic-label">Sell</span>
+                  <h3>Customers, products, and invoices</h3>
+                  <p>
+                    Create reusable records, draft invoices or estimates, and check the exact
+                    customer preview before posting.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="sales-workspace"
+                    data-help-target="invoice-designer-section"
+                  >
+                    Open invoicing
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="payment manual stripe refund dispute allocation receive money"
+                >
+                  <span class="help-topic-label">Get paid</span>
+                  <h3>Payments</h3>
+                  <p>
+                    Record manual payments or manage a separately configured Stripe connection,
+                    refunds, and disputes.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="payments-workspace"
+                    data-help-target="manual-payment-form"
+                  >
+                    Open payments
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="vendor supplier bill expense receipt purchase credit payables"
+                >
+                  <span class="help-topic-label">Buy</span>
+                  <h3>Bills and expenses</h3>
+                  <p>
+                    Add vendors, create bills, record immediate expenses, enter bill payments or
+                    vendor credits, and upload receipt or supplier invoice images for review.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="purchases-workspace"
+                    data-help-target="bill-form"
+                  >
+                    Open purchases
+                  </button>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="projects-workspace"
+                    data-help-target="capture-form"
+                  >
+                    Open receipt capture
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="bank statement csv upload preview categorize match transfer reconcile"
+                >
+                  <span class="help-topic-label">Bank</span>
+                  <h3>Banking and reconciliation</h3>
+                  <p>
+                    Upload statement activity, preview imports, categorize or match transactions,
+                    and reconcile an account.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="banking-workspace"
+                    data-help-target="bank-import-form"
+                  >
+                    Open banking
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="report profit loss balance sheet books health accountant period journal audit review"
+                >
+                  <span class="help-topic-label">Review</span>
+                  <h3>Reports and accountant review</h3>
+                  <p>
+                    Run reports by date and basis, review Books Health, or investigate periods,
+                    journals, exceptions, and audit history.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="reports-workspace"
+                    data-help-target="report-filter-form"
+                  >
+                    Open reports
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="team invite member role bookkeeper accountant access security organization"
+                >
+                  <span class="help-topic-label">Collaborate</span>
+                  <h3>Team and roles</h3>
+                  <p>
+                    Invite people into the current organization and give each person a role that
+                    matches their work.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="membership-admin"
+                    data-help-target="invitation-form"
+                  >
+                    Manage team
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="move migrate import csv export quickbooks xero wave sage zoho woocommerce etsy connect integration commerce"
+                >
+                  <span class="help-topic-label">Move &amp; connect</span>
+                  <h3>Moving and connecting data</h3>
+                  <p>
+                    Test a CSV import before completing it, export organization data, or connect
+                    WooCommerce or Etsy to the non-posting review inbox.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="portability-workspace"
+                    data-help-target="data-import-form"
+                  >
+                    Open Switching centre
+                  </button>
+                </article>
+                <article
+                  class="help-topic-card"
+                  data-help-topic
+                  data-help-keywords="bug problem error issue broken unexpected support feedback diagnostic report"
+                >
+                  <span class="help-topic-label">Support</span>
+                  <h3>Report a problem</h3>
+                  <p>
+                    Describe what happened, prepare privacy-safe technical details, and copy,
+                    download, or email the report to someone you trust.
+                  </p>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-help-destination="help-workspace"
+                    data-help-target="bug-report-form"
+                  >
+                    Open bug report
+                  </button>
+                </article>
+              </div>
+            </section>
+          </div>
+
+          <section class="help-support-panel" aria-labelledby="help-support-heading">
+            <div>
+              <p class="section-kicker">Support &amp; privacy</p>
+              <h2 id="help-support-heading">
+                Get useful support details without sharing your books
+              </h2>
+              <p>
+                Download technical details for a trusted tester or support person. The file is
+                designed to help diagnose the application without exporting financial records.
+              </p>
+            </div>
+            <div class="help-support-actions">
+              <button id="download-support-diagnostics" class="secondary-command" type="button">
+                Download support details
+              </button>
+              <div id="product-analytics-consent-control">
+                <label class="check privacy-consent"
+                  ><input id="product-analytics-consent" type="checkbox" /> Share privacy-minimized
+                  organization workflow signals to help improve PennyWise Accounting (no amounts,
+                  names, documents, or account data)</label
+                >
+                <p id="product-analytics-consent-note" class="field-hint">
+                  Organization owners and admins can enable or withdraw this optional setting.
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section class="bug-report-panel" aria-labelledby="bug-report-heading">
+            <div class="bug-report-heading">
+              <div>
+                <p class="section-kicker">Report a problem</p>
+                <h2 id="bug-report-heading">Prepare a useful bug report</h2>
+                <p>
+                  This form prepares a report on this device. PennyWise Accounting does not receive
+                  or send it automatically; you decide whether to copy, download, or open it in your
+                  email app.
+                </p>
+              </div>
+              <span class="bug-report-local-badge">Local only</span>
+            </div>
+
+            <div class="bug-report-layout">
+              <form id="bug-report-form" class="bug-report-form">
+                <div class="bug-report-basics">
+                  <label
+                    >Short summary
+                    <input
+                      name="summary"
+                      required
+                      maxlength="160"
+                      placeholder="Example: Invoice preview stays blank after adding a line"
+                      aria-describedby="bug-report-summary-help"
+                    />
+                    <small id="bug-report-summary-help"
+                      >Describe one problem in 160 characters or fewer.</small
+                    >
+                  </label>
+                  <label
+                    >Severity
+                    <select name="severity" required>
+                      <option value="">Choose a severity</option>
+                      <option value="Blocking — work cannot continue">
+                        Blocking — work cannot continue
+                      </option>
+                      <option value="Major — an important workflow is unavailable">
+                        Major — an important workflow is unavailable
+                      </option>
+                      <option value="Normal — something is incorrect or confusing">
+                        Normal — something is incorrect or confusing
+                      </option>
+                      <option value="Minor — cosmetic or low-impact issue">
+                        Minor — cosmetic or low-impact issue
+                      </option>
+                    </select>
+                  </label>
+                </div>
+                <label
+                  >Steps to reproduce
+                  <textarea
+                    name="steps"
+                    required
+                    maxlength="3000"
+                    rows="6"
+                    placeholder="1. Open Sales&#10;2. Choose New invoice&#10;3. Add a line and choose Preview"
+                  ></textarea>
+                </label>
+                <div class="bug-report-outcome-grid">
+                  <label
+                    >What did you expect?
+                    <textarea name="expected" required maxlength="2000" rows="5"></textarea>
+                  </label>
+                  <label
+                    >What actually happened?
+                    <textarea name="actual" required maxlength="2000" rows="5"></textarea>
+                  </label>
+                </div>
+                <label class="check bug-report-diagnostics-choice"
+                  ><input name="includeDiagnostics" type="checkbox" checked /> Include privacy-safe
+                  technical details such as browser, display preferences, viewport, and current
+                  workspace</label
+                >
+                <output id="bug-report-status" class="bug-report-status" aria-live="polite"
+                  >Your report has not been shared.</output
+                >
+                <div class="bug-report-actions">
+                  <button id="copy-bug-report" type="button">Copy report</button>
+                  <button id="download-bug-report" class="secondary-command" type="button">
+                    Download report
+                  </button>
+                  <button id="email-bug-report" class="secondary-command" type="button">
+                    Open email draft
+                  </button>
+                  <button class="text-command" type="reset">Clear form</button>
+                </div>
+              </form>
+
+              <aside class="bug-report-privacy" aria-labelledby="bug-report-privacy-heading">
+                <h3 id="bug-report-privacy-heading">Protect private information</h3>
+                <p>
+                  Do not enter passwords, access keys, bank or card numbers, payroll information,
+                  government identifiers, personal addresses, or customer and vendor records.
+                </p>
+                <details>
+                  <summary>What the optional diagnostics include</summary>
+                  <ul>
+                    <li>Browser and language</li>
+                    <li>Online status and viewport size</li>
+                    <li>Theme, density, text size, and current workspace</li>
+                  </ul>
+                  <p>
+                    They do not include names, email addresses, organization identifiers, login
+                    details, documents, account numbers, transactions, or amounts.
+                  </p>
+                </details>
+                <p class="bug-report-handoff-note">
+                  Review the finished report before sharing it. An email draft has no recipient;
+                  choose a trusted support person and press Send yourself.
+                </p>
+              </aside>
+            </div>
+          </section>
+        </section>

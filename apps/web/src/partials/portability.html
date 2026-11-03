@@ -1,0 +1,440 @@
+        <section id="portability-workspace" hidden aria-labelledby="portability-heading">
+          <div class="section-heading">
+            <div>
+              <h1 id="portability-heading">Switching centre</h1>
+              <p>Move from another system with a guided, testable import and clear proof.</p>
+            </div>
+          </div>
+          <ol class="workflow-steps migration-steps" aria-label="Switching workflow">
+            <li class="is-current" aria-current="step">Choose source</li>
+            <li>Map file</li>
+            <li>Preview</li>
+            <li>Test import</li>
+            <li>Commit</li>
+            <li>Reconcile</li>
+          </ol>
+          <p id="migration-step-summary" class="migration-step-summary" aria-live="polite">
+            Choose the system you are leaving, then upload an unchanged CSV or XLSX export.
+          </p>
+          <section
+            id="data-import-source-guide"
+            class="switching-source-guide"
+            aria-labelledby="data-import-source-guide-heading"
+            aria-live="polite"
+          >
+            <div class="switching-source-choice">
+              <label for="data-import-source-system"
+                >Previous system
+                <select
+                  id="data-import-source-system"
+                  name="sourceSystem"
+                  form="data-import-form"
+                  aria-describedby="data-import-source-summary"
+                >
+                  <option value="QUICKBOOKS_ONLINE">QuickBooks Online</option>
+                  <option value="QUICKBOOKS_DESKTOP">QuickBooks Desktop</option>
+                  <option value="XERO">Xero</option>
+                  <option value="WAVE">Wave</option>
+                  <option value="FRESHBOOKS">FreshBooks</option>
+                  <option value="SAGE">Sage</option>
+                  <option value="ZOHO_BOOKS">Zoho Books</option>
+                  <option value="OTHER">CSV or spreadsheet (other source)</option>
+                </select></label
+              >
+              <button id="download-import-template" class="secondary-command" type="button">
+                Download CSV template
+              </button>
+            </div>
+            <div class="switching-source-guide-heading">
+              <div>
+                <p class="eyebrow">Source checklist</p>
+                <h2 id="data-import-source-guide-heading">
+                  Before you export from QuickBooks Online
+                </h2>
+              </div>
+              <a
+                id="data-import-source-help"
+                class="secondary-command"
+                href="https://quickbooks.intuit.com/learn-support/en-ca/help-article/list-management/export-data-reports-lists-quickbooks-online/L1xleDrLp_CA_en_CA"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Official export help</a
+              >
+            </div>
+            <p id="data-import-source-summary" class="switching-source-summary">
+              Export the source lists and retain reports that prove your balances at cutover.
+            </p>
+            <p
+              id="data-import-source-detection"
+              class="switching-source-detection"
+              role="status"
+              aria-live="polite"
+              hidden
+            ></p>
+            <ol id="data-import-source-checklist" class="switching-source-checklist"></ol>
+            <p id="switching-import-order" class="switching-import-order">
+              Recommended order: chart of accounts, contacts, products, open receivables and
+              payables, inventory and opening balances, then historical archive.
+            </p>
+          </section>
+          <div class="columns">
+            <section>
+              <h3>Move your business data</h3>
+              <form
+                id="data-import-form"
+                class="form-grid"
+                aria-describedby="data-import-currency-warning switching-import-order"
+              >
+                <label
+                  >What are you moving?
+                  <select name="importType">
+                    <option value="CHART_OF_ACCOUNTS">Chart of accounts</option>
+                    <option value="CUSTOMERS">Customers</option>
+                    <option value="VENDORS">Vendors</option>
+                    <option value="PRODUCTS">Products and services</option>
+                    <option value="OPENING_BALANCES">Opening balances</option>
+                    <option value="OUTSTANDING_INVOICES">Outstanding invoices</option>
+                    <option value="OUTSTANDING_BILLS">Outstanding bills</option>
+                    <option value="CUSTOMER_CREDITS">Customer opening credits</option>
+                    <option value="VENDOR_CREDITS">Vendor opening credits</option>
+                    <option value="INVENTORY_OPENING">Inventory opening quantities</option>
+                    <option value="HISTORICAL_ARCHIVE">Historical archive</option>
+                  </select></label
+                >
+                <label class="import-file-control"
+                  >Import file
+                  <input
+                    id="data-import-file"
+                    name="file"
+                    type="file"
+                    accept=".csv,text/csv,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    aria-describedby="data-import-file-help data-import-file-summary"
+                    required
+                  />
+                  <span id="data-import-file-help" class="field-help"
+                    >CSV or Excel workbook (.xlsx). Excel 97-2003 (.xls) and macro-enabled files are
+                    not accepted.</span
+                  >
+                </label>
+                <output id="data-import-file-summary" class="import-file-summary" aria-live="polite"
+                  >Choose an unchanged source export to inspect columns before upload.</output
+                >
+                <p id="data-import-currency-warning" class="non-posting-callout wide-field" hidden>
+                  Foreign opening balances and open foreign invoices or bills require supervised
+                  migration. Do not convert or import them as CAD. Preserve the source amount,
+                  currency, base carrying amount, and historical rate evidence.
+                </p>
+                <section
+                  id="import-mapping-workspace"
+                  class="import-mapping-workspace wide-field"
+                  aria-labelledby="import-mapping-heading"
+                  hidden
+                >
+                  <div class="import-mapping-heading">
+                    <div>
+                      <p class="eyebrow">Before upload</p>
+                      <h4 id="import-mapping-heading">Check columns and map fields</h4>
+                      <p id="import-mapping-completeness" class="import-mapping-completeness"></p>
+                    </div>
+                    <span class="non-posting-badge">Not uploaded or imported</span>
+                  </div>
+                  <div class="import-mapping-tabs" role="tablist" aria-label="Import file review">
+                    <button
+                      id="import-preview-tab"
+                      type="button"
+                      role="tab"
+                      aria-controls="import-preview-panel"
+                      aria-selected="true"
+                    >
+                      Preview
+                    </button>
+                    <button
+                      id="import-mapper-tab"
+                      type="button"
+                      role="tab"
+                      aria-controls="import-mapper-panel"
+                      aria-selected="false"
+                      tabindex="-1"
+                    >
+                      Map columns
+                    </button>
+                  </div>
+                  <section
+                    id="import-preview-panel"
+                    role="tabpanel"
+                    aria-labelledby="import-preview-tab"
+                  >
+                    <dl id="import-workbook-metadata" class="import-workbook-metadata"></dl>
+                    <ul id="import-workbook-warnings" class="import-workbook-warnings" hidden></ul>
+                    <div class="table-wrap import-preview-table-wrap">
+                      <table id="import-preview-table" aria-label="Representative source rows">
+                        <thead></thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
+                  </section>
+                  <section
+                    id="import-mapper-panel"
+                    role="tabpanel"
+                    aria-labelledby="import-mapper-tab"
+                    hidden
+                  >
+                    <p class="import-mapper-intro">
+                      Choose one source column per PennyWise Accounting field. Required fields must
+                      be mapped before the import can be tested. Ignore source columns that are not
+                      needed.
+                    </p>
+                    <div
+                      id="import-mapping-issues"
+                      class="import-mapping-issues"
+                      role="status"
+                    ></div>
+                    <div id="import-column-mapper" class="import-column-mapper"></div>
+                    <section class="ignored-columns" aria-labelledby="ignored-columns-heading">
+                      <h5 id="ignored-columns-heading">Ignored source columns</h5>
+                      <p id="ignored-import-columns">
+                        None. Every source column is currently mapped.
+                      </p>
+                    </section>
+                  </section>
+                </section>
+                <details class="advanced-import-mapping wide-field">
+                  <summary>Advanced mapping JSON</summary>
+                  <label
+                    >Mapping JSON
+                    <textarea name="mapping" spellcheck="false">{}</textarea>
+                  </label>
+                  <p>
+                    The visual mapper keeps this value in sync. Use JSON only for a reviewed manual
+                    override; mappings use PennyWise Accounting field names pointing to source
+                    headings.
+                  </p>
+                </details>
+                <div class="form-actions"><button type="submit">Upload and review</button></div>
+              </form>
+              <div class="form-actions">
+                <button id="dry-run-data-import" type="button" disabled>Test import</button>
+                <button id="commit-data-import" type="button" disabled>Complete import</button>
+                <button id="acknowledge-data-import" type="button" disabled>
+                  Confirm reviewed
+                </button>
+                <button
+                  id="download-import-errors"
+                  class="secondary-command"
+                  type="button"
+                  disabled
+                >
+                  Download issues
+                </button>
+              </div>
+              <output id="data-import-status" class="structured-output"></output>
+              <section class="import-history" aria-labelledby="import-history-heading">
+                <div class="import-outcome-heading">
+                  <div>
+                    <p class="eyebrow">Continue safely</p>
+                    <h4 id="import-history-heading">Recent imports for this data type</h4>
+                    <p class="import-outcome-summary">
+                      Resume a prior batch without uploading the same source file again.
+                    </p>
+                  </div>
+                  <button id="refresh-import-history" class="secondary-command" type="button">
+                    Refresh
+                  </button>
+                </div>
+                <div class="table-wrap">
+                  <table aria-label="Recent import batches">
+                    <thead>
+                      <tr>
+                        <th scope="col">Source file</th>
+                        <th scope="col">Previous system</th>
+                        <th scope="col">Rows</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Updated</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody id="recent-import-batches"></tbody>
+                  </table>
+                </div>
+                <output id="import-history-status" class="field-help" aria-live="polite"></output>
+              </section>
+              <section
+                id="import-outcome-review"
+                class="import-outcome-review"
+                aria-labelledby="import-outcome-heading"
+                hidden
+              >
+                <div class="import-outcome-heading">
+                  <div>
+                    <p class="eyebrow">Control summary</p>
+                    <h4 id="import-outcome-heading">What PennyWise Accounting will do</h4>
+                    <p
+                      id="import-outcome-summary"
+                      class="import-outcome-summary"
+                      aria-live="polite"
+                    ></p>
+                  </div>
+                  <span id="import-outcome-boundary" class="non-posting-badge">Review first</span>
+                </div>
+                <dl id="import-outcome-metrics" class="metric-grid"></dl>
+                <div class="table-wrap import-outcome-table-wrap">
+                  <table id="import-outcome-table" aria-label="Import row outcomes">
+                    <thead>
+                      <tr>
+                        <th scope="col">Row</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Source identifier</th>
+                        <th scope="col">Review note</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
+                <div class="import-outcome-pagination" aria-label="Import outcome review pages">
+                  <button id="previous-import-outcome-page" type="button" class="secondary-command">
+                    Previous rows
+                  </button>
+                  <span id="import-outcome-page-status" role="status" aria-live="polite"></span>
+                  <button id="next-import-outcome-page" type="button" class="secondary-command">
+                    Next rows
+                  </button>
+                </div>
+                <section
+                  id="import-reconciliation-card"
+                  class="import-reconciliation-card"
+                  aria-labelledby="import-reconciliation-heading"
+                  hidden
+                >
+                  <h5 id="import-reconciliation-heading">Reconciliation after commit</h5>
+                  <dl id="import-reconciliation-values" class="import-reconciliation-values"></dl>
+                  <form
+                    id="import-source-controls-form"
+                    class="compact-form import-source-controls"
+                  >
+                    <p class="field-help">
+                      Enter totals from the dated source-system report. PennyWise will not mark a
+                      financial cutover reviewed until the source and PennyWise totals agree.
+                    </p>
+                    <div class="responsive-form-grid">
+                      <label>
+                        Source report
+                        <input
+                          name="sourceReportName"
+                          maxlength="160"
+                          placeholder="Trial Balance, A/R Aging, A/P Aging, or Inventory Valuation"
+                          required
+                        />
+                      </label>
+                      <label>
+                        Report date
+                        <input name="sourceReportDate" type="date" required />
+                      </label>
+                      <label id="import-source-debit-field" hidden>
+                        Source debits (minor units)
+                        <input name="sourceDebitMinor" inputmode="numeric" pattern="[0-9]+" />
+                      </label>
+                      <label id="import-source-credit-field" hidden>
+                        Source credits (minor units)
+                        <input name="sourceCreditMinor" inputmode="numeric" pattern="[0-9]+" />
+                      </label>
+                      <label id="import-source-balance-field">
+                        Source balance (minor units)
+                        <input name="sourceBalanceMinor" inputmode="numeric" pattern="[0-9]+" />
+                      </label>
+                      <label>
+                        Report SHA-256 (optional)
+                        <input
+                          name="sourceReportChecksum"
+                          maxlength="64"
+                          pattern="[A-Fa-f0-9]{64}"
+                          placeholder="64-character checksum"
+                        />
+                      </label>
+                    </div>
+                    <div class="form-actions">
+                      <button id="save-import-source-controls" type="submit">
+                        Compare source totals
+                      </button>
+                    </div>
+                    <output
+                      id="import-source-controls-status"
+                      class="field-help"
+                      aria-live="polite"
+                    ></output>
+                  </form>
+                </section>
+              </section>
+              <section
+                id="import-item-match-review"
+                class="import-item-match-review"
+                aria-labelledby="import-item-match-heading"
+                hidden
+              >
+                <div class="import-item-match-heading">
+                  <div>
+                    <p class="eyebrow">Review assistance</p>
+                    <h4 id="import-item-match-heading">Possible existing items</h4>
+                    <p id="import-item-match-summary" class="import-item-match-summary"></p>
+                  </div>
+                  <span class="non-posting-badge">Suggestion only</span>
+                </div>
+                <p id="import-item-match-boundary" class="non-posting-callout"></p>
+                <div
+                  id="import-item-match-rows"
+                  class="import-item-match-rows"
+                  aria-live="polite"
+                ></div>
+                <div class="import-item-match-pagination" aria-label="Item suggestion pages">
+                  <button id="previous-import-item-matches" type="button" class="secondary-command">
+                    Previous rows
+                  </button>
+                  <span id="import-item-match-page-status"></span>
+                  <button id="next-import-item-matches" type="button" class="secondary-command">
+                    Next rows
+                  </button>
+                </div>
+                <output
+                  id="import-item-match-load-status"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+              </section>
+            </section>
+            <section>
+              <h3>Complete export</h3>
+              <form id="organization-export-form" class="form-grid">
+                <label class="check"
+                  ><input name="includeAttachments" type="checkbox" /> Include clean
+                  attachments</label
+                >
+                <div class="form-actions"><button type="submit">Create export</button></div>
+              </form>
+              <div class="form-actions">
+                <button
+                  id="refresh-organization-export"
+                  class="secondary-command"
+                  type="button"
+                  disabled
+                >
+                  Refresh
+                </button>
+                <button id="download-organization-export" type="button" disabled>Download</button>
+              </div>
+              <output id="organization-export-status" class="structured-output"></output>
+            </section>
+          </div>
+          <section>
+            <h3>Organization closure</h3>
+            <form id="organization-closure-form" class="form-grid">
+              <label class="wide-field"
+                >Reason <textarea name="reason" required maxlength="500"></textarea>
+              </label>
+              <label class="check"><input name="legalHold" type="checkbox" /> Legal hold</label>
+              <div class="form-actions"><button type="submit">Request closure</button></div>
+            </form>
+            <button id="finalize-organization-closure" type="button" disabled>
+              Schedule retention
+            </button>
+            <output id="organization-closure-status" class="structured-output"></output>
+          </section>
+        </section>

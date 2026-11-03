@@ -1,0 +1,180 @@
+        <section id="reports-workspace" hidden aria-labelledby="reports-heading">
+          <div class="section-heading">
+            <h1 id="reports-heading">Dashboard and reports</h1>
+            <button id="refresh-reports" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <p id="report-header-line" class="report-header-line" role="status">
+            Amounts in CAD (base currency)
+          </p>
+          <form id="report-filter-form" class="report-toolbar">
+            <label
+              >Period
+              <select name="preset" id="report-period-preset">
+                <option value="custom">Custom range</option>
+                <option value="this-month">This month</option>
+                <option value="last-month">Last month</option>
+                <option value="this-quarter">This quarter</option>
+                <option value="this-year">This year</option>
+                <option value="last-year">Previous year</option>
+              </select></label
+            >
+            <label>From <input name="from" type="date" required /></label>
+            <label>To <input name="to" type="date" required /></label>
+            <label>As of <input name="asOf" type="date" required /></label>
+            <label
+              >Basis
+              <select name="basis">
+                <option value="ACCRUAL">Accrual</option>
+                <option value="CASH">Cash</option>
+              </select></label
+            >
+            <label
+              >Currency
+              <select name="currency" id="report-currency-filter">
+                <option value="base">Base currency</option>
+              </select></label
+            >
+            <label
+              >Report
+              <select name="reportName">
+                <option value="profit-and-loss">Profit and loss</option>
+                <option value="balance-sheet">Balance sheet</option>
+                <option value="trial-balance">Trial balance</option>
+                <option value="general-ledger">General ledger</option>
+                <option value="journals">Journal report</option>
+                <option value="cash-flow">Cash flow</option>
+                <option value="receivables">Accounts receivable</option>
+                <option value="payables">Accounts payable</option>
+                <option value="tax">Tax report</option>
+                <option value="banking">Banking report</option>
+                <option value="sales">Sales report</option>
+                <option value="expenses">Expense report</option>
+              </select></label
+            >
+            <label class="report-compare-toggle"
+              ><input id="report-compare-enabled" name="compare" type="checkbox" /> Compare with
+              previous period</label
+            >
+            <label
+              >Comparison
+              <select id="report-comparison-mode" name="comparisonMode">
+                <option value="previous-period">Previous period</option>
+                <option value="previous-year">Previous year</option>
+                <option value="budget" disabled>Budget (when a budget is selected)</option>
+              </select></label
+            >
+            <label class="report-compare-toggle"
+              ><input id="report-hide-zero" name="hideZero" type="checkbox" checked /> Hide zero
+              rows</label
+            >
+            <div class="form-actions">
+              <button type="submit">Run report</button>
+              <button id="export-report" class="secondary-command" type="button">
+                Download CSV
+              </button>
+              <button id="print-report" class="secondary-command" type="button">Print / PDF</button>
+            </div>
+          </form>
+          <section class="report-saved-views" aria-labelledby="report-saved-views-heading">
+            <div>
+              <h2 id="report-saved-views-heading">Saved views</h2>
+              <p class="field-help">
+                Save filters, comparison, collapsed groups, and columns for this report.
+              </p>
+            </div>
+            <div class="report-saved-view-controls">
+              <label
+                >View
+                <select id="report-view-select">
+                  <option value="">Current filters</option>
+                </select></label
+              >
+              <label
+                >Name
+                <input id="report-view-name" maxlength="120" placeholder="e.g. Monthly owner view"
+              /></label>
+              <label
+                ><input id="report-view-shared" type="checkbox" /> Share with permitted report
+                readers</label
+              >
+              <label><input id="report-view-default" type="checkbox" /> Make my default view</label>
+              <button id="save-report-view" type="button">Save view</button>
+              <button id="delete-report-view" class="secondary-command" type="button" disabled>
+                Delete view
+              </button>
+            </div>
+            <output id="report-view-status" role="status" aria-live="polite"></output>
+          </section>
+          <dl id="dashboard-summary" class="metric-grid" aria-label="Business dashboard"></dl>
+          <div id="report-status" role="status" aria-live="polite"></div>
+          <output
+            id="report-comparison"
+            class="report-comparison"
+            role="status"
+            aria-live="polite"
+            hidden
+            >Enable comparison to load the immediately preceding period.</output
+          >
+          <aside
+            id="report-drilldown-panel"
+            class="report-drilldown-panel"
+            hidden
+            aria-labelledby="report-drilldown-heading"
+          >
+            <div class="section-heading">
+              <div>
+                <p class="section-kicker">In-place review</p>
+                <h2 id="report-drilldown-heading">Transaction details</h2>
+                <p id="report-drilldown-breadcrumb" class="field-help"></p>
+              </div>
+              <button id="close-report-drilldown" class="secondary-command" type="button">
+                Close
+              </button>
+            </div>
+            <div id="report-drilldown-content"></div>
+          </aside>
+          <section
+            id="report-tax-jurisdictions"
+            class="report-tax-jurisdictions"
+            aria-labelledby="report-tax-jurisdictions-heading"
+            hidden
+          >
+            <h3 id="report-tax-jurisdictions-heading">What you file, by authority</h3>
+            <p class="field-help">
+              Each authority is reconciled against the account its own tax component posts to.
+              GST/HST and provincial sales taxes are filed separately, on different schedules.
+            </p>
+            <div class="table-wrap">
+              <table aria-label="Sales tax by authority">
+                <thead id="report-tax-jurisdictions-head"></thead>
+                <tbody id="report-tax-jurisdictions-body"></tbody>
+              </table>
+            </div>
+            <details class="report-tax-remittance">
+              <summary>Recording a remittance</summary>
+              <p>
+                Filing is done on the authority's own return, from the figures above. Record the
+                payment in PennyWise Accounting as a manual journal in the accountant workspace:
+                debit the authority's payable account for the amount remitted, and credit the bank
+                account it was paid from. That clears the liability and leaves the journal linked to
+                the period.
+              </p>
+              <p class="field-help">
+                PennyWise Accounting does not file returns, calculate what is owed to an authority,
+                or move money. The figures above come from posted documents only.
+              </p>
+              <button type="button" id="open-accountant-for-remittance" class="secondary-command">
+                Open accountant workspace
+              </button>
+            </details>
+            <button type="button" id="export-tax-by-authority" class="secondary-command">
+              Export by authority (CSV)
+            </button>
+          </section>
+          <div class="table-wrap">
+            <table id="report-table" aria-label="Selected financial or operational report">
+              <thead id="report-head"></thead>
+              <tbody id="report-body"></tbody>
+            </table>
+          </div>
+        </section>

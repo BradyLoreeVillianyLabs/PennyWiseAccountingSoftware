@@ -1,0 +1,678 @@
+        <section id="setup-workspace" hidden>
+          <div class="section-heading">
+            <div>
+              <h1>Set up your business</h1>
+              <p>Complete one guided step at a time. You can finish the rest later.</p>
+            </div>
+            <span id="setup-progress"></span>
+          </div>
+          <nav id="setup-tabs" class="tabs" aria-label="Setup steps"></nav>
+
+          <section class="setup-panel" data-step="BUSINESS_PROFILE">
+            <h2>Business profile</h2>
+            <form id="profile-form" class="form-grid">
+              <input name="version" type="hidden" />
+              <label>Legal name <input name="legalName" required maxlength="200" /></label>
+              <label>Operating name <input name="displayName" required maxlength="200" /></label>
+              <label>Business type <input name="businessType" maxlength="100" required /></label>
+              <label
+                >Business number <input name="businessNumber" maxlength="30" autocomplete="off"
+              /></label>
+              <label>Email <input name="email" type="email" /></label>
+              <label>Telephone <input name="phone" type="tel" /></label>
+              <label>Website <input name="website" type="url" /></label>
+              <label
+                >Locale
+                <select name="locale">
+                  <option value="en-CA">English (Canada)</option>
+                  <option value="fr-CA">French (Canada)</option>
+                </select></label
+              >
+              <label>Time zone <input name="timeZone" required /></label>
+              <div class="form-actions"><button type="submit">Save profile</button></div>
+            </form>
+            <section class="company-management-panel" aria-labelledby="company-management-heading">
+              <div class="section-heading compact-section-heading">
+                <div>
+                  <p class="section-kicker">Workspace companies</p>
+                  <h3 id="company-management-heading">Create or archive a company</h3>
+                  <p class="action-help">
+                    Add a separate legal company inside this workspace. Archiving a company removes
+                    it from active work without erasing its records; at least one active company
+                    must remain.
+                  </p>
+                </div>
+                <button id="open-company-create" class="secondary-command" type="button">
+                  + Add company
+                </button>
+              </div>
+              <form id="company-edit-form" class="form-grid company-edit-form">
+                <div class="section-heading compact-section-heading wide-field">
+                  <div>
+                    <p class="section-kicker">Current company</p>
+                    <h3>Edit the company you have open</h3>
+                  </div>
+                </div>
+                <label>Legal name <input name="legalName" required maxlength="240" /></label>
+                <label>Display name <input name="displayName" required maxlength="160" /></label>
+                <label
+                  >Base currency
+                  <input name="baseCurrency" pattern="[A-Za-z]{3}" required maxlength="3"
+                /></label>
+                <label>Time zone <input name="timezone" required maxlength="80" /></label>
+                <label>Locale <input name="locale" required maxlength="20" /></label>
+                <p class="action-help wide-field">
+                  Save changes to this company only. Company archival retains its records and is
+                  available after another active company exists.
+                </p>
+                <div class="form-actions">
+                  <button type="submit">Save company</button>
+                  <button
+                    id="delete-current-company"
+                    class="secondary-command danger-command"
+                    data-delete-current-company
+                    type="button"
+                  >
+                    Archive company
+                  </button>
+                </div>
+              </form>
+              <div
+                id="company-management-list"
+                class="company-management-list"
+                aria-live="polite"
+              ></div>
+              <form id="company-create-form" class="form-grid company-create-form">
+                <div class="section-heading compact-section-heading wide-field">
+                  <div>
+                    <p class="section-kicker">Blank template</p>
+                    <h3>Start a new company</h3>
+                  </div>
+                </div>
+                <label>Legal name <input name="legalName" required maxlength="240" /></label>
+                <label>Display name <input name="displayName" required maxlength="160" /></label>
+                <label
+                  >Base currency
+                  <input name="baseCurrency" value="CAD" pattern="[A-Za-z]{3}" required
+                /></label>
+                <label
+                  >Time zone
+                  <input name="timezone" value="America/Edmonton" required maxlength="80"
+                /></label>
+                <label>Locale <input name="locale" value="en-CA" required maxlength="20" /></label>
+                <div class="form-actions"><button type="submit">Create company</button></div>
+              </form>
+              <output id="company-management-status" class="structured-output"></output>
+            </section>
+          </section>
+
+          <section class="setup-panel" data-step="FISCAL_CURRENCY" hidden>
+            <h2>Fiscal and currency</h2>
+            <p class="action-help">
+              Saving these settings also initializes your first fiscal year.
+            </p>
+            <form id="fiscal-form" class="form-grid">
+              <label
+                >Base currency <input name="baseCurrency" value="CAD" pattern="[A-Z]{3}" required
+              /></label>
+              <label
+                >Accounting start date
+                <input
+                  name="accountingStartDate"
+                  type="date"
+                  required
+                  aria-describedby="fiscal-calendar-help"
+                />
+              </label>
+              <label
+                >Fiscal year end
+                <input
+                  name="fiscalYearEndDate"
+                  type="date"
+                  required
+                  aria-describedby="fiscal-calendar-help"
+                />
+              </label>
+              <p id="fiscal-calendar-help" class="action-help wide-field">
+                Use the calendar buttons to choose both dates. Your fiscal year-end month and day
+                repeat every year; the calendar year selected here is only used to choose that date.
+              </p>
+              <div class="form-actions">
+                <button type="submit">Save and initialize fiscal year</button
+                ><button id="initialize-fiscal" type="button" class="secondary-command">
+                  Initialize fiscal year again
+                </button>
+              </div>
+            </form>
+            <section class="settings-subsection" aria-labelledby="multi-currency-heading">
+              <div class="section-heading">
+                <div>
+                  <h3 id="multi-currency-heading">CAD and USD accounting</h3>
+                  <p>
+                    Keep the ledger in your base currency while creating, settling, and reporting
+                    CAD and USD transactions with dated, documented rate snapshots.
+                  </p>
+                </div>
+              </div>
+              <form id="multi-currency-form" class="form-grid compact-form">
+                <input name="version" type="hidden" />
+                <label class="check wide-field"
+                  ><input name="enabled" type="checkbox" /> Enable CAD and USD accounting</label
+                >
+                <label
+                  >Rate mode
+                  <select name="rateMode" disabled>
+                    <option value="MANUAL">Manual approved rates</option>
+                  </select>
+                </label>
+                <fieldset class="currency-options wide-field">
+                  <legend>Enabled currencies</legend>
+                  <label><input type="checkbox" name="currency" value="CAD" /> CAD</label>
+                  <label><input type="checkbox" name="currency" value="USD" /> USD</label>
+                </fieldset>
+                <div class="form-actions">
+                  <button type="submit">Save currency settings</button>
+                </div>
+              </form>
+              <form id="fx-rate-form" class="inline-form compact-form">
+                <label
+                  >Foreign currency
+                  <select name="transactionCurrency"></select
+                ></label>
+                <label
+                  >Base units per 1 foreign unit
+                  <input name="rate" inputmode="decimal" placeholder="1.35" required
+                /></label>
+                <label
+                  >Purpose
+                  <select name="purpose" required>
+                    <option value="TRANSACTION">Invoice or bill</option>
+                    <option value="ACTUAL_SETTLEMENT">Customer or bill payment</option>
+                    <option value="CLOSING">Period-end revaluation</option>
+                    <option value="AVERAGE">Reporting reference only</option>
+                  </select></label
+                >
+                <label>Effective date <input name="effectiveAt" type="date" required /></label>
+                <label
+                  >Source note
+                  <input
+                    name="sourceReference"
+                    maxlength="200"
+                    required
+                    placeholder="Approved by bookkeeper"
+                /></label>
+                <button id="suggest-boc-rate" type="button" class="secondary-command">
+                  Suggest Bank of Canada rate
+                </button>
+                <button type="submit">Add rate snapshot</button>
+              </form>
+              <p id="fx-rate-suggestion-status" class="action-help" aria-live="polite">
+                Suggestions are indicative previews only. Nothing is saved until you review the
+                fields and choose Add rate snapshot.
+              </p>
+              <p id="multi-currency-help" class="action-help"></p>
+              <div class="table-wrap">
+                <table>
+                  <caption class="sr-only">
+                    Recent exchange-rate snapshots
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Currency</th>
+                      <th>Rate</th>
+                      <th>Effective</th>
+                      <th>Purpose</th>
+                      <th>Method</th>
+                      <th>Source</th>
+                    </tr>
+                  </thead>
+                  <tbody id="fx-rate-rows"></tbody>
+                </table>
+              </div>
+            </section>
+          </section>
+
+          <section class="setup-panel" data-step="TAX_REGISTRATION" hidden>
+            <h2>Tax registration</h2>
+            <form id="tax-registration-form" class="form-grid">
+              <label
+                >Type
+                <select name="registrationType">
+                  <option>GST_HST</option>
+                  <option>PROVINCIAL</option>
+                </select></label
+              >
+              <label
+                >Jurisdiction <input name="jurisdiction" value="CA" required maxlength="40"
+              /></label>
+              <label
+                >Registration number
+                <input name="registrationNumber" maxlength="50" autocomplete="off"
+              /></label>
+              <label class="check"><input name="registered" type="checkbox" /> Registered</label>
+              <label>Effective from <input name="effectiveFrom" type="date" /></label>
+              <div class="form-actions">
+                <button type="submit">Save registration</button
+                ><button type="button" data-skip="TAX_REGISTRATION" class="secondary-command">
+                  Skip
+                </button>
+              </div>
+            </form>
+
+            <section id="tax-code-section" aria-labelledby="tax-code-heading">
+              <div class="section-heading">
+                <h3 id="tax-code-heading">Sales tax codes</h3>
+                <p>
+                  A tax code holds one component per authority. Each component posts its own amount
+                  to its own account, so a return can be prepared per authority.
+                </p>
+              </div>
+
+              <div id="tax-code-list" class="tax-code-list">
+                <p class="empty-state">Loading tax codes…</p>
+              </div>
+
+              <form id="tax-code-form" class="tax-code-form">
+                <fieldset>
+                  <legend>Add or re-version a tax code</legend>
+                  <div class="form-grid">
+                    <label
+                      >Code
+                      <input
+                        name="code"
+                        required
+                        maxlength="20"
+                        pattern="[A-Z0-9_\-]{1,20}"
+                        placeholder="CA-BC"
+                        autocomplete="off"
+                      />
+                      <span class="field-help"
+                        >Capitals, digits, hyphen or underscore. Re-using an existing code creates a
+                        new version of it.</span
+                      >
+                    </label>
+                    <label
+                      >Name
+                      <input
+                        name="name"
+                        required
+                        maxlength="100"
+                        placeholder="GST + PST British Columbia"
+                      />
+                    </label>
+                    <label
+                      >Treatment
+                      <select name="treatment" id="tax-code-treatment">
+                        <option value="STANDARD">Standard — tax is charged</option>
+                        <option value="ZERO_RATED">Zero-rated — 0%, input tax credits kept</option>
+                        <option value="EXEMPT">Exempt — 0%, input tax credits lost</option>
+                      </select>
+                    </label>
+                    <label
+                      >Calculation
+                      <select name="calculationMode">
+                        <option value="EXCLUSIVE">Exclusive — tax added to the price</option>
+                        <option value="INCLUSIVE">Inclusive — tax already in the price</option>
+                      </select>
+                    </label>
+                    <label
+                      >Effective from <input name="effectiveFrom" type="date" required
+                    /></label>
+                    <label>Effective to <input name="effectiveTo" type="date" /></label>
+                  </div>
+
+                  <p id="tax-code-treatment-help" class="field-help" role="status">
+                    Zero-rated and exempt are not interchangeable. A zero-rated sale keeps the input
+                    tax credits on what you bought to make it; an exempt sale does not.
+                  </p>
+                </fieldset>
+
+                <fieldset>
+                  <legend>Components</legend>
+                  <p class="field-help">
+                    One per authority. British Columbia needs two: GST to the federal account, PST
+                    to the provincial one.
+                  </p>
+                  <div id="tax-code-components"></div>
+                  <button type="button" id="tax-code-add-component" class="secondary-command">
+                    Add component
+                  </button>
+                </fieldset>
+
+                <fieldset>
+                  <legend>Where this rate came from</legend>
+                  <div class="form-grid">
+                    <label
+                      >Source
+                      <input
+                        name="sourceName"
+                        required
+                        maxlength="200"
+                        placeholder="Canada Revenue Agency"
+                      />
+                    </label>
+                    <label
+                      >Source link
+                      <input name="sourceUrl" type="url" placeholder="https://" />
+                    </label>
+                    <label
+                      >Checked on <input name="sourceRetrievedAt" type="date" required />
+                    </label>
+                  </div>
+                </fieldset>
+
+                <div
+                  id="tax-code-preview"
+                  class="tax-code-preview"
+                  role="status"
+                  aria-live="polite"
+                >
+                  <h4>What a sale using this code will do</h4>
+                  <div id="tax-code-preview-body">
+                    <p class="empty-state">Add a component to see the accounts a sale would use.</p>
+                  </div>
+                </div>
+
+                <div class="form-actions">
+                  <button type="submit">Save tax code version</button>
+                  <button
+                    id="cancel-contextual-tax-code"
+                    class="secondary-command"
+                    type="button"
+                    hidden
+                  >
+                    Return to draft
+                  </button>
+                </div>
+              </form>
+            </section>
+          </section>
+
+          <section class="setup-panel" data-step="INDUSTRY_PRESET" hidden>
+            <h2>Industry preset</h2>
+            <form id="preset-form" class="inline-form">
+              <label
+                >Business activity
+                <select name="presetKey">
+                  <option value="general-service">General service</option>
+                  <option value="contractor-trades">Contractor and trades</option>
+                  <option value="ranch-agriculture">Ranch and agriculture</option>
+                  <option value="repair-business">Repair business</option>
+                  <option value="tourism-experiences">Tourism and experiences</option>
+                  <option value="small-product-seller">Small product seller</option>
+                </select></label
+              >
+              <button type="submit">Apply preset</button>
+            </form>
+            <div id="preset-preview" class="table-wrap"></div>
+          </section>
+
+          <section class="setup-panel" data-step="CHART_REVIEW" hidden>
+            <div class="section-heading">
+              <h2>Chart of accounts</h2>
+              <button id="refresh-accounts" class="secondary-command" type="button">Refresh</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Code</th>
+                    <th>Account</th>
+                    <th>Type</th>
+                    <th>Control</th>
+                  </tr>
+                </thead>
+                <tbody id="setup-accounts"></tbody>
+              </table>
+            </div>
+            <button type="button" data-complete="CHART_REVIEW">Approve chart</button>
+          </section>
+
+          <section class="setup-panel" data-step="OPENING_BALANCES" hidden>
+            <h2>Opening balances</h2>
+            <form id="opening-form">
+              <label>Effective date <input name="effectiveDate" type="date" required /></label>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Account</th>
+                      <th>Debit (CAD)</th>
+                      <th>Credit (CAD)</th>
+                      <th>Control difference</th>
+                    </tr>
+                  </thead>
+                  <tbody id="opening-lines"></tbody>
+                </table>
+              </div>
+              <div
+                id="opening-balance-summary"
+                class="balance-summary"
+                role="status"
+                aria-live="polite"
+              >
+                Enter amounts to see whether opening balances are balanced.
+              </div>
+              <div class="form-actions">
+                <button type="submit" aria-label="Save opening-balance draft">Save draft</button
+                ><button id="post-opening" type="button">Post balances</button
+                ><button type="button" data-skip="OPENING_BALANCES" class="secondary-command">
+                  Skip
+                </button>
+              </div>
+            </form>
+          </section>
+
+          <section class="setup-panel" data-step="BRANDING_DEFAULTS" hidden>
+            <h2>Branding and defaults</h2>
+            <form id="defaults-form" class="form-grid">
+              <input name="version" type="hidden" />
+              <label
+                >Payment terms (days)
+                <input name="paymentTermsDays" type="number" min="0" max="365"
+              /></label>
+              <label>Invoice prefix <input name="invoicePrefix" maxlength="12" /></label>
+              <label
+                >Invoice placeholder <input name="invoiceNextPlaceholder" inputmode="numeric"
+              /></label>
+              <label>Estimate prefix <input name="estimatePrefix" maxlength="12" /></label>
+              <label
+                >Estimate placeholder <input name="estimateNextPlaceholder" inputmode="numeric"
+              /></label>
+              <label
+                >Tax display
+                <select name="taxCalculationMode">
+                  <option value="EXCLUSIVE">Exclusive</option>
+                  <option value="INCLUSIVE">Inclusive</option>
+                </select></label
+              >
+              <label
+                >Customer notes <textarea name="customerNotes" maxlength="2000"></textarea>
+              </label>
+              <label
+                >Payment instructions
+                <textarea name="paymentInstructions" maxlength="2000"></textarea>
+              </label>
+              <label
+                >Default document language
+                <select name="documentLanguage">
+                  <option value="en-CA">English</option>
+                  <option value="fr-CA">French</option>
+                  <option value="BILINGUAL">English and French</option>
+                </select>
+              </label>
+              <fieldset class="wide-field invoice-first-run-payment-methods">
+                <legend>Usual customer payment methods</legend>
+                <label class="check"
+                  ><input name="paymentMethods" type="checkbox" value="E_TRANSFER" /> Interac
+                  e-Transfer</label
+                >
+                <label class="check"
+                  ><input name="paymentMethods" type="checkbox" value="EFT" /> EFT or bank
+                  transfer</label
+                >
+                <label class="check"
+                  ><input name="paymentMethods" type="checkbox" value="CHEQUE" /> Cheque</label
+                >
+                <label class="check"
+                  ><input name="paymentMethods" type="checkbox" value="CARD" /> Card or payment
+                  link</label
+                >
+                <label class="check"
+                  ><input name="paymentMethods" type="checkbox" value="CASH" /> Cash</label
+                >
+                <label class="check"
+                  ><input name="paymentMethods" type="checkbox" value="OTHER" /> Other</label
+                >
+              </fieldset>
+              <label
+                >Date format
+                <select name="dateFormat">
+                  <option>yyyy-MM-dd</option>
+                  <option>dd/MM/yyyy</option>
+                  <option>MM/dd/yyyy</option>
+                </select></label
+              >
+              <label
+                >Number format
+                <select name="numberFormat">
+                  <option>en-CA</option>
+                  <option>fr-CA</option>
+                </select></label
+              >
+              <label class="check"
+                ><input name="showLogo" type="checkbox" /> Show logo
+                <span class="field-help"
+                  >Upload a company logo below before enabling this.</span
+                ></label
+              >
+              <label class="check"
+                ><input name="showBusinessNumber" type="checkbox" /> Show business number</label
+              >
+              <div class="form-actions">
+                <button type="submit">Save defaults</button
+                ><button type="button" data-skip="BRANDING_DEFAULTS" class="secondary-command">
+                  Skip
+                </button>
+              </div>
+            </form>
+            <form id="logo-form" class="inline-form">
+              <label
+                >Logo
+                <input
+                  name="logo"
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  required /></label
+              ><button type="submit">Upload logo</button>
+            </form>
+          </section>
+
+          <section class="setup-panel" data-step="FINAL_REVIEW" hidden>
+            <h2>Final review</h2>
+            <div id="final-status"></div>
+            <section
+              class="workflow-preferences-card"
+              aria-labelledby="workflow-preferences-heading"
+            >
+              <div class="section-heading">
+                <div>
+                  <h3 id="workflow-preferences-heading">Workspace and approval preferences</h3>
+                  <p>
+                    Choose a starting layout, then adjust it. These choices control workflow
+                    visibility only; they do not change accounts, tax treatment, or posting rules.
+                  </p>
+                </div>
+              </div>
+              <form id="workflow-preferences-form" class="form-grid">
+                <label class="wide-field"
+                  >Starting profile
+                  <select name="profileKey" required></select>
+                  <span id="workflow-profile-description" class="field-help"></span>
+                </label>
+                <label class="check"
+                  ><input name="cashPlanningEnabled" type="checkbox" /> Show cash planning</label
+                >
+                <label class="check wide-field"
+                  ><input name="bankFeedReviewRequired" type="checkbox" checked /> Keep all
+                  connected bank activity in review
+                  <span class="field-help"
+                    >When on, all connected bank activity remains in review. When off, only exact
+                    active bank-rule matches may be processed automatically; every exception still
+                    requires review.</span
+                  ></label
+                >
+                <label class="check"
+                  ><input name="purchaseRequestsEnabled" type="checkbox" /> Show purchase
+                  requests</label
+                >
+                <label
+                  >Purchase approval threshold (CAD)
+                  <input
+                    name="purchaseApprovalThresholdMinor"
+                    inputmode="decimal"
+                    value="0.00"
+                    required
+                  />
+                  <span class="field-help"
+                    >Requests at or above this amount require approval. Requests below it are
+                    approved automatically; $0.00 requires approval for every request.</span
+                  >
+                </label>
+                <label class="check"
+                  ><input name="requireSeparatePurchaseApprover" type="checkbox" /> Require a
+                  separate purchase approver</label
+                >
+                <label class="check"
+                  ><input name="customerDepositsEnabled" type="checkbox" /> Prepare customer deposit
+                  workflow</label
+                >
+                <label class="check"
+                  ><input name="progressBillingEnabled" type="checkbox" /> Prepare progress billing
+                  workflow</label
+                >
+                <label class="check"
+                  ><input name="fixedAssetRegisterEnabled" type="checkbox" /> Show fixed asset
+                  register</label
+                >
+                <label class="check wide-field"
+                  ><input name="ownerWorkspaceEnabled" type="checkbox" /> Offer the simplified owner
+                  workspace for jobs, customers, estimates, invoices, and contracts</label
+                >
+                <div class="form-actions">
+                  <button type="submit">Save workflow preferences</button>
+                </div>
+              </form>
+              <div id="show-more-pennywise-panel" class="workflow-more-panel" hidden>
+                <p>
+                  Invoicing-only mode hides the broader workspaces from the navigation. Your data is
+                  still available and nothing is disabled.
+                </p>
+                <button id="show-more-pennywise" class="secondary-command" type="button">
+                  Show more of PennyWise
+                </button>
+              </div>
+              <div class="safety-controls">
+                <h4>Always-on safeguards</h4>
+                <ul id="workflow-safety-controls"></ul>
+              </div>
+            </section>
+            <section class="workflow-preferences-card" aria-labelledby="automations-heading">
+              <div class="section-heading">
+                <div>
+                  <h3 id="automations-heading">Automations</h3>
+                  <p>
+                    Background work runs while PennyWise is open on this computer. Each job is
+                    bounded, tenant-scoped, and recorded in the audit history.
+                  </p>
+                </div>
+                <button id="refresh-automations" class="secondary-command" type="button">
+                  Refresh
+                </button>
+              </div>
+              <p id="automation-runtime-status" class="action-help" role="status"></p>
+              <div id="automation-job-list" class="automation-job-list" aria-live="polite"></div>
+            </section>
+            <button id="complete-setup" type="button">Complete setup</button>
+          </section>
+        </section>

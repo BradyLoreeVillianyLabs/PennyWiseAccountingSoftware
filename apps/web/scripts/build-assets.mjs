@@ -1,6 +1,7 @@
-import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, mkdir, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import { dirname, resolve } from "node:path";
+import { assembleIndexHtml, readWebStyles } from "./web-sources.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const output = resolve(root, "dist");
@@ -30,7 +31,7 @@ await esbuild.build({
   charset: "utf8",
   outfile: resolve(output, "app.js")
 });
-const styles = await esbuild.transform(await readFile(resolve(root, "styles.css"), "utf8"), {
+const styles = await esbuild.transform(await readWebStyles(root), {
   loader: "css",
   minify: true,
   target: "es2022",
@@ -49,8 +50,7 @@ async function copyStaticAsset(file) {
     return;
   }
 
-  const html = await readFile(resolve(root, file), "utf8");
-  await writeFile(target, minifyHtml(html), "utf8");
+  await writeFile(target, minifyHtml(await assembleIndexHtml(root)), "utf8");
 }
 
 function minifyHtml(source) {
@@ -60,9 +60,21 @@ function minifyHtml(source) {
     preservedBlocks.push([token, block]);
     return token;
   });
-  let minified = protectedSource.replace(/<!--[\s\S]*?-->/g, "").replace(/>\s+</g, "><");
+  let minified = protectedSource
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/>\s+</g, "><")
+    .replace(/<[a-zA-Z][^\s/>]*(?:"[^"]*"|'[^']*'|[^"'>])*>/g, collapseTagWhitespace);
   for (const [token, block] of preservedBlocks) minified = minified.replace(token, block);
   return minified;
+}
+
+// Whitespace between attributes is not part of the DOM, unlike whitespace inside a quoted value.
+function collapseTagWhitespace(tag) {
+  return tag
+    .split(/("[^"]*"|'[^']*')/)
+    .map((part, index) => (index % 2 === 1 ? part : part.replace(/\s+/g, " ")))
+    .join("")
+    .replace(/\s+(\/?>)$/, "$1");
 }
 
 async function loadEsbuild() {

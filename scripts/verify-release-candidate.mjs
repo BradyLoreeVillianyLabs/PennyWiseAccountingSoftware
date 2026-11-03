@@ -1,6 +1,11 @@
 import { readFile, stat } from "node:fs/promises";
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  assembleIndexHtml,
+  readWebScripts,
+  readWebStyles
+} from "../apps/web/scripts/web-sources.mjs";
 
 const root = resolve(fileURLToPath(new URL("..", import.meta.url)));
 // package.json invokes these as flags (`--security`, `--accessibility`,
@@ -34,9 +39,10 @@ for (const file of requiredFiles) await readText(file);
 const release = await readText("docs/RELEASE_CANDIDATE.md");
 const userAcceptance = await readText("docs/USER_ACCEPTANCE_SCRIPTS.md");
 const changelog = await readText("CHANGELOG.md");
-const html = await readText("apps/web/index.html");
-const javascript = await readText("apps/web/app.js");
-const css = await readText("apps/web/styles.css");
+const webRoot = resolve(root, "apps/web");
+const html = await assembleIndexHtml(webRoot);
+const javascript = await readWebScripts(webRoot);
+const css = await readWebStyles(webRoot);
 const ownerRequestLedger = await readText("docs/tasks/OWNER_REQUEST_LEDGER_2026-08-03.md");
 const betaCompletionProgram = await readText(
   "docs/tasks/PUBLIC_BETA_COMPLETION_PROGRAM_2026-08-03.md"

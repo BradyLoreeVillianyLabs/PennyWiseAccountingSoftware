@@ -36,6 +36,33 @@
         "cssLines": 13447,
         "largestJsFileLines": 27656
       }
+    },
+    "wave-0": {
+      "measuredAt": "2026-11-01T02:54:27.135Z",
+      "navigation": {
+        "topNavItems": 16,
+        "topNavItemsIncludingCompactMenu": 32,
+        "railItemsAll": 20,
+        "railItemsOwnerMode": 14
+      },
+      "markup": {
+        "buttons": 463,
+        "inputs": 779,
+        "forms": 121,
+        "tables": 59,
+        "dialogs": 22,
+        "sections": 216
+      },
+      "visuals": {
+        "chartElements": 0
+      },
+      "size": {
+        "jsFiles": 51,
+        "jsLines": 29419,
+        "htmlLines": 10231,
+        "cssLines": 13470,
+        "largestJsFileLines": 4318
+      }
     }
   }
 }

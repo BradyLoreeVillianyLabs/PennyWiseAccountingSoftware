@@ -1,0 +1,1239 @@
+        <section id="sales-workspace" hidden>
+          <div class="section-heading">
+            <div>
+              <h1>Sales</h1>
+              <p>Create customer documents, track what you’re owed, and record payments.</p>
+            </div>
+            <button id="refresh-sales" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <p id="sales-delivery-boundary" class="non-posting-callout" role="note">
+            <strong>Manual delivery in this beta:</strong> PennyWise Accounting does not send
+            customer email. Download an invoice PDF, or print an estimate preview to PDF, then send
+            it through your own email service. Customer links are for local or controlled-share
+            testing only. A PennyWise Accounting status never proves that the customer received
+            anything.
+          </p>
+          <div class="sales-columns">
+            <section id="customers-section">
+              <h2 id="customer-form-heading">Customers</h2>
+              <form id="customer-form" class="form-grid">
+                <input name="customerId" type="hidden" />
+                <input name="version" type="hidden" />
+                <label
+                  >Customer number (optional)
+                  <input name="customerNumber" maxlength="40" autocomplete="off" />
+                  <span class="field-help">Leave blank to generate the next CUST-0001 number.</span>
+                </label>
+                <label>Display name <input name="displayName" required maxlength="200" /></label>
+                <label>Email <input name="email" type="email" /></label>
+                <label
+                  >Invoice language
+                  <select name="documentLanguage">
+                    <option value="">Use company default</option>
+                    <option value="en-CA">English</option>
+                    <option value="fr-CA">Français</option>
+                    <option value="BILINGUAL">English + Français</option>
+                  </select>
+                </label>
+                <label
+                  >Default invoice currency
+                  <select name="defaultCurrency">
+                    <option value="CAD">CAD</option>
+                    <option value="USD">USD</option>
+                  </select></label
+                >
+                <label
+                  >Payment terms (days)
+                  <input name="defaultPaymentTermsDays" type="number" min="0" max="365" value="30"
+                /></label>
+                <label class="check"
+                  ><input name="reminderDisabled" type="checkbox" /> Do not send payment
+                  reminders</label
+                >
+                <label
+                  >Reminder tone
+                  <select name="reminderTone">
+                    <option value="">Use company default</option>
+                    <option value="FRIENDLY">Friendly</option>
+                    <option value="FIRM">Firm</option>
+                  </select>
+                </label>
+                <div class="form-actions">
+                  <button type="submit">Create customer</button>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-cancel-contextual-create="customer"
+                    hidden
+                  >
+                    Return to draft
+                  </button>
+                  <button id="cancel-customer-edit" class="secondary-command" type="button" hidden>
+                    Cancel edit
+                  </button>
+                </div>
+              </form>
+              <div class="table-toolbar">
+                <label
+                  >Find customers
+                  <input
+                    data-table-filter-target="customers"
+                    placeholder="Name, number, or email"
+                  />
+                </label>
+                <output
+                  data-table-filter-count="customers"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+                <button type="button" class="secondary-command" data-table-export="customers">
+                  Download visible
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Number</th>
+                      <th>Customer</th>
+                      <th>Email</th>
+                      <th><span class="sr-only">Actions</span></th>
+                    </tr>
+                  </thead>
+                  <tbody id="customers"></tbody>
+                </table>
+              </div>
+            </section>
+            <section id="products-services-section">
+              <h2>Products and services</h2>
+              <form id="product-form" class="form-grid">
+                <label>SKU <input name="sku" maxlength="80" /></label>
+                <label>Name <input name="name" required maxlength="200" /></label>
+                <label
+                  >Sales price (CAD) <input name="salesPriceMinor" required inputmode="decimal"
+                /></label>
+                <div class="field-with-contextual-action">
+                  <label
+                    >Income account
+                    <select name="incomeAccountId" required></select>
+                  </label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="account"
+                    data-contextual-origin-form="product-form"
+                    data-contextual-origin-workspace="sales-workspace"
+                    data-contextual-selection-name="incomeAccountId"
+                    data-contextual-account-types="REVENUE"
+                  >
+                    + Add revenue account
+                  </button>
+                </div>
+                <div class="field-with-contextual-action">
+                  <label
+                    >Default tax code
+                    <select name="defaultTaxCodeId"></select>
+                    <span class="field-help"
+                      >Used when an invoice line for this product does not name a tax code. Store
+                      orders take their code from the connector mapping instead.</span
+                    >
+                  </label>
+                  <button
+                    class="text-command contextual-add-action"
+                    type="button"
+                    data-contextual-create="tax-code"
+                    data-contextual-origin-form="product-form"
+                    data-contextual-origin-workspace="sales-workspace"
+                    data-contextual-selection-name="defaultTaxCodeId"
+                  >
+                    + Add tax code
+                  </button>
+                </div>
+                <label
+                  >Type
+                  <select name="itemType">
+                    <option value="SERVICE">Service</option>
+                    <option value="NON_INVENTORY_PRODUCT">Non-inventory product</option>
+                  </select></label
+                >
+                <label
+                  >HS tariff code (operator supplied)
+                  <input
+                    name="hsTariffCode"
+                    inputmode="numeric"
+                    maxlength="20"
+                    pattern="[0-9]{4,12}"
+                /></label>
+                <label
+                  >Country of origin (ISO alpha-2)
+                  <input name="countryOfOrigin" maxlength="2" pattern="[A-Za-z]{2}"
+                /></label>
+                <p class="field-help form-span">
+                  These are shipping reference fields. PennyWise Accounting does not classify goods,
+                  determine duty, or provide tariff advice.
+                </p>
+                <div class="form-actions">
+                  <button type="submit">Create item</button>
+                  <button
+                    class="secondary-command"
+                    type="button"
+                    data-cancel-contextual-create="product"
+                    hidden
+                  >
+                    Return to draft
+                  </button>
+                </div>
+              </form>
+              <div class="table-toolbar">
+                <label
+                  >Find products
+                  <input data-table-filter-target="products" placeholder="Name, SKU, or price" />
+                </label>
+                <output
+                  data-table-filter-count="products"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+                <button type="button" class="secondary-command" data-table-export="products">
+                  Download visible
+                </button>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>SKU</th>
+                      <th>Item</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody id="products"></tbody>
+                </table>
+              </div>
+            </section>
+          </div>
+          <section id="invoice-designer-section" class="invoice-designer-section">
+            <div class="workspace-title invoice-designer-title">
+              <div>
+                <h2 data-i18n="invoice.title">New invoice</h2>
+                <p data-i18n="invoice.subtitle">
+                  Create the draft, confirm the exact customer view, then post or send it.
+                </p>
+              </div>
+              <div class="draft-recovery-controls">
+                <span id="invoice-save-status" class="save-status">Not saved</span>
+                <output
+                  id="invoice-browser-draft-status"
+                  class="draft-recovery-status"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+                <button id="invoice-clear-browser-draft" class="text-command" type="button" hidden>
+                  Discard local draft
+                </button>
+              </div>
+            </div>
+            <div class="invoice-designer-grid">
+              <section class="invoice-editor-panel" aria-labelledby="invoice-details-heading">
+                <h3 id="invoice-details-heading" data-i18n="invoice.detailsHeading">
+                  Customer and items
+                </h3>
+                <form id="invoice-form" class="form-grid">
+                  <section
+                    class="compact-document-header wide-field"
+                    aria-labelledby="invoice-document-header-heading"
+                  >
+                    <div class="compact-document-header-heading">
+                      <div>
+                        <h4 id="invoice-document-header-heading">Invoice details</h4>
+                        <p class="field-help">Drafts stay unnumbered until you finalize them.</p>
+                      </div>
+                      <output
+                        id="invoice-number-status"
+                        class="document-number-status"
+                        role="status"
+                        >Invoice number assigned when finalized</output
+                      >
+                    </div>
+                  </section>
+                  <div class="field-with-contextual-action">
+                    <label
+                      ><span data-i18n="invoice.customer">Customer</span>
+                      <select name="customerId" required></select>
+                    </label>
+                    <button
+                      class="text-command contextual-add-action"
+                      type="button"
+                      data-contextual-create="customer"
+                      data-contextual-origin-form="invoice-form"
+                      data-contextual-origin-workspace="sales-workspace"
+                      data-contextual-selection-name="customerId"
+                    >
+                      <span data-i18n="invoice.addCustomer">+ Add customer</span>
+                    </button>
+                  </div>
+                  <section
+                    class="invoice-line-editor wide-field"
+                    aria-labelledby="invoice-lines-heading"
+                  >
+                    <div class="invoice-line-editor-heading">
+                      <div>
+                        <h4 id="invoice-lines-heading">Invoice lines</h4>
+                        <p class="field-help">
+                          Choose a saved item or enter a description-only line. The account is Sales
+                          when no saved item is selected; tax is explicit on every line.
+                        </p>
+                      </div>
+                      <button id="invoice-add-line" class="secondary-command" type="button">
+                        + Add line
+                      </button>
+                    </div>
+                    <div
+                      id="invoice-line-editor"
+                      class="invoice-line-editor-table"
+                      role="table"
+                      aria-label="Invoice lines"
+                    ></div>
+                    <output
+                      id="invoice-line-status"
+                      class="structured-output"
+                      role="status"
+                      aria-live="polite"
+                    ></output>
+                    <div class="legacy-invoice-controls" aria-hidden="true">
+                      <select name="productItemId" tabindex="-1"></select>
+                      <input name="quantity" value="1" tabindex="-1" />
+                      <input name="unitPriceMinor" tabindex="-1" />
+                      <input name="discountMinor" value="0" tabindex="-1" />
+                    </div>
+                    <div class="invoice-totals" aria-live="polite">
+                      <strong>Estimated until saved</strong>
+                      <span id="invoice-estimated-subtotal">Subtotal: $0.00</span>
+                      <span id="invoice-estimated-discount">Discount: $0.00</span>
+                      <span id="invoice-estimated-tax">Tax: calculated when saved</span>
+                      <strong id="invoice-estimated-total">Total: $0.00</strong>
+                    </div>
+                  </section>
+                  <label
+                    ><span data-i18n="invoice.issueDate">Issue date</span>
+                    <input name="issueDate" type="date" required
+                  /></label>
+                  <label
+                    >Payment terms (days)
+                    <input name="paymentTermsDays" type="number" min="0" max="365" value="30" />
+                  </label>
+                  <label
+                    >Due date
+                    <input name="dueDate" type="date" required />
+                    <span class="field-help"
+                      >Derived from issue date and payment terms; you can edit it.</span
+                    >
+                  </label>
+                  <label
+                    ><span data-i18n="invoice.currency">Invoice currency</span>
+                    <select name="currency" required>
+                      <option value="CAD">CAD</option>
+                      <option value="USD">USD</option>
+                    </select></label
+                  >
+                  <details class="compact-document-options wide-field">
+                    <summary>More invoice options</summary>
+                    <div class="form-grid compact-document-options-grid">
+                      <p class="wide-field document-text-format-guide">
+                        Format: <code>**bold**</code>, <code>_italic_</code>,
+                        <code>## heading</code>, or <code>- list</code>.
+                      </p>
+                      <label class="wide-field"
+                        >Transaction-date rate
+                        <select name="fxRateSnapshotId"></select>
+                        <span class="field-help"
+                          >Required for a foreign-currency invoice and restricted to the issue
+                          date.</span
+                        ></label
+                      >
+                      <section id="invoice-inline-rate" class="wide-field inline-rate-panel" hidden>
+                        <h4>Rate for this invoice</h4>
+                        <p
+                          id="invoice-inline-rate-status"
+                          class="field-help"
+                          role="status"
+                          aria-live="polite"
+                        >
+                          Check the latest Bank of Canada observation for the invoice date. Nothing
+                          is applied until you choose Use this rate.
+                        </p>
+                        <div class="inline-form-actions">
+                          <button id="invoice-suggest-rate" class="secondary-command" type="button">
+                            Check Bank of Canada
+                          </button>
+                          <button id="invoice-use-suggested-rate" type="button" hidden>
+                            Use this rate
+                          </button>
+                        </div>
+                      </section>
+                      <label class="wide-field"
+                        >Message to customer
+                        <textarea name="customerFacingNotes" rows="2" maxlength="2000"></textarea>
+                      </label>
+                      <label class="wide-field"
+                        >Terms
+                        <textarea name="terms" rows="2" maxlength="2000"></textarea>
+                      </label>
+                      <fieldset id="invoice-payment-method-selection" class="wide-field">
+                        <legend>Payment methods on this invoice</legend>
+                        <p class="field-help">
+                          Leave every method unchecked to use all company payment instructions.
+                          Select methods here when this invoice needs a narrower set.
+                        </p>
+                        <div
+                          id="invoice-payment-method-options"
+                          class="payment-method-options"
+                        ></div>
+                      </fieldset>
+                    </div>
+                  </details>
+                  <div class="form-actions">
+                    <button type="submit" aria-label="Create invoice draft and review">
+                      <span data-i18n="invoice.createDraft">Create draft &amp; review</span>
+                    </button>
+                    <button
+                      id="invoice-copy-new-draft"
+                      class="secondary-command"
+                      type="button"
+                      hidden
+                    >
+                      Copy to new draft
+                    </button>
+                  </div>
+                </form>
+                <output id="invoice-preview"></output>
+                <section
+                  id="invoice-books-impact"
+                  class="invoice-books-impact"
+                  hidden
+                  aria-labelledby="invoice-books-impact-heading"
+                >
+                  <h3 id="invoice-books-impact-heading">What this did to your books</h3>
+                  <p id="invoice-books-impact-summary"></p>
+                  <div id="invoice-books-impact-entries" class="table-wrap"></div>
+                  <a id="invoice-books-impact-link" class="text-command" hidden></a>
+                </section>
+              </section>
+              <details
+                class="document-controls invoice-appearance-panel"
+                aria-labelledby="invoice-documents-heading"
+              >
+                <summary id="invoice-documents-heading" data-i18n="invoice.appearance">
+                  Branding and document style (optional)
+                </summary>
+                <p>
+                  Optional. Choose a template, colours, customer notes, payment terms, and your
+                  company logo.
+                </p>
+                <form id="invoice-template-form" class="form-grid">
+                  <label class="wide-field"
+                    >Template
+                    <select name="templateKey" required></select
+                  ></label>
+                  <div
+                    id="invoice-template-quick-picks"
+                    class="invoice-template-quick-picks wide-field"
+                    aria-label="Popular invoice layouts"
+                  ></div>
+                  <output id="invoice-template-summary" class="invoice-template-summary wide-field"
+                    >Choose a layout to see its design intent.</output
+                  >
+                  <label
+                    >Primary colour <input name="primaryColor" type="color" value="#1f4e79"
+                  /></label>
+                  <label
+                    >Accent colour <input name="accentColor" type="color" value="#d9eaf7"
+                  /></label>
+                  <label
+                    >Page size
+                    <select name="pageSize">
+                      <option value="LETTER">Letter</option>
+                      <option value="A4">A4</option>
+                    </select></label
+                  >
+                  <label
+                    >Header alignment
+                    <select name="headerAlignment">
+                      <option value="left">Left</option>
+                      <option value="center">Centre</option>
+                      <option value="right">Right</option>
+                    </select></label
+                  >
+                  <label
+                    >Font pairing
+                    <select name="fontPairing">
+                      <option value="system">System clarity</option>
+                      <option value="classic">Classic serif</option>
+                      <option value="modern">Modern sans</option>
+                      <option value="editorial">Editorial contrast</option>
+                      <option value="technical">Technical utility</option>
+                    </select></label
+                  >
+                  <label
+                    >Heading size
+                    <input
+                      name="headingFontSize"
+                      type="number"
+                      min="24"
+                      max="42"
+                      step="1"
+                      value="30"
+                    />
+                  </label>
+                  <label
+                    >Body size
+                    <input name="bodyFontSize" type="number" min="9" max="14" step="1" value="11" />
+                  </label>
+                  <label
+                    >Table size
+                    <input name="tableFontSize" type="number" min="8" max="13" step="1" value="9" />
+                  </label>
+                  <label
+                    >Notes size
+                    <input
+                      name="notesFontSize"
+                      type="number"
+                      min="8"
+                      max="13"
+                      step="1"
+                      value="10"
+                    />
+                  </label>
+                  <label
+                    >Background treatment
+                    <select name="backgroundTreatment">
+                      <option value="none">Clean white</option>
+                      <option value="brand-wash">Soft brand wash</option>
+                      <option value="image-watermark">Image watermark</option>
+                    </select>
+                    <span class="field-help">Watermarks are muted and print-safe.</span>
+                  </label>
+                  <input name="headerImageAssetId" type="hidden" />
+                  <label
+                    >Spacing
+                    <select name="spacing">
+                      <option value="compact">Compact</option>
+                      <option value="comfortable">Comfortable</option>
+                      <option value="airy">Airy</option>
+                    </select></label
+                  >
+                  <label
+                    >Table detail
+                    <select name="detailStyle">
+                      <option value="rules">Crisp rules</option>
+                      <option value="tinted">Tinted bands</option>
+                      <option value="minimal">Minimal ink</option>
+                    </select></label
+                  >
+                  <label class="wide-field"
+                    >Customer notes <textarea name="customerNotes" maxlength="4000"></textarea>
+                  </label>
+                  <label class="wide-field"
+                    >Payment terms <textarea name="terms" maxlength="4000"></textarea>
+                  </label>
+                  <label class="wide-field"
+                    >Payment instructions
+                    <textarea name="paymentInstructions" maxlength="4000"></textarea>
+                  </label>
+                  <label class="wide-field"
+                    >Document footer <textarea name="footer" maxlength="2000"></textarea>
+                  </label>
+                  <label class="wide-field"
+                    >Signature block <textarea name="signatureBlock" maxlength="2000"></textarea>
+                  </label>
+                  <div class="form-actions">
+                    <button type="submit">Save &amp; refresh exact preview</button>
+                  </div>
+                </form>
+                <form id="invoice-logo-form" class="logo-upload-form">
+                  <label
+                    >Company logo
+                    <input
+                      name="logo"
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      required /></label
+                  ><button type="submit" class="secondary-command">Upload logo</button>
+                </form>
+                <form id="invoice-background-form" class="logo-upload-form">
+                  <label
+                    >Invoice background image
+                    <input
+                      name="background"
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      required /></label
+                  ><button type="submit" class="secondary-command">Upload background</button>
+                  <output id="invoice-background-status" aria-live="polite"></output>
+                </form>
+              </details>
+              <details id="invoice-preview-panel" class="invoice-preview-panel">
+                <summary class="preview-panel-summary">
+                  <span class="preview-panel-title">Customer preview</span>
+                  <span id="invoice-preview-status" class="preview-panel-status"
+                    >Create a draft to review it</span
+                  >
+                </summary>
+                <div class="preview-panel-content" aria-labelledby="invoice-preview-heading">
+                  <div class="preview-heading">
+                    <div>
+                      <h3 id="invoice-preview-heading" data-i18n="invoice.previewHeading">
+                        Exact customer preview
+                      </h3>
+                      <p>The customer link and PDF use this same renderer.</p>
+                    </div>
+                    <button
+                      id="print-invoice-preview"
+                      class="secondary-command"
+                      type="button"
+                      disabled
+                    >
+                      <span data-i18n="invoice.printPreview">Print preview</span>
+                    </button>
+                    <button
+                      id="record-preview-invoice-payment"
+                      class="secondary-command"
+                      type="button"
+                      hidden
+                    >
+                      Record payment
+                    </button>
+                  </div>
+                  <output id="invoice-preview-integrity" class="invoice-preview-integrity"
+                    >The immutable render snapshot appears here after draft creation.</output
+                  >
+                  <output id="invoice-document-preview" class="invoice-document-preview"
+                    ><span class="invoice-preview-empty" data-i18n="invoice.previewEmpty"
+                      >Create the draft to render the exact invoice your customer will
+                      receive.</span
+                    ></output
+                  >
+                  <output id="delivery-history"></output>
+                </div>
+              </details>
+            </div>
+            <div class="table-toolbar">
+              <label
+                ><span data-i18n="invoice.find">Find invoices</span>
+                <input
+                  data-table-filter-target="invoices"
+                  data-i18n="invoice.findPlaceholder"
+                  data-i18n-attr="placeholder"
+                  placeholder="Invoice number, customer, or status"
+              /></label>
+              <output data-table-filter-count="invoices" role="status" aria-live="polite"></output>
+              <button type="button" class="secondary-command" data-table-export="invoices">
+                <span data-i18n="invoice.downloadVisible">Download visible</span>
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th>Currency</th>
+                    <th>Base amount</th>
+                    <th><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="invoices"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="estimate-designer-section" class="invoice-designer-section">
+            <div class="workspace-title invoice-designer-title">
+              <div>
+                <h2>Estimates</h2>
+                <p>
+                  Create a proposal, preview the exact customer document, and test the response-link
+                  workflow.
+                </p>
+              </div>
+              <button id="refresh-estimates" class="secondary-command" type="button">
+                Refresh
+              </button>
+            </div>
+            <div class="invoice-designer-grid">
+              <section class="invoice-editor-panel" aria-labelledby="estimate-details-heading">
+                <h3 id="estimate-details-heading">Estimate details</h3>
+                <form id="estimate-form" class="form-grid">
+                  <section
+                    class="compact-document-header wide-field"
+                    aria-labelledby="estimate-document-header-heading"
+                  >
+                    <div class="compact-document-header-heading">
+                      <div>
+                        <h4 id="estimate-document-header-heading">Estimate details</h4>
+                        <p class="field-help">
+                          Leave the number blank for the next short estimate number, or set your
+                          own.
+                        </p>
+                      </div>
+                      <label class="compact-document-number-field"
+                        >Estimate number
+                        <input
+                          name="estimateNumber"
+                          maxlength="120"
+                          pattern="[A-Za-z0-9][A-Za-z0-9 ._/-]*"
+                        />
+                        <span id="estimate-number-guidance" class="field-help"></span>
+                      </label>
+                    </div>
+                  </section>
+                  <div class="field-with-contextual-action">
+                    <label
+                      >Customer
+                      <select name="customerId" required></select
+                    ></label>
+                    <button
+                      class="text-command contextual-add-action"
+                      type="button"
+                      data-contextual-create="customer"
+                      data-contextual-origin-form="estimate-form"
+                      data-contextual-origin-workspace="sales-workspace"
+                      data-contextual-selection-name="customerId"
+                    >
+                      + Add customer
+                    </button>
+                  </div>
+                  <section
+                    class="invoice-line-editor wide-field"
+                    aria-labelledby="estimate-lines-heading"
+                  >
+                    <div class="invoice-line-editor-heading">
+                      <div>
+                        <h4 id="estimate-lines-heading">Estimate lines</h4>
+                        <p class="field-help">
+                          Saved items are optional. Description-only lines use the Sales account and
+                          an explicit tax choice.
+                        </p>
+                      </div>
+                      <button id="estimate-add-line" class="secondary-command" type="button">
+                        + Add line
+                      </button>
+                    </div>
+                    <div
+                      id="estimate-line-editor"
+                      class="invoice-line-editor-table"
+                      role="table"
+                      aria-label="Estimate lines"
+                    ></div>
+                    <output
+                      id="estimate-line-status"
+                      class="structured-output"
+                      role="status"
+                      aria-live="polite"
+                    ></output>
+                    <div class="invoice-totals" aria-live="polite">
+                      <strong>Estimated until saved</strong>
+                      <span id="estimate-estimated-subtotal">Subtotal: $0.00</span>
+                      <span id="estimate-estimated-discount">Discount: $0.00</span>
+                      <span id="estimate-estimated-tax">Tax: calculated when saved</span>
+                      <strong id="estimate-estimated-total">Total: $0.00</strong>
+                    </div>
+                  </section>
+                  <label>Issue date <input name="issueDate" type="date" required /></label>
+                  <label>Expiry date <input name="expiryDate" type="date" /></label>
+                  <details class="compact-document-options wide-field">
+                    <summary>Message and terms</summary>
+                    <div class="form-grid compact-document-options-grid">
+                      <p class="wide-field document-text-format-guide">
+                        Format: <code>**bold**</code>, <code>_italic_</code>,
+                        <code>## heading</code>, or <code>- list</code>.
+                      </p>
+                      <label class="wide-field"
+                        >Customer notes
+                        <textarea name="customerFacingNotes" maxlength="4000"></textarea>
+                      </label>
+                      <label class="wide-field"
+                        >Terms <textarea name="terms" maxlength="4000"></textarea>
+                      </label>
+                    </div>
+                  </details>
+                  <div class="form-actions">
+                    <button type="submit" aria-label="Create estimate draft and review">
+                      Create draft &amp; review
+                    </button>
+                  </div>
+                </form>
+              </section>
+              <details id="estimate-preview-panel" class="invoice-preview-panel">
+                <summary class="preview-panel-summary">
+                  <span class="preview-panel-title">Customer preview</span>
+                  <span id="estimate-preview-status" class="preview-panel-status"
+                    >Save an estimate to review it</span
+                  >
+                </summary>
+                <div class="preview-panel-content" aria-labelledby="estimate-preview-heading">
+                  <div class="preview-heading">
+                    <div>
+                      <h3 id="estimate-preview-heading">Estimate preview</h3>
+                      <p>
+                        Preview uses the same customer-facing renderer as the public estimate link.
+                      </p>
+                    </div>
+                  </div>
+                  <output id="estimate-document-preview" class="invoice-document-preview"
+                    ><span class="invoice-preview-empty"
+                      >Save an estimate or choose Preview from the list.</span
+                    ></output
+                  >
+                </div>
+              </details>
+            </div>
+            <div class="table-toolbar">
+              <label
+                >Find estimates
+                <input
+                  data-table-filter-target="estimates"
+                  placeholder="Estimate number, customer, or status"
+              /></label>
+              <output data-table-filter-count="estimates" role="status" aria-live="polite"></output>
+              <button type="button" class="secondary-command" data-table-export="estimates">
+                Download visible
+              </button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Number</th>
+                    <th>Customer</th>
+                    <th>Status</th>
+                    <th>Total</th>
+                    <th><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="estimates"></tbody>
+              </table>
+            </div>
+          </section>
+          <section
+            id="customer-deposit-section"
+            class="workflow-preference-section"
+            aria-labelledby="customer-deposit-heading"
+            hidden
+          >
+            <div class="section-heading">
+              <div>
+                <h2 id="customer-deposit-heading">Customer deposit requests</h2>
+                <p>
+                  Classify and approve a request before any money, tax, or ledger entry is recorded.
+                </p>
+              </div>
+            </div>
+            <div class="non-posting-callout" role="note">
+              This is a planning and approval record. Receiving, applying, refunding, and posting a
+              deposit stay disabled until the accounting and tax policy is configured.
+            </div>
+            <form id="customer-deposit-form" class="form-grid">
+              <label>Request number <input name="requestNumber" required maxlength="40" /></label>
+              <label
+                >Customer
+                <select name="customerId" required></select
+              ></label>
+              <label
+                >Classification
+                <select name="classification" required>
+                  <option value="REFUNDABLE_DEPOSIT">Refundable deposit</option>
+                  <option value="ADVANCE_PAYMENT">Advance payment</option>
+                </select>
+                <span class="field-help"
+                  >Choose refundable when the amount remains repayable; choose advance payment when
+                  it is intended to be applied to future work.</span
+                >
+              </label>
+              <label
+                >Related estimate
+                <select name="estimateId"></select
+              ></label>
+              <label
+                >Related project
+                <select name="projectId"></select
+              ></label>
+              <label>Request date <input name="requestDate" type="date" required /></label>
+              <label>Due date <input name="dueDate" type="date" /></label>
+              <label
+                >Requested amount (CAD)
+                <input name="amountMinor" inputmode="decimal" required />
+              </label>
+              <label class="wide-field"
+                >Purpose <textarea name="purpose" required maxlength="1000"></textarea>
+              </label>
+              <label class="wide-field"
+                >Customer message <textarea name="customerMessage" maxlength="2000"></textarea>
+              </label>
+              <div class="form-actions"><button type="submit">Save deposit request</button></div>
+            </form>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Request</th>
+                    <th>Customer</th>
+                    <th>Classification</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="customer-deposit-requests"></tbody>
+              </table>
+            </div>
+          </section>
+          <section
+            id="progress-billing-section"
+            class="workflow-preference-section"
+            aria-labelledby="progress-billing-heading"
+            hidden
+          >
+            <div class="section-heading">
+              <div>
+                <h2 id="progress-billing-heading">Progress billing plans</h2>
+                <p>
+                  Split an accepted estimate into deterministic milestones that always reconcile to
+                  the original net, tax, and total.
+                </p>
+              </div>
+            </div>
+            <div class="non-posting-callout" role="note">
+              Approval confirms the schedule only. Milestone invoice generation and posting remain
+              disabled pending final tax and deposit-application policy.
+            </div>
+            <form id="progress-billing-form" class="form-grid">
+              <label
+                >Accepted estimate
+                <select name="estimateId" required></select
+              ></label>
+              <label>Plan number <input name="planNumber" required maxlength="40" /></label>
+              <label
+                >Project
+                <select name="projectId"></select
+              ></label>
+              <label
+                >First milestone name
+                <input name="milestoneName" value="Initial progress" required maxlength="160" />
+              </label>
+              <label
+                >First milestone method
+                <select name="milestoneBasis" required>
+                  <option value="PERCENT_OF_ESTIMATE">Percentage of estimate</option>
+                  <option value="FIXED_SUBTOTAL">Fixed amount before tax</option>
+                </select>
+              </label>
+              <label
+                >First milestone value
+                <input name="milestoneValue" inputmode="decimal" required />
+                <span class="field-help"
+                  >Enter a percentage such as 25, or a fixed CAD amount, based on the method.</span
+                >
+              </label>
+              <label>First milestone due <input name="milestoneDueDate" type="date" /></label>
+              <label class="wide-field"
+                >Notes <textarea name="notes" maxlength="2000"></textarea>
+              </label>
+              <div class="form-actions"><button type="submit">Build reconciled plan</button></div>
+            </form>
+            <output id="progress-billing-detail"></output>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Plan</th>
+                    <th>Estimate</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="progress-billing-plans"></tbody>
+              </table>
+            </div>
+          </section>
+          <section id="recurring-schedules-section" aria-labelledby="recurring-schedules-heading">
+            <div class="section-heading">
+              <div>
+                <h2 id="recurring-schedules-heading">Recurring invoice plans</h2>
+                <p>
+                  PennyWise creates each due occurrence as a draft by default. Automations run while
+                  PennyWise is open on this computer; review history and blockers here.
+                </p>
+              </div>
+              <button id="refresh-recurring-schedules" class="secondary-command" type="button">
+                Refresh
+              </button>
+            </div>
+            <form id="recurring-schedule-form" class="form-grid">
+              <label
+                >Customer
+                <select name="customerId" required></select
+              ></label>
+              <label
+                >Frequency
+                <select name="frequency">
+                  <option value="MONTH">Monthly</option>
+                  <option value="WEEK">Weekly</option>
+                  <option value="YEAR">Yearly</option>
+                </select>
+              </label>
+              <label
+                >Every <input name="interval" type="number" min="1" max="120" value="1" required
+              /></label>
+              <label
+                >Day of month <input name="dayOfMonth" type="number" min="1" max="31" value="1"
+              /></label>
+              <label>First run <input name="startAt" type="datetime-local" required /></label>
+              <label>End date <input name="endAt" type="datetime-local" /></label>
+              <label
+                >When the app was closed
+                <select name="missedOccurrencePolicy">
+                  <option value="EVERY">Create every missed occurrence</option>
+                  <option value="LATEST">Create only the latest missed occurrence</option>
+                </select>
+              </label>
+              <label
+                >Invoice action
+                <select name="invoiceMode">
+                  <option value="DRAFT">Create a draft for review</option>
+                  <option value="FINALIZE">Create and finalize</option>
+                  <option value="SEND">Create, finalize, and send when email is enabled</option>
+                </select>
+              </label>
+              <label class="wide-field"
+                >Invoice template JSON
+                <textarea name="template" rows="5" required>
+{"currency":"CAD","paymentTermsDays":30,"lines":[{"description":"Recurring service","quantity":"1","unitPriceMinor":"0","discountMinor":"0"}]}</textarea
+                >
+              </label>
+              <div class="form-actions">
+                <button id="recurring-use-invoice-composer" class="secondary-command" type="button">
+                  Use current invoice composer as template
+                </button>
+                <button type="submit">Create recurring schedule</button>
+              </div>
+            </form>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Cadence</th>
+                    <th>Next run</th>
+                    <th>Status</th>
+                    <th>History</th>
+                    <th><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="recurring-schedules"></tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h2>Receivables</h2>
+            <div id="receivables-summary"></div>
+            <div class="workspace-title">
+              <div>
+                <h3>Overdue follow-up</h3>
+                <p>Review recipients and balances before sending any reminder.</p>
+              </div>
+              <button id="refresh-receivables-follow-up" class="secondary-command" type="button">
+                Refresh overdue
+              </button>
+              <button id="review-bulk-reminders" class="secondary-command" type="button">
+                Review reminder batch
+              </button>
+            </div>
+            <form id="reminder-settings-form" class="inline-form">
+              <label class="check"
+                ><input name="enabled" type="checkbox" /> Automated reminders</label
+              >
+              <label
+                >Tone
+                <select name="tone">
+                  <option value="FRIENDLY">Friendly</option>
+                  <option value="FIRM">Firm</option>
+                </select>
+              </label>
+              <label>Days relative to due date <input name="offsets" value="-3,0,7,14" /></label>
+              <label
+                >Quiet start <input name="quietStartHour" type="number" min="0" max="23" value="8"
+              /></label>
+              <label
+                >Quiet end <input name="quietEndHour" type="number" min="0" max="23" value="20"
+              /></label>
+              <button type="submit">Save reminder settings</button>
+              <output id="reminder-settings-status" role="status"></output>
+            </form>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Customer</th>
+                    <th>Age</th>
+                    <th>Amount</th>
+                    <th>Recipient</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="receivables-follow-up-rows"></tbody>
+              </table>
+            </div>
+          </section>
+          <section
+            id="bulk-entry-section"
+            class="bulk-entry-window cl-window"
+            hidden
+            aria-labelledby="bulk-entry-heading"
+          >
+            <header class="cl-window-titlebar" data-window-drag-handle>
+              <div>
+                <p class="section-kicker">Draft workbench</p>
+                <h2 id="bulk-entry-heading">Bulk entry</h2>
+                <p>
+                  Paste or enter several drafts at once. Nothing posts until you use the existing
+                  Post or Approve action.
+                </p>
+              </div>
+              <div class="cl-window-controls" aria-label="Bulk entry window controls">
+                <button
+                  type="button"
+                  class="window-control window-fit-control"
+                  data-window-action="fit"
+                  aria-label="Fit bulk entry to available space"
+                >
+                  Fit
+                </button>
+                <button
+                  type="button"
+                  class="window-control window-zoom-control"
+                  data-window-action="zoom-out"
+                  aria-label="Zoom out bulk entry"
+                >
+                  −
+                </button>
+                <button
+                  type="button"
+                  class="window-control window-zoom-control"
+                  data-window-action="zoom-reset"
+                  aria-label="Reset bulk entry zoom"
+                >
+                  <span id="bulk-entry-zoom-label">100%</span>
+                </button>
+                <button
+                  type="button"
+                  class="window-control window-zoom-control"
+                  data-window-action="zoom-in"
+                  aria-label="Zoom in bulk entry"
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  class="window-control"
+                  data-window-action="minimize"
+                  aria-label="Minimize bulk entry"
+                >
+                  −
+                </button>
+                <button
+                  type="button"
+                  class="window-control"
+                  data-window-action="maximize"
+                  aria-label="Maximize bulk entry"
+                >
+                  □
+                </button>
+                <button
+                  type="button"
+                  class="window-control"
+                  data-window-action="close"
+                  aria-label="Close bulk entry"
+                >
+                  ×
+                </button>
+              </div>
+            </header>
+            <div class="cl-window-body" data-window-body>
+              <div class="bulk-entry-toolbar">
+                <div class="bulk-entry-type-tabs" role="tablist" aria-label="Bulk entry type">
+                  <button
+                    id="bulk-entry-invoice-tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="true"
+                    data-bulk-entry-type="invoice"
+                  >
+                    Invoices
+                  </button>
+                  <button
+                    id="bulk-entry-bill-tab"
+                    type="button"
+                    role="tab"
+                    aria-selected="false"
+                    data-bulk-entry-type="bill"
+                  >
+                    Bills
+                  </button>
+                </div>
+                <div class="bulk-entry-actions">
+                  <button id="bulk-entry-add-row" type="button" class="secondary-command">
+                    Add row
+                  </button>
+                  <button id="bulk-entry-duplicate-row" type="button" class="secondary-command">
+                    Duplicate selected
+                  </button>
+                  <button id="bulk-entry-delete-row" type="button" class="secondary-command">
+                    Delete selected
+                  </button>
+                  <button id="bulk-entry-clear" type="button" class="secondary-command">
+                    Clear
+                  </button>
+                  <button id="bulk-entry-save" type="button">Save drafts</button>
+                  <button id="bulk-entry-save-close" type="button">Save &amp; close</button>
+                </div>
+              </div>
+              <p class="bulk-entry-safety-note" role="note">
+                <strong>Draft-only:</strong> Save validates and creates drafts through the existing
+                accounting services. It does not post journals, payments, inventory, or bank
+                activity.
+              </p>
+              <p class="field-help">
+                Paste tab-separated rows with headers such as Customer, Date, Description, Qty,
+                Rate, Vendor, Bill Number, Account, and Currency. PennyWise Accounting suggests
+                aliases and keeps uncertain matches visible for review.
+              </p>
+              <div
+                id="bulk-entry-grid"
+                class="bulk-entry-grid"
+                role="grid"
+                aria-label="Bulk entry grid"
+              ></div>
+              <div class="bulk-entry-footer">
+                <output
+                  id="bulk-entry-status"
+                  class="bulk-entry-status"
+                  role="status"
+                  aria-live="polite"
+                  >Add a row or paste tab-separated values into the grid.</output
+                >
+                <output
+                  id="bulk-entry-preview"
+                  class="bulk-entry-preview"
+                  role="status"
+                  aria-live="polite"
+                ></output>
+              </div>
+            </div>
+            <div class="cl-window-resize-handle" data-window-resize-handle aria-hidden="true"></div>
+          </section>
+        </section>

@@ -1,0 +1,130 @@
+        <section id="contracts-workspace" hidden aria-labelledby="contracts-heading">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">Customer agreements</p>
+              <h1 id="contracts-heading">Contracts and work authorizations</h1>
+              <p>
+                Create a clear draft from a starter, complete the job details, review it, and print
+                it.
+              </p>
+            </div>
+            <button id="refresh-contracts" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <aside class="contract-safety-note" aria-label="Contract template guidance">
+            <strong>Starter documents, not legal advice.</strong>
+            <span
+              >Review local requirements and obtain legal advice where appropriate before asking
+              anyone to sign.</span
+            >
+          </aside>
+          <div class="contracts-workspace-grid">
+            <aside class="contracts-library" aria-labelledby="contract-library-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Start</p>
+                  <h2 id="contract-library-heading">Templates and drafts</h2>
+                </div>
+                <button id="new-contract-draft" class="text-command" type="button">
+                  New draft
+                </button>
+              </div>
+              <label class="contract-template-select"
+                >Starter template
+                <select
+                  id="contract-starter-select"
+                  name="starterKey"
+                  form="contract-form"
+                ></select>
+              </label>
+              <div id="contract-template-source" class="contract-template-source"></div>
+              <div id="contracts-list" class="contracts-list" aria-label="Saved contracts">
+                <p class="empty-state">Loading contract drafts…</p>
+              </div>
+            </aside>
+            <form id="contract-form" class="contract-editor" novalidate>
+              <input name="contractId" type="hidden" />
+              <div class="contract-editor-heading">
+                <div>
+                  <p class="section-kicker">Draft editor</p>
+                  <h2 id="contract-editor-heading">Create a work agreement</h2>
+                </div>
+                <output id="contract-save-status" class="save-status" aria-live="polite"
+                  >New draft</output
+                >
+              </div>
+              <div class="form-grid contract-reference-grid">
+                <label class="wide-field"
+                  >Document title
+                  <input
+                    name="title"
+                    maxlength="200"
+                    placeholder="Use the selected starter title"
+                  />
+                </label>
+                <label
+                  >Customer
+                  <select name="customerId"></select>
+                </label>
+                <label
+                  >Job or project
+                  <select name="projectId"></select>
+                </label>
+                <label
+                  >Estimate
+                  <select name="estimateId"></select>
+                </label>
+                <label
+                  >Jurisdiction
+                  <input
+                    name="jurisdiction"
+                    maxlength="120"
+                    placeholder="Select starter guidance first"
+                  />
+                </label>
+              </div>
+              <div
+                id="contract-variable-fields"
+                class="contract-variable-fields"
+                aria-live="polite"
+              >
+                <p class="field-help">Start a draft to load and prefill the contract fields.</p>
+              </div>
+              <label class="wide-field"
+                >Draft wording
+                <textarea name="content" rows="16" maxlength="30000" disabled></textarea>
+              </label>
+              <label
+                id="contract-review-acknowledgement"
+                class="contract-review-acknowledgement"
+                hidden
+              >
+                <input name="legalReviewAcknowledged" type="checkbox" />
+                I have reviewed this draft and understand that it needs appropriate legal and
+                jurisdictional review before signing.
+              </label>
+              <div class="form-actions contract-editor-actions">
+                <button id="save-contract-draft" type="submit">Create draft</button>
+                <button id="mark-contract-ready" class="secondary-command" type="button" hidden>
+                  Mark ready for review
+                </button>
+                <button id="print-contract" class="secondary-command" type="button" hidden>
+                  Print
+                </button>
+              </div>
+            </form>
+            <section class="contract-preview-panel" aria-labelledby="contract-preview-heading">
+              <div class="section-heading compact-heading">
+                <div>
+                  <p class="section-kicker">Preview</p>
+                  <h2 id="contract-preview-heading">Read before sending or signing</h2>
+                </div>
+                <a id="contract-source-link" href="#" target="_blank" rel="noopener" hidden
+                  >Source guidance</a
+                >
+              </div>
+              <pre id="contract-preview" class="contract-preview">
+Choose a starter and create a draft to see the print-ready preview.</pre
+              >
+            </section>
+          </div>
+        </section>

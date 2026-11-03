@@ -1,0 +1,213 @@
+        <section id="pos-workspace" hidden aria-labelledby="pos-heading">
+          <div class="section-heading">
+            <div>
+              <h1 id="pos-heading">Point of sale</h1>
+              <p>
+                Fast checkout with the same tax, inventory, invoice, and payment controls as the
+                rest of PennyWise Accounting.
+              </p>
+            </div>
+            <button id="refresh-pos" class="secondary-command" type="button">Refresh</button>
+          </div>
+          <p class="non-posting-callout" role="note">
+            <strong>Online, server-authoritative checkout:</strong> this beta supports cash and
+            manually recorded tender only. Card credentials and true offline posting are not
+            accepted.
+          </p>
+          <p id="pos-capabilities-status" class="muted-copy" role="status" aria-live="polite">
+            Loading POS interaction capabilities.
+          </p>
+          <div class="columns">
+            <section>
+              <h2>Register and shift</h2>
+              <details class="document-controls">
+                <summary>Configure a register</summary>
+                <form id="pos-register-config-form" class="form-grid">
+                  <label>Code <input name="code" maxlength="40" required /></label>
+                  <label>Name <input name="name" maxlength="200" required /></label>
+                  <label
+                    >Inventory location
+                    <select name="inventoryLocationId" required></select
+                  ></label>
+                  <label
+                    >Cash drawer account
+                    <select name="cashAccountId" required></select
+                  ></label>
+                  <div class="form-actions"><button type="submit">Add register</button></div>
+                </form>
+              </details>
+              <form id="pos-register-form" class="form-grid">
+                <label
+                  >Register
+                  <select name="registerId" required></select
+                ></label>
+                <label>Business date <input name="businessDate" type="date" required /></label>
+                <label
+                  >Opening float (minor units)
+                  <input name="openingFloatMinor" inputmode="numeric" value="0" required
+                /></label>
+                <div class="form-actions"><button type="submit">Open shift</button></div>
+              </form>
+              <output id="pos-shift-status" aria-live="polite">No shift loaded.</output>
+              <form id="pos-close-shift-form" class="inline-form" hidden>
+                <label
+                  >Counted cash (minor units)
+                  <input name="countedCashMinor" inputmode="numeric" required
+                /></label>
+                <button type="submit">Close shift</button>
+              </form>
+              <output id="pos-reconciliation" aria-live="polite"></output>
+            </section>
+            <section>
+              <h2>Checkout</h2>
+              <form id="pos-sale-form" class="form-grid">
+                <label
+                  >Product or service
+                  <select name="productItemId" required></select
+                ></label>
+                <label
+                  >Scan exact SKU / barcode / part number
+                  <input
+                    name="productLookup"
+                    autocomplete="off"
+                    placeholder="Scan, then press Enter"
+                /></label>
+                <output id="pos-product-lookup-output" aria-live="polite"></output>
+                <label
+                  >Quantity <input name="quantity" value="1" pattern="\d+(\.\d{1,6})?" required
+                /></label>
+                <label
+                  >Unit price (minor units)
+                  <input name="unitPriceMinor" inputmode="numeric" required
+                /></label>
+                <div class="form-span">
+                  <h3>Cart</h3>
+                  <p class="field-help">
+                    Add each item once. The server re-calculates every line, tax, and total before
+                    posting.
+                  </p>
+                  <div class="form-actions">
+                    <button id="pos-add-line" type="button" class="secondary-command">
+                      Add line to cart
+                    </button>
+                  </div>
+                  <div class="table-wrap">
+                    <table>
+                      <caption class="sr-only">
+                        Current point-of-sale cart
+                      </caption>
+                      <thead>
+                        <tr>
+                          <th>Item</th>
+                          <th>Qty</th>
+                          <th>Unit price</th>
+                          <th>Remove</th>
+                        </tr>
+                      </thead>
+                      <tbody id="pos-cart-lines"></tbody>
+                    </table>
+                  </div>
+                </div>
+                <div id="pos-tenders" class="form-span">
+                  <h3>Tender</h3>
+                  <p class="field-help">
+                    Split tender is supported for cash and manually recorded tender. Change is
+                    issued only against cash.
+                  </p>
+                  <div id="pos-tender-rows"></div>
+                  <button id="pos-add-tender" type="button" class="secondary-command">
+                    Add another tender
+                  </button>
+                </div>
+                <div class="form-actions">
+                  <button id="pos-preview" type="button" class="secondary-command">
+                    Preview total
+                  </button>
+                  <button type="submit">Complete cash sale</button>
+                </div>
+              </form>
+              <output id="pos-preview-output" aria-live="polite"></output>
+              <output id="pos-sale-output" aria-live="polite"></output>
+              <section
+                id="pos-receipt-section"
+                class="form-span"
+                hidden
+                aria-labelledby="pos-receipt-heading"
+              >
+                <h3 id="pos-receipt-heading">Receipt</h3>
+                <p id="pos-receipt-status" class="field-help">
+                  The receipt is an in-browser print surface linked to the posted invoice.
+                </p>
+                <button id="pos-print-receipt" type="button" class="secondary-command">
+                  Print receipt
+                </button>
+              </section>
+            </section>
+          </div>
+          <article
+            id="pos-printable-receipt"
+            class="pos-printable-receipt"
+            hidden
+            aria-labelledby="pos-printable-receipt-heading"
+          >
+            <h2 id="pos-printable-receipt-heading">PennyWise Accounting receipt</h2>
+            <p id="pos-printable-receipt-number"></p>
+            <div id="pos-printable-receipt-lines"></div>
+            <p id="pos-printable-receipt-total"></p>
+            <p id="pos-printable-receipt-tenders"></p>
+            <p class="muted-copy">Posted through the online, server-authoritative POS workflow.</p>
+          </article>
+          <section>
+            <h2>Recent sales</h2>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Receipt</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="pos-sales"></tbody>
+              </table>
+            </div>
+          </section>
+          <section>
+            <h2>Returns and refunds</h2>
+            <p class="muted-copy">
+              Return a completed sale through the same credit-note, payment-refund, inventory, and
+              audit controls used elsewhere in PennyWise Accounting.
+            </p>
+            <form id="pos-return-form" class="form-grid">
+              <label
+                >Completed sale
+                <select name="saleId" required></select
+              ></label>
+              <label
+                >Sale line
+                <select name="saleLineId" required></select
+              ></label>
+              <label
+                >Quantity (optional)
+                <input name="quantity" inputmode="decimal" pattern="\d+(\.\d{1,6})?"
+              /></label>
+              <label
+                >Disposition
+                <select name="disposition">
+                  <option value="RESTOCK">Restock</option>
+                  <option value="WRITE_OFF">Write off</option>
+                </select>
+                ></label
+              >
+              <label
+                >Reason <input name="reason" maxlength="500" required value="Customer return"
+              /></label>
+              <label class="check"
+                ><input name="refund" type="checkbox" checked />Refund original tender</label
+              >
+              <div class="form-actions"><button type="submit">Process return</button></div>
+            </form>
+            <output id="pos-return-output" aria-live="polite"></output>
+          </section>
+        </section>

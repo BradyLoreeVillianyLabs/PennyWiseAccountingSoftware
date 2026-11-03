@@ -23,3 +23,29 @@ and production-style runtimes; organization membership, not the sample label, de
 permissions. Use a disposable database and never use these identities for live customer data.
 
 The release contract is checked with `pnpm.cmd test:e2e` and `pnpm.cmd test:accessibility`. Refer to `docs/RELEASE_CANDIDATE.md` and `docs/USER_ACCEPTANCE_SCRIPTS.md` before expanding the beta audience.
+
+## Source layout
+
+`app.js` is the entry point. Modules only declare; each one exports an `init…()` function that binds its events, and `app.js` calls those functions in order before loading the session. The build bundles everything into `dist/`, which is what `serve.mjs` serves, so rebuild after changing a source file.
+
+| Path                       | Contents                                                                                             |
+| -------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `src/state.js`             | The element registry and shared state. Read shared values directly; write them through their setter. |
+| `src/api.js`, `src/lib/`   | Fetch helpers and code shared by more than one workspace.                                            |
+| `src/nav.js`               | Navigation definitions and the left rail.                                                            |
+| `src/shell.js`             | Workspace switching, layout, platform windows, and display preferences.                              |
+| `src/session.js`           | Sign-in, organization selection, and loading the active organization.                                |
+| `src/workspaces/<name>.js` | One module for each workspace.                                                                       |
+| `src/partials/<name>.html` | Workspace markup. The build replaces each `<!-- @partial name -->` line in `index.html` with it.     |
+| `styles/<name>.css`        | Module stylesheets, added after `styles.css` by the build.                                           |
+| `src/ui-flags.js`          | The UI v2 flag: `isUiV2Enabled()` and `setUiV2Enabled(bool)`.                                        |
+| `src/ui-kit/`, `charts.js` | UI v2 components and charts. See `src/ui-kit/README.md` for the props contract.                      |
+
+Partials are spliced in byte for byte, so they keep their original indentation and Prettier skips them.
+
+Workspaces never import each other, which is what lets streams work in parallel:
+
+- To open another workspace, call `navigateTo(workspaceId, { scrollToTop, refreshData })` from `src/shell.js`.
+- To call a function in another workspace, register it with `registerWorkspaceCalls()` in the module that owns it, and add a forwarder of the same name to `src/lib/workspace-calls.js`. Callers import the forwarder.
+
+`scripts/verify-assets.mjs` fails the build on a workspace-to-workspace import or an import cycle.

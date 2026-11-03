@@ -248,6 +248,13 @@
   `docs/tasks/ui-v2/U0-foundations.md`. Later U phases need separate authorization. No changes to
   `packages/accounting-core`, `packages/db`, or posting code are authorized by this entry.
 
+- UI v2 continuation authorized by the owner on 2026-11-02: all UI v2 phases U0-U8 are approved,
+  and the prior phase-start gates are cleared. Streams may start from the latest `ui/integration`
+  under their existing task contracts. This authorization does not mark open PRs as merged, CI as
+  passing, or waive task acceptance, validation, cross-engine review, accounting/security rules, or
+  external release-acceptance evidence. See `docs/tasks/ui-v2/W1-api-summary-handoffs.md` for the
+  Wave 1 API-summary handoffs.
+
 - Dependency maintenance authorized by the owner on 2026-10-31: the `deps` Wave 0 stream in
   issue #35 may update package manifests, `pnpm-lock.yaml`, and `pnpm.overrides` to resolve
   dependency vulnerabilities that block CI. No application, UI, schema, migration, or accounting

@@ -258,6 +258,7 @@ import {
 } from "./services/request-rate-limiter.js";
 import { ReportService } from "./services/report-service.js";
 import { Phase10ReportService } from "./services/phase10-report-service.js";
+import { UiSummaryService } from "./services/ui-summary-service.js";
 import { ReportViewService } from "./services/report-view-service.js";
 import { BooksHealthService } from "./services/books-health-service.js";
 import { AccountantService } from "./services/accountant-service.js";
@@ -314,6 +315,7 @@ import {
 } from "./services/shipping/carrier-adapter.js";
 import { ShippingService } from "./services/shipping/shipping-service.js";
 import { registerShippingRoutes } from "./http/shipping-routes.js";
+import { registerUiSummaryRoutes } from "./http/ui-summary-routes.js";
 import {
   FetchWebhookHttpClient,
   type WebhookHttpClient,
@@ -645,6 +647,7 @@ export function buildApp(options: BuildAppOptions = {}) {
   const journalService = new JournalService(prisma);
   const reportService = new ReportService(prisma);
   const phase10ReportService = new Phase10ReportService(prisma);
+  const uiSummaryService = new UiSummaryService(prisma, phase10ReportService);
   const reportViewService = new ReportViewService(prisma);
   const booksHealthService = new BooksHealthService(prisma);
   const accountantService = new AccountantService(prisma);
@@ -2274,6 +2277,7 @@ export function buildApp(options: BuildAppOptions = {}) {
   registerEmailConnectionRoutes(app, prisma, identityAdapter, emailConnectionService);
   registerPurchaseRoutes(app, prisma, identityAdapter, purchaseService, purchaseAttachmentService);
   registerShippingRoutes(app, prisma, identityAdapter, shippingService);
+  registerUiSummaryRoutes(app, prisma, identityAdapter, uiSummaryService);
   registerPlanningRoutes(
     app,
     prisma,

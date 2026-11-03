@@ -17,6 +17,12 @@ import operations from "./native-operations.cjs";
 import offlineActivation from "./offline-activation.cjs";
 import provisioning from "./provision-beta.cjs";
 
+function skipUnlessWindows(context) {
+  if (process.platform === "win32") return false;
+  context.skip("Windows path and cmd.exe fixture");
+  return true;
+}
+
 test("preissued setup activates a fresh installation, preserves updates, and refuses another slot", () => {
   const root = mkdtempSync(join(tmpdir(), "pennywise-provision-test-"));
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
@@ -137,7 +143,8 @@ test("native backup manifest verifies every archive member", () => {
   }
 });
 
-test("nightly task wrapper supports both installed MSIX and unpackaged beta entries", () => {
+test("nightly task wrapper supports both installed MSIX and unpackaged beta entries", (context) => {
+  if (skipUnlessWindows(context)) return;
   const wrapper = operations.taskWrapperContents("TypeWritingMonkeys.PennyWiseAccounting");
   assert.match(wrapper, /Get-AppxPackage -Name 'TypeWritingMonkeys\.PennyWiseAccounting'/);
   assert.match(wrapper, /!PennyWiseBackup/);
@@ -197,7 +204,8 @@ test("nightly backup task XML has a UTF-16LE BOM and does not persist config whe
   }
 });
 
-test("backup destinations distinguish physical disks, same-disk volumes, sync folders, and network locations", () => {
+test("backup destinations distinguish physical disks, same-disk volumes, sync folders, and network locations", (context) => {
+  if (skipUnlessWindows(context)) return;
   const diskNumberForVolume = (volume) => ({ "c:\\": 0, "d:\\": 0, "e:\\": 1 })[volume];
   assert.deepEqual(
     operations.allowedBackupDestination(
@@ -329,7 +337,8 @@ test("diagnostics redact stored secrets, database URLs, email, and local data pa
   assert.match(result, /\[REDACTED\]|postgresql:\/\/\[REDACTED\]/);
 });
 
-test("verified local PostgreSQL runtime supports initdb child processes and repairs tampering", () => {
+test("verified local PostgreSQL runtime supports initdb child processes and repairs tampering", (context) => {
+  if (skipUnlessWindows(context)) return;
   const root = mkdtempSync(join(tmpdir(), "pennywise-native-runtime-"));
   try {
     const resources = join(root, "resources");
@@ -366,7 +375,8 @@ test("verified local PostgreSQL runtime supports initdb child processes and repa
   }
 });
 
-test("native backup and restore round-trip a database dump, documents, and installation-bound secrets", async () => {
+test("native backup and restore round-trip a database dump, documents, and installation-bound secrets", async (context) => {
+  if (skipUnlessWindows(context)) return;
   const root = mkdtempSync(join(tmpdir(), "pennywise-native-roundtrip-"));
   const previousOneDrive = process.env.OneDrive;
   process.env.OneDrive = join(root, "synced");
@@ -418,7 +428,8 @@ test("native backup and restore round-trip a database dump, documents, and insta
   }
 });
 
-test("restore succeeds onto a replacement installation and discloses the source installation", async () => {
+test("restore succeeds onto a replacement installation and discloses the source installation", async (context) => {
+  if (skipUnlessWindows(context)) return;
   const root = mkdtempSync(join(tmpdir(), "pennywise-native-cross-install-"));
   const previousOneDrive = process.env.OneDrive;
   process.env.OneDrive = join(root, "synced");

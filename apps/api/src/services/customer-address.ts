@@ -30,7 +30,7 @@ export const customerAddressSchema = z
     countryCode: countryCode.optional(),
     country: countryCode.optional(),
     phone: addressText(40),
-    email: z.string().trim().email().nullable().optional(),
+    email: z.string().trim().pipe(z.email()).nullable().optional(),
     isDefault: z.boolean().optional()
   })
   .strict()
@@ -39,7 +39,7 @@ export const customerAddressSchema = z
     const resolvedSubdivision = value.subdivisionCode ?? value.province;
     if (!resolvedCountry) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         path: ["countryCode"],
         message: "countryCode is required."
       });
@@ -47,20 +47,20 @@ export const customerAddressSchema = z
     }
     if (value.countryCode && value.country && value.countryCode !== value.country)
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         path: ["countryCode"],
         message: "countryCode and country must identify the same country."
       });
     if (value.subdivisionCode && value.province && value.subdivisionCode !== value.province)
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         path: ["subdivisionCode"],
         message: "subdivisionCode and province must identify the same subdivision."
       });
     if (resolvedCountry === "CA" || resolvedCountry === "US") {
       if (!resolvedSubdivision) {
         context.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: ["subdivisionCode"],
           message: `subdivisionCode is required for ${resolvedCountry} addresses.`
         });
@@ -69,7 +69,7 @@ export const customerAddressSchema = z
           normalizeSubdivisionCode(resolvedCountry, resolvedSubdivision);
         } catch (error) {
           context.addIssue({
-            code: z.ZodIssueCode.custom,
+            code: "custom",
             path: ["subdivisionCode"],
             message: error instanceof Error ? error.message : "Subdivision code is invalid."
           });
@@ -82,7 +82,7 @@ export const customerAddressSchema = z
           : /^\d{5}(?:-\d{4})?$/.test(postal);
       if (!validPostal)
         context.addIssue({
-          code: z.ZodIssueCode.custom,
+          code: "custom",
           path: ["postalCode"],
           message:
             resolvedCountry === "CA"

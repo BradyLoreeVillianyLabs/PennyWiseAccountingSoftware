@@ -16,7 +16,7 @@ describe("payment instruction safety", () => {
     "https://10.0.0.4/pay",
     "https://[::1]/pay"
   ])("rejects unsafe payment URL %s", (url) => {
-    expect(() => validatePaymentInstructionUrl(url)).toThrowError(
+    expect(() => validatePaymentInstructionUrl(url)).toThrow(
       "Payment links must use https and a public host."
     );
   });

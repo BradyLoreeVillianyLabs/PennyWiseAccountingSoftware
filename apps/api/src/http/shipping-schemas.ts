@@ -17,7 +17,7 @@ export const shippingAddressSchema = z
     postalCode: nonEmptyStringSchema.max(40),
     countryCode: z.string().regex(/^[A-Z]{2}$/),
     phone: nonEmptyStringSchema.max(80).nullable().optional(),
-    email: z.string().email().max(320).nullable().optional()
+    email: z.email().max(320).nullable().optional()
   })
   .strict();
 

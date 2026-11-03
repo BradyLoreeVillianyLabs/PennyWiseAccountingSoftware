@@ -19,7 +19,7 @@ export const calendarQuerySchema = z
     endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
   })
   .strict();
-export const idSchema = z.string().uuid();
+export const idSchema = z.uuid();
 export const minorUnitStringSchema = z.string().regex(/^\d+$/);
 export const signedMinorUnitStringSchema = z.string().regex(/^-?\d+$/);
 export const quantityStringSchema = z.string().regex(/^\d+(?:\.\d{1,6})?$/);
@@ -82,7 +82,7 @@ export const fxRateSnapshotSchema = z
   .object({
     transactionCurrency: z.string().regex(/^[A-Z]{3}$/),
     rate: z.string().regex(/^\d+(?:\.\d+)?$/),
-    effectiveAt: z.string().datetime({ offset: true }),
+    effectiveAt: z.iso.datetime({ offset: true }),
     method: z.literal("MANUAL").default("MANUAL"),
     purpose: z
       .enum(["TRANSACTION", "CLOSING", "AVERAGE", "ACTUAL_SETTLEMENT"])
@@ -100,7 +100,7 @@ export const fxRevaluationSchema = z
   .strict();
 
 export const createInvitationSchema = z.object({
-  email: z.string().email(),
+  email: z.email(),
   role: roleSchema
 });
 
@@ -197,7 +197,7 @@ export const apiCredentialSchema = z
   .object({
     name: nonEmptyStringSchema.max(120),
     scopes: z.array(nonEmptyStringSchema.max(80)).max(20),
-    expiresAt: z.string().datetime({ offset: true }).optional()
+    expiresAt: z.iso.datetime({ offset: true }).optional()
   })
   .strict();
 
@@ -240,29 +240,29 @@ export const connectorDraftSchema = z
       .toUpperCase()
       .regex(/^[A-Z0-9_-]{2,80}$/),
     displayName: nonEmptyStringSchema.max(120),
-    mapping: z.record(z.unknown()).default({})
+    mapping: z.record(z.string(), z.unknown()).default({})
   })
   .strict();
 
 export const connectorConnectSchema = z
   .object({
-    credentials: z.record(z.unknown()).refine((value) => Object.keys(value).length > 0),
-    backfillStartAt: z.string().datetime({ offset: true }).optional(),
-    backfillEndAt: z.string().datetime({ offset: true }).optional()
+    credentials: z.record(z.string(), z.unknown()).refine((value) => Object.keys(value).length > 0),
+    backfillStartAt: z.iso.datetime({ offset: true }).optional(),
+    backfillEndAt: z.iso.datetime({ offset: true }).optional()
   })
   .strict();
 
 export const connectorMappingSchema = z
   .object({
     version: z.number().int().positive(),
-    mapping: z.record(z.unknown())
+    mapping: z.record(z.string(), z.unknown())
   })
   .strict();
 
 export const connectorSyncSchema = z
   .object({
-    from: z.string().datetime({ offset: true }).optional(),
-    to: z.string().datetime({ offset: true }).optional(),
+    from: z.iso.datetime({ offset: true }).optional(),
+    to: z.iso.datetime({ offset: true }).optional(),
     maxPages: z.number().int().min(1).max(10).default(3),
     pageSize: z.number().int().min(1).max(100).optional(),
     scope: z.enum(["ORDERS", "SETTLEMENTS", "ALL"]).optional(),
@@ -280,13 +280,13 @@ export const connectorSyncSchema = z
 const catalogImageSchema = z
   .object({
     externalImageId: z.string().trim().min(1).max(200),
-    remoteUrl: z.string().trim().url().max(2048),
+    remoteUrl: z.string().trim().pipe(z.url().max(2048)),
     contentTypeHint: z.string().trim().max(120).nullable().optional(),
     byteLengthHint: z.string().regex(/^\d+$/).nullable().optional(),
     width: z.number().int().positive().max(100_000).nullable().optional(),
     height: z.number().int().positive().max(100_000).nullable().optional(),
     position: z.number().int().min(0).max(100_000).optional(),
-    safeMetadata: z.record(z.unknown()).optional()
+    safeMetadata: z.record(z.string(), z.unknown()).optional()
   })
   .strict();
 
@@ -299,16 +299,16 @@ const catalogVariantSchema = z
     gtin: z.string().trim().max(32).nullable().optional(),
     manufacturer: z.string().trim().max(200).nullable().optional(),
     manufacturerPartNumber: z.string().trim().max(200).nullable().optional(),
-    variantSignature: z.record(z.string().max(500)).optional(),
+    variantSignature: z.record(z.string(), z.string().max(500)).optional(),
     sourceStatus: z.string().trim().max(80).nullable().optional(),
-    providerUpdatedAt: z.string().datetime({ offset: true }).nullable().optional(),
+    providerUpdatedAt: z.iso.datetime({ offset: true }).nullable().optional(),
     observedQuantityMicros: z
       .string()
       .regex(/^-?\d+$/)
       .nullable()
       .optional(),
     images: z.array(catalogImageSchema).max(100).optional(),
-    safeMetadata: z.record(z.unknown()).optional()
+    safeMetadata: z.record(z.string(), z.unknown()).optional()
   })
   .strict();
 
@@ -318,8 +318,8 @@ export const connectorCatalogIngestSchema = z
     name: nonEmptyStringSchema.max(500),
     description: z.string().trim().max(20_000).nullable().optional(),
     sourceStatus: z.string().trim().max(80).nullable().optional(),
-    sourceUrl: z.string().trim().url().max(2048).nullable().optional(),
-    providerUpdatedAt: z.string().datetime({ offset: true }).nullable().optional(),
+    sourceUrl: z.string().trim().pipe(z.url().max(2048)).nullable().optional(),
+    providerUpdatedAt: z.iso.datetime({ offset: true }).nullable().optional(),
     images: z.array(catalogImageSchema).max(100).optional(),
     variants: z.array(catalogVariantSchema).min(1).max(1_000)
   })
@@ -398,8 +398,8 @@ export const inventorySyncObservationSchema = z
       .regex(/^-?\d+$/)
       .nullable()
       .optional(),
-    providerObservedAt: z.string().datetime({ offset: true }).nullable().optional(),
-    safeMetadata: z.record(z.unknown()).optional()
+    providerObservedAt: z.iso.datetime({ offset: true }).nullable().optional(),
+    safeMetadata: z.record(z.string(), z.unknown()).optional()
   })
   .strict();
 
@@ -436,7 +436,7 @@ export const catalogImageDecisionSchema = z
   .strict();
 
 export const connectorWebhookRegistrationSchema = z
-  .object({ deliveryUrl: z.string().trim().url().max(2048) })
+  .object({ deliveryUrl: z.string().trim().pipe(z.url().max(2048)) })
   .strict();
 
 export const connectorWebhookSecretSchema = z
@@ -448,7 +448,7 @@ export const etsyOAuthStartSchema = z
     apiKey: z.string().trim().min(1).max(256),
     sharedSecret: z.string().trim().min(1).max(512),
     shopId: z.string().trim().min(1).max(200).optional(),
-    redirectUri: z.string().trim().url().max(2048)
+    redirectUri: z.string().trim().pipe(z.url().max(2048))
   })
   .strict();
 
@@ -483,7 +483,7 @@ export const commerceInboxEventSchema = z
     resourceId: z.string().trim().min(1).max(200),
     eventType: z.string().trim().min(1).max(120),
     eventVersion: z.string().trim().max(80).nullable().optional(),
-    occurredAt: z.string().datetime({ offset: true }).nullable().optional(),
+    occurredAt: z.iso.datetime({ offset: true }).nullable().optional(),
     sourceCurrency: z
       .string()
       .regex(/^[A-Z]{3}$/)
@@ -499,8 +499,8 @@ export const commerceInboxEventSchema = z
       .regex(/^[A-Z]{3}$/)
       .nullable()
       .optional(),
-    rawPayload: z.record(z.unknown()),
-    normalizedPayload: z.record(z.unknown()).nullable().optional(),
+    rawPayload: z.record(z.string(), z.unknown()),
+    normalizedPayload: z.record(z.string(), z.unknown()).nullable().optional(),
     normalizedSchemaVersion: z.literal(1).optional(),
     normalizationIssues: z.array(commerceNormalizationIssueSchema).max(500).optional(),
     mappingVersion: z.number().int().positive().max(1000).optional()
@@ -510,7 +510,7 @@ export const commerceInboxEventSchema = z
 export const commerceInboxReviewSchema = z
   .object({
     status: z.enum(["REVIEW_REQUIRED", "NORMALIZED", "DEAD_LETTER"]),
-    normalizedPayload: z.record(z.unknown()).nullable().optional(),
+    normalizedPayload: z.record(z.string(), z.unknown()).nullable().optional(),
     reviewNote: z.string().trim().max(2000).nullable().optional()
   })
   .strict();
@@ -520,7 +520,7 @@ const commerceOrderCustomerSchema = z
     customerNumber: nonEmptyStringSchema.max(40).regex(/^[A-Za-z0-9-]+$/),
     displayName: nonEmptyStringSchema.max(200),
     legalName: z.string().trim().max(200).nullable().optional(),
-    email: z.string().email().nullable().optional(),
+    email: z.email().nullable().optional(),
     telephone: z.string().trim().max(40).nullable().optional(),
     defaultPaymentTermsDays: z.number().int().min(0).max(365).default(30),
     defaultCurrency: z
@@ -689,7 +689,7 @@ const addressSchema = z
   .superRefine((value, context) => {
     if (value.country === "CA" && !/^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$/.test(value.postalCode)) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         path: ["postalCode"],
         message: "Canadian postal code is invalid."
       });
@@ -699,7 +699,7 @@ const addressSchema = z
 const contactSchema = z
   .object({
     name: nonEmptyStringSchema.max(120),
-    email: z.string().email().optional(),
+    email: z.email().optional(),
     telephone: z.string().trim().max(40).optional()
   })
   .strict();
@@ -719,10 +719,10 @@ export const createCustomerSchema = z
     billingAddress: customerAddressSchema.nullable().optional(),
     shippingAddress: customerAddressSchema.nullable().optional(),
     serviceAddress: customerAddressSchema.nullable().optional(),
-    email: z.string().email().nullable().optional(),
+    email: z.email().nullable().optional(),
     documentLanguage: z.enum(["en-CA", "fr-CA", "BILINGUAL"]).nullable().optional(),
     telephone: z.string().trim().max(40).nullable().optional(),
-    website: z.string().url().nullable().optional(),
+    website: z.url().nullable().optional(),
     taxRegistrationIdentifiers: z
       .record(z.string().trim().max(40), z.string().trim().max(80))
       .optional(),
@@ -1018,8 +1018,8 @@ export const createRecurringScheduleSchema = z
     interval: z.number().int().min(1).max(120).default(1),
     dayOfMonth: z.number().int().min(1).max(31).nullable().optional(),
     timeZone: nonEmptyStringSchema.max(80).default("America/Edmonton"),
-    startAt: z.string().datetime({ offset: true }),
-    endAt: z.string().datetime({ offset: true }).nullable().optional(),
+    startAt: z.iso.datetime({ offset: true }),
+    endAt: z.iso.datetime({ offset: true }).nullable().optional(),
     missedOccurrencePolicy: z.enum(["EVERY", "LATEST"]).default("EVERY"),
     invoiceMode: z.enum(["DRAFT", "FINALIZE", "SEND"]).default("DRAFT"),
     template: z.record(z.string(), z.unknown())
@@ -1086,8 +1086,8 @@ export const createProjectWorkItemSchema = z
     category: optionalText(80),
     label: optionalText(80),
     location: optionalText(500),
-    startAt: z.string().datetime({ offset: true }).nullable().optional(),
-    endAt: z.string().datetime({ offset: true }).nullable().optional(),
+    startAt: z.iso.datetime({ offset: true }).nullable().optional(),
+    endAt: z.iso.datetime({ offset: true }).nullable().optional(),
     relatedResourceType: z.enum(["PROJECT", "INVOICE", "ESTIMATE", "BILL"]).nullable().optional(),
     relatedResourceId: idSchema.nullable().optional(),
     startDate: projectWorkItemDateSchema.nullable().optional(),
@@ -1122,7 +1122,7 @@ export const createCustomerContactSchema = z
   .object({
     name: nonEmptyStringSchema.max(200),
     role: optionalText(120),
-    email: z.string().email().nullable().optional(),
+    email: z.email().nullable().optional(),
     telephone: z.string().trim().max(40).nullable().optional(),
     preferredChannel: optionalText(80),
     notes: optionalText(4000)
@@ -1140,7 +1140,7 @@ export const createCustomerActivitySchema = z
     category: optionalText(80),
     subject: optionalText(240),
     body: nonEmptyStringSchema.max(10_000),
-    happenedAt: z.string().datetime({ offset: true }).optional(),
+    happenedAt: z.iso.datetime({ offset: true }).optional(),
     contactId: idSchema.nullable().optional(),
     relatedResourceType: z.enum(["PROJECT", "INVOICE", "ESTIMATE", "BILL"]).nullable().optional(),
     relatedResourceId: idSchema.nullable().optional()
@@ -1168,8 +1168,8 @@ export const createTimeEntrySchema = z
     rateMinor: minorUnitStringSchema,
     description: optionalText(2000),
     billable: z.boolean().default(true),
-    startedAt: z.string().datetime({ offset: true }).nullable().optional(),
-    endedAt: z.string().datetime({ offset: true }).nullable().optional()
+    startedAt: z.iso.datetime({ offset: true }).nullable().optional(),
+    endedAt: z.iso.datetime({ offset: true }).nullable().optional()
   })
   .strict();
 
@@ -1648,7 +1648,7 @@ export const emailConnectionCallbackSchema = z
 
 export const sendInvoiceSchema = z
   .object({
-    recipientEmail: z.string().email().optional(),
+    recipientEmail: z.email().optional(),
     subject: nonEmptyStringSchema
       .max(998)
       .refine((value) => !/[\r\n]/.test(value), "Subject cannot contain line breaks.")
@@ -1659,7 +1659,7 @@ export const sendInvoiceSchema = z
 
 export const manualInvoiceDeliverySchema = z
   .object({
-    recipientEmails: z.array(z.string().email()).min(1).max(10),
+    recipientEmails: z.array(z.email()).min(1).max(10),
     subject: nonEmptyStringSchema
       .max(998)
       .refine((value) => !/[\r\n]/.test(value), "Subject cannot contain line breaks.")
@@ -1689,7 +1689,7 @@ export const statementRequestSchema = z
 
 export const statementSendSchema = statementRequestSchema
   .extend({
-    recipientEmail: z.string().email(),
+    recipientEmail: z.email(),
     subject: nonEmptyStringSchema.max(998).optional(),
     message: optionalText(10000)
   })
@@ -1697,7 +1697,7 @@ export const statementSendSchema = statementRequestSchema
 
 export const publicInvoiceLinkSchema = z
   .object({
-    expiresAt: z.string().datetime().optional()
+    expiresAt: z.iso.datetime().optional()
   })
   .strict();
 
@@ -1746,7 +1746,7 @@ export const commercialSubscriptionSchema = z
     provider: optionalText(80).nullable().optional(),
     providerCustomerId: optionalText(200).nullable().optional(),
     providerSubscriptionId: optionalText(200).nullable().optional(),
-    currentPeriodEnd: z.string().datetime().nullable().optional()
+    currentPeriodEnd: z.iso.datetime().nullable().optional()
   })
   .strict();
 
@@ -1762,7 +1762,7 @@ export const commercialEventSchema = z
     provider: nonEmptyStringSchema.max(80),
     providerEventId: nonEmptyStringSchema.max(200),
     eventType: nonEmptyStringSchema.max(160),
-    payload: z.record(z.unknown())
+    payload: z.record(z.string(), z.unknown())
   })
   .strict();
 
@@ -1775,7 +1775,7 @@ export const manualCommercialSubscriptionSchema = z
   .object({
     planCode: nonEmptyStringSchema.max(80),
     entitlements: z.array(nonEmptyStringSchema.max(120)).max(200),
-    currentPeriodEnd: z.string().datetime().nullable().optional()
+    currentPeriodEnd: z.iso.datetime().nullable().optional()
   })
   .strict();
 
@@ -1783,7 +1783,7 @@ export const manualCommercialEventSchema = z
   .object({
     providerEventId: nonEmptyStringSchema.max(200),
     eventType: nonEmptyStringSchema.max(160),
-    payload: z.record(z.unknown())
+    payload: z.record(z.string(), z.unknown())
   })
   .strict();
 
@@ -1806,8 +1806,8 @@ export const profileSchema = z
     businessAddress: addressSchema.nullable().optional(),
     mailingAddress: addressSchema.nullable().optional(),
     phone: optionalText(40),
-    email: z.string().email().nullable().optional(),
-    website: z.string().url().nullable().optional(),
+    email: z.email().nullable().optional(),
+    website: z.url().nullable().optional(),
     locale: z.enum(["en-CA", "fr-CA"]),
     timeZone: nonEmptyStringSchema.max(100),
     baseCurrency: z.string().regex(/^[A-Z]{3}$/),
@@ -1851,7 +1851,7 @@ export const taxRegistrationSchema = z
     const number = value.registrationNumber?.replace(/[\s-]/g, "").toUpperCase();
     if (!number) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         path: ["registrationNumber"],
         message: "A registration number is required when the business is registered."
       });
@@ -1865,7 +1865,7 @@ export const taxRegistrationSchema = z
           : null;
     if (pattern && !pattern.test(number)) {
       context.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         path: ["registrationNumber"],
         message:
           value.registrationType === "QST"
@@ -1887,8 +1887,8 @@ export const taxCodeVersionSchema = z
     effectiveFrom: dateStringSchema,
     effectiveTo: dateStringSchema.nullable().optional(),
     sourceName: nonEmptyStringSchema.max(200),
-    sourceUrl: z.string().url().nullable().optional(),
-    sourceRetrievedAt: z.string().datetime(),
+    sourceUrl: z.url().nullable().optional(),
+    sourceRetrievedAt: z.iso.datetime(),
     expectedTaxCodeVersion: z.number().int().positive().optional(),
     components: z
       .array(
@@ -1971,7 +1971,7 @@ const paymentInstructionMethodSchema = z
   .object({
     key: z.enum(["E_TRANSFER", "EFT", "CHEQUE", "PAY_ONLINE", "CASH", "OTHER"]),
     position: z.number().int().min(0).max(20).optional(),
-    recipientEmail: z.string().email().max(320).optional(),
+    recipientEmail: z.email().max(320).optional(),
     autodeposit: z.boolean().optional(),
     institution: optionalText(160),
     transitNumber: z.string().trim().min(1).max(32).optional(),
@@ -2017,7 +2017,7 @@ export const productEventSchema = z
       .max(64)
       .regex(/^[A-Z][A-Z0-9_.-]*$/),
     eventVersion: z.number().int().positive().max(10).default(1),
-    occurredAt: z.string().datetime({ offset: true }).optional()
+    occurredAt: z.iso.datetime({ offset: true }).optional()
   })
   .strict();
 
@@ -2046,7 +2046,7 @@ export const payrollCodeSchema = z
     code: nonEmptyStringSchema.max(80),
     name: nonEmptyStringSchema.max(160),
     kind: z.enum(["EARNING", "DEDUCTION", "EMPLOYER_CONTRIBUTION"]),
-    statutoryAttributes: z.record(z.any()).default({}),
+    statutoryAttributes: z.record(z.string(), z.any()).default({}),
     expenseAccountId: idSchema.nullable().optional(),
     liabilityAccountId: idSchema.nullable().optional(),
     remittanceAuthority: optionalText(120).nullable().optional()
@@ -2066,7 +2066,7 @@ export const payrollWorkerSchema = z
         effectiveTo: dateStringSchema.nullable().optional(),
         status: z.enum(["ACTIVE", "ON_LEAVE", "TERMINATED"]).optional(),
         jurisdictionCode: nonEmptyStringSchema.max(40),
-        taxAttributes: z.record(z.any()).default({})
+        taxAttributes: z.record(z.string(), z.any()).default({})
       })
       .strict(),
     compensation: z
@@ -2135,7 +2135,7 @@ export const payrollRunSchema = z
           .object({
             workerId: idSchema,
             grossPayMinor: signedMinorUnitStringSchema,
-            statutory: z.record(z.any()).optional()
+            statutory: z.record(z.string(), z.any()).optional()
           })
           .strict()
       )
